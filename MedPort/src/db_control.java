@@ -1,5 +1,10 @@
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class db_control {
@@ -11,20 +16,13 @@ public class db_control {
 	Connection getcon() {	return mpCon;	}
 
 	boolean checkConnection() {
-//		String hostName = "nk.database.windows.net"; // update me
-//        String dbName = "medport"; // update me
-//        String user = "nainnn01"; // update me
-//        String password = "Nkforever2019"; // update me
-//        String url = String.format("jdbc:sqlserver://%s:1433;database=%s;user=%s;password=%s;encrypt=true;"
-//            + "hostNameInCertificate=*.database.windows.net;loginTimeout=30;", hostName, dbName, user, password);
-		//String url = "jdbc:sqlserver://nk.database.windows.net:1433;database=medport;user=nainnn01@nk;password=Nkforever2019;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
-		
+
 		try {
-//			mpCon = DriverManager.getConnection("jdbc:sqlserver://medport.database.windows.net:1433", "munov01", "soumya98Wii-00");
-//			mpCon = DriverManager.getConnection("jdbc:sqlserver://medport.database.windows.net:1433/medport", "munov01", "soumya98Wii-00");
-//			mpCon = DriverManager.getConnection("jdbc:");
-			mpCon = DriverManager.getConnection("jdbc:sqlserver://nk.database.windows.net:1433", "nainnn01", "Nkforever2019");
-//			mpCon = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/metportdb", "root", "nkforever2019");
+//			mpCon = DriverManager.getConnection("jdbc:sqlserver://medport.database.windows.net:1433", "munov01",
+//					"soumya98Wii-00");
+//			mpCon = DriverManager.getConnection("jdbc:sqlserver://nk.database.windows.net:1433", "nainnn01",
+//					"Nkforever2019");
+			mpCon = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/metportdb", "root", "nkforever2019");
 			
 			return true;
 		} catch (SQLException  e) {
