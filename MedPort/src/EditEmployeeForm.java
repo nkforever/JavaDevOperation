@@ -1,22 +1,7 @@
-import javax.swing.JPanel;
 import java.awt.BorderLayout;
-import javax.swing.JTextField;
-import javax.swing.text.DateFormatter;
-import javax.swing.text.MaskFormatter;
-import javax.swing.text.NumberFormatter;
-
-import java.awt.Font;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
-import javax.swing.ButtonGroup;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
 import java.awt.Color;
-import javax.swing.JRadioButton;
-import java.awt.event.ItemListener;
+import java.awt.Component;
+import java.awt.Font;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.text.DateFormat;
@@ -24,11 +9,23 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.awt.event.ItemEvent;
-import org.eclipse.wb.swing.FocusTraversalOnArray;
-import java.awt.Component;
 
-public class newPatientForm extends JPanel{
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.text.DateFormatter;
+import javax.swing.text.MaskFormatter;
+import javax.swing.text.NumberFormatter;
+
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+
+public class EditEmployeeForm extends JPanel{
 	/**
 	 * 
 	 */
@@ -41,14 +38,12 @@ public class newPatientForm extends JPanel{
 	private JLabel lblGender, lblSsn, lblStreetAddr, lblState, lblCity, lblZipcode, lblPhone;
 
 
-	private db_control dbc = new db_control();
+	private DBcontrol dbc = new DBcontrol();
 	private JTextField aptNumField;
 	private JButton saveButton;
 
 	private String patientID = "", firstName = "", midName = "", lastName= "", DOB = "", gender = "", ssnArea = "", ssnGroup = "", ssnSerial ="",
 			phoneNumber = "", streetNum = "", aptNum = "", streetName = "", city = "", state = "", zipcode = ""; 
-
-	private JRadioButton radioButtonYes, radioButtonNo;
 	private int active = 0;
 
 
@@ -65,9 +60,14 @@ public class newPatientForm extends JPanel{
 	private JLabel label;
 	private JLabel label_1;
 	private JLabel label_2;
+	private JCheckBox addEditPatientCheckBox;
+	private JCheckBox editOwnProfilecheckBox;
+	private JCheckBox viewPatientCheckBoc;
+	private JCheckBox viewBillCheckBox;
+	private JComboBox<String> roleComboBox;
 
 
-	public newPatientForm() {
+	public EditEmployeeForm() {
 		setLayout(new BorderLayout(0, 0));
 
 		JPanel formPanel = new JPanel();
@@ -196,7 +196,7 @@ public class newPatientForm extends JPanel{
 
 		saveButton = new JButton("Save");
 		saveButton.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		saveButton.setBounds(549, 280, 94, 37);
+		saveButton.setBounds(548, 303, 94, 37);
 		formPanel.add(saveButton);
 
 		lblNewLabel = new JLabel("First Name");
@@ -338,43 +338,10 @@ public class newPatientForm extends JPanel{
 		ssnSerialField.setBounds(595, 67, 48, 29);
 		formPanel.add(ssnSerialField);
 
-		JLabel lblNewLabel_1 = new JLabel("Admitting this patient today?");
+		JLabel lblNewLabel_1 = new JLabel("Staff Role");
 		lblNewLabel_1.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		lblNewLabel_1.setBounds(58, 286, 216, 29);
+		lblNewLabel_1.setBounds(458, 233, 86, 29);
 		formPanel.add(lblNewLabel_1);
-
-		radioButtonYes = new JRadioButton("Yes");
-		radioButtonYes.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent arg0) {
-				if(radioButtonYes.isSelected()) {
-					active = 1;
-				}
-			}
-		});
-
-		radioButtonYes.setBackground(new Color(253, 245, 230));
-		radioButtonYes.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		radioButtonYes.setBounds(275, 286, 70, 29);
-		formPanel.add(radioButtonYes);
-
-		radioButtonNo = new JRadioButton("No");
-		radioButtonNo.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				if(radioButtonNo.isSelected()) {
-					active = 0;
-				}
-			}
-		});
-
-		radioButtonNo.setBackground(new Color(253, 245, 230));
-		radioButtonNo.setSelected(true);
-		radioButtonNo.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		radioButtonNo.setBounds(363, 286, 70, 29);
-		formPanel.add(radioButtonNo);
-
-		ButtonGroup rdGroup = new ButtonGroup();
-		rdGroup.add(radioButtonYes);
-		rdGroup.add(radioButtonNo);
 
 		lblNewLabel_2 = new JLabel("(Enter 10 digits)");
 		lblNewLabel_2.setFont(new Font("Times New Roman", Font.ITALIC, 12));
@@ -394,7 +361,7 @@ public class newPatientForm extends JPanel{
 		mandatoryError = new JLabel("** Please fill out all the required field.");
 		mandatoryError.setVisible(false);
 		mandatoryError.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 14));
-		mandatoryError.setBounds(373, 323, 269, 29);
+		mandatoryError.setBounds(402, 337, 240, 29);
 		formPanel.add(mandatoryError);
 
 		label = new JLabel("*");
@@ -411,7 +378,45 @@ public class newPatientForm extends JPanel{
 		label_2.setFont(new Font("Times New Roman", Font.BOLD, 18));
 		label_2.setBounds(75, 20, 14, 21);
 		formPanel.add(label_2);
-		formPanel.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{firstNameField, midNameField, lastNameField, DOBField, genderField, ssnAreaField, ssnGroupField, ssnSerialField, streetNumField, streetNameField, aptNumField, cityField, stateField, zipcodeField, phoneNumberField, radioButtonYes, radioButtonNo, saveButton}));
+		
+		roleComboBox = new JComboBox<String>();
+		roleComboBox.setModel(new DefaultComboBoxModel<String>(
+				new String[] { "N/A", "Admin", "Doctor", "Finance", "Nurse", "Secretary" }));
+		roleComboBox.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		roleComboBox.setBounds(544, 233, 98, 29);
+		formPanel.add(roleComboBox);
+		
+		addEditPatientCheckBox = new JCheckBox("Add/Edit Patient");
+		addEditPatientCheckBox.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		addEditPatientCheckBox.setBounds(11, 282, 163, 29);
+		formPanel.add(addEditPatientCheckBox);
+		
+		editOwnProfilecheckBox = new JCheckBox("Own Profile");
+		editOwnProfilecheckBox.setSelected(true);
+		editOwnProfilecheckBox.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		editOwnProfilecheckBox.setBounds(188, 282, 163, 29);
+		formPanel.add(editOwnProfilecheckBox);
+		
+		viewPatientCheckBoc = new JCheckBox("View Patient");
+		viewPatientCheckBoc.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		viewPatientCheckBoc.setBounds(11, 328, 163, 29);
+		formPanel.add(viewPatientCheckBoc);
+		
+		viewBillCheckBox = new JCheckBox("View Bill");
+		viewBillCheckBox.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		viewBillCheckBox.setBounds(188, 328, 163, 29);
+		formPanel.add(viewBillCheckBox);
+
+		JLabel lbllimited = new JLabel("* Limited");
+		lbllimited.setFont(new Font("Times New Roman", Font.ITALIC, 12));
+		lbllimited.setBounds(350, 286, 104, 29);
+		formPanel.add(lbllimited);
+
+		JCheckBox processPaymentCheckBox = new JCheckBox("Process Payment");
+		processPaymentCheckBox.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		processPaymentCheckBox.setBounds(188, 373, 163, 29);
+		formPanel.add(processPaymentCheckBox);
+		formPanel.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{firstNameField, midNameField, lastNameField, DOBField, genderField, ssnAreaField, ssnGroupField, ssnSerialField, streetNumField, streetNameField, aptNumField, cityField, stateField, zipcodeField, phoneNumberField, saveButton}));
 
 	}
 
@@ -485,23 +490,23 @@ public class newPatientForm extends JPanel{
 	void loadPatientInfo() {
 
 
-		patientProfile.setID(patientID);
-		patientProfile.setFName(firstName);
-		patientProfile.setMName(midName);
-		patientProfile.setLName(lastName);
-		patientProfile.setDOB(DOB);
-		patientProfile.setGender(gender);
-		patientProfile.setSSNArea(ssnArea);
-		patientProfile.setSSNGroup(ssnGroup);
-		patientProfile.setSSNSerial(ssnSerial);
-		patientProfile.setPhoneNumber(phoneNumber);
-		patientProfile.setStreetNum(streetNum);
-		patientProfile.setStreetName(streetName);
-		patientProfile.setAptNum(aptNum);
-		patientProfile.setCity(city);
-		patientProfile.setState(state);
-		patientProfile.setZipcode(zipcode);
-		patientProfile.setActive(active);		
+		ClientProfile.setID(patientID);
+		ClientProfile.setFName(firstName);
+		ClientProfile.setMName(midName);
+		ClientProfile.setLName(lastName);
+		ClientProfile.setDOB(DOB);
+		ClientProfile.setGender(gender);
+		ClientProfile.setSSNArea(ssnArea);
+		ClientProfile.setSSNGroup(ssnGroup);
+		ClientProfile.setSSNSerial(ssnSerial);
+		ClientProfile.setPhoneNumber(phoneNumber);
+		ClientProfile.setStreetNum(streetNum);
+		ClientProfile.setStreetName(streetName);
+		ClientProfile.setAptNum(aptNum);
+		ClientProfile.setCity(city);
+		ClientProfile.setState(state);
+		ClientProfile.setZipcode(zipcode);
+		ClientProfile.setActive(active);		
 
 		clearForm();
 	}
@@ -522,7 +527,6 @@ public class newPatientForm extends JPanel{
 		ssnSerialField.setText("");
 		phoneNumberField.setText("");
 		stateField.setSelectedIndex(0);
-		radioButtonNo.isSelected();
 
 		firstNameField.setBackground(Color.white);
 		lastNameField.setBackground(Color.white);

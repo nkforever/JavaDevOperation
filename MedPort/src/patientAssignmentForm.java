@@ -46,7 +46,7 @@ public class patientAssignmentForm extends JPanel{
 	private JButton addRecordButton;
 	
 
-	private db_control dbc = new db_control();
+	private DBcontrol dbc = new DBcontrol();
 	
 	private DateFormat  dateFormat = new SimpleDateFormat("MM/dd/yyyy"); 
 	private NumberFormat num = new DecimalFormat("###"); 

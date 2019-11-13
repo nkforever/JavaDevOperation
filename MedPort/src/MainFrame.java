@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -17,7 +18,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-public class mainFrame {
+public class MainFrame {
 
 	private JFrame mainFrame;
 
@@ -28,7 +29,7 @@ public class mainFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					mainFrame window = new mainFrame();
+					MainFrame window = new MainFrame();
 					window.mainFrame.setVisible(true);
 					window.mainFrame.setLocationRelativeTo(null);
 				} catch (Exception e) {
@@ -41,7 +42,7 @@ public class mainFrame {
 	/**
 	 * Create the application.
 	 */
-	public mainFrame() {
+	public MainFrame() {
 		initialize();
 	}
 
@@ -57,7 +58,7 @@ public class mainFrame {
 
 	private JLabel lblNewLabel, serverStatus;
 
-	private db_control dbc = new db_control();
+	private DBcontrol dbc = new DBcontrol();
 
 
 	private void initialize() {
@@ -203,14 +204,15 @@ public class mainFrame {
 
 				valid = dbc.validate(user, pass);
 				if(valid) {
-					userProfile.setUser(user);
+				OwnProfile profile = new OwnProfile();
+					profile.setUser(user);
 					ErrorMessageLabel.setText("SUCCESS!");
 					mainFrame.getContentPane().removeAll();
 					mainFrame.setExtendedState( mainFrame.getExtendedState()|JFrame.MAXIMIZED_BOTH );
 					mainFrame.setResizable(true);
 
 
-					mainPanel mp = new mainPanel();
+					MainPanel mp = new MainPanel();
 					JScrollPane scrPane = new JScrollPane(mp);
 					mp.getNameSearchField().requestFocus();
 					mainFrame.getContentPane().add(scrPane);

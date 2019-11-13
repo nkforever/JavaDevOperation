@@ -1,5 +1,5 @@
 
-public class patientProfile {
+public class ClientProfile {
 	
 	static String patientID = "________", ssnArea ="  ", ssnGroup = "  ", ssnSerial = "    ", phoneNumber = "(   )-   -    ";
 	static String streetNum = "_____", aptNum = "", zipcode = "_____";
@@ -7,7 +7,7 @@ public class patientProfile {
 	static int active = 0;
 	
 	static boolean found = false; 
-	patientProfile(){
+	ClientProfile(){
 		
 	}
 	

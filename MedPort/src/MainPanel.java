@@ -8,8 +8,11 @@ import java.awt.GridLayout;
 import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -20,45 +23,38 @@ import javax.swing.SwingConstants;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-
-public class mainPanel extends JPanel {
+public class MainPanel extends JPanel {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
 	private JTextField nameSearch, idSearch, ssnSearch;
-	private JButton searchButton, logoutButton;
+	private JButton searchButton, logoutButton, homeButton, addNewButton, checkinButton, editPatientProfile,
+			patientHistoryButton, viewBillButton;
 
-	private JPanel profilePanel, profileInputPanel, bottomPanel, profileSection;
+	private JPanel profilePanel, profileInputPanel, bottomPanel, profileSection, searchPanel, centerPanel,
+			optionProfilePanel;
 	private JLabel userLabel, SSNLabel, genderLabel, DOBLabel, patientIDLabel, firstNameLabel, midNameLabel,
-	lastNameLabel, primaryDoctorLabel;
-	private JLabel streetLabel, cityStateLabel, phoneNumberLabel, aptLabel;
+			lastNameLabel, primaryDoctorLabel, lblPhone, updateStatusLabel, streetLabel, cityStateLabel,
+			phoneNumberLabel, aptLabel;
 
-	private db_control dbc = new db_control();
-	private JLabel lblPhone;
-	private JButton homeButton;
-	private JPanel searchPanel;
-	private JPanel centerPanel;
-	private JButton addNewButton;
+	private DBcontrol dbc = new DBcontrol();
 
-	newPatientForm npf = new newPatientForm();
+	// MVC controller group
+	NewPatientForm npf = new NewPatientForm();
 	lastPatientHistory lph = new lastPatientHistory();
 	patientAssignmentForm paf = new patientAssignmentForm();
 
 	MVCcontroller mvc = new MVCcontroller(this, npf, paf);
+	// End MVC controller group
 
-	DefaultListModel<String> model;
-	private JPanel optionProfilePanel;
-	private JLabel updateStatusLabel;
-	private JButton checkinButton;
-	private JButton editPatientProfile;
-	private JButton patientHistoryButton;
-	private JButton viewBillButton;
+	private DefaultListModel<String> model;
+	private OwnProfile profile = new OwnProfile();
 
-	public mainPanel() {
+	// Begin main panel class
+	public MainPanel() {
 		
 		setBackground(Color.LIGHT_GRAY);
 		setLayout(new BorderLayout(0, 5));
@@ -96,7 +92,7 @@ public class mainPanel extends JPanel {
 		flowLayout.setAlignment(FlowLayout.RIGHT);
 		inputPanel.add(blank2);
 
-		userLabel = new JLabel("Login as: " + userProfile.getUser());
+		userLabel = new JLabel("Login as: " + profile.getUser());
 		userLabel.setForeground(Color.BLUE);
 		userLabel.setHorizontalTextPosition(SwingConstants.CENTER);
 		userLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -120,9 +116,8 @@ public class mainPanel extends JPanel {
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					try {
-						searchPatient();
+						searchProfile();
 					} catch (InterruptedException e1) {
-						
 						return;
 					}
 				}
@@ -147,9 +142,8 @@ public class mainPanel extends JPanel {
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					try {
-						searchPatient();
+						searchProfile();
 					} catch (InterruptedException e1) {
-						//
 						return;
 					}
 				}
@@ -159,7 +153,7 @@ public class mainPanel extends JPanel {
 		ssnSearch = new JTextField();
 		ssnSearch.addFocusListener(new FocusAdapter() {
 			@Override
-			public void focusGained(FocusEvent arg0) {
+			public void focusGained(FocusEvent e) {
 				ssnSearch.setBackground(Color.white);
 				idSearch.setBackground(Color.white);
 				nameSearch.setBackground(Color.white);
@@ -170,9 +164,8 @@ public class mainPanel extends JPanel {
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					try {
-						searchPatient();
+						searchProfile();
 					} catch (InterruptedException e1) {
-					
 						return;
 					}
 				}
@@ -191,22 +184,12 @@ public class mainPanel extends JPanel {
 
 		searchButton = new JButton("Search");
 		searchButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		searchButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					searchPatient();
-				} catch (InterruptedException e1) {
-			
-					return;
-				}
-			}
-		});
 		searchButton.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					try {
-						searchPatient();
+						searchProfile();
 					} catch (InterruptedException e1) {
 						return;
 					}
@@ -228,11 +211,6 @@ public class mainPanel extends JPanel {
 		add(bottomPanel, BorderLayout.SOUTH);
 
 		logoutButton = new JButton("Logout");
-		logoutButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
 		logoutButton.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -242,12 +220,8 @@ public class mainPanel extends JPanel {
 			}
 		});
 		
+
 		homeButton = new JButton("Home");
-		homeButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				backToHome();
-			}
-		});
 		homeButton.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -333,7 +307,7 @@ public class mainPanel extends JPanel {
 		lblAddress.setFont(new Font("Times New Roman", Font.BOLD, 16));
 		profileSection.add(lblAddress);
 
-		streetLabel = new JLabel("---  ----- ------");
+		streetLabel = new JLabel(" ");
 		streetLabel.setBounds(89, 143, 201, 38);
 		streetLabel.setFont(new Font("Times New Roman", Font.BOLD, 16));
 		profileSection.add(streetLabel);
@@ -343,14 +317,14 @@ public class mainPanel extends JPanel {
 		lblPrimaryDoctor.setFont(new Font("Times New Roman", Font.BOLD, 15));
 		profileSection.add(lblPrimaryDoctor);
 
-		primaryDoctorLabel = new JLabel("------------");
+		primaryDoctorLabel = new JLabel(" ");
 		primaryDoctorLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		primaryDoctorLabel.setHorizontalTextPosition(SwingConstants.CENTER);
 		primaryDoctorLabel.setBounds(335, 173, 145, 38);
 		primaryDoctorLabel.setFont(new Font("Times New Roman", Font.BOLD, 16));
 		profileSection.add(primaryDoctorLabel);
 
-		cityStateLabel = new JLabel("---- ----- ---- -----");
+		cityStateLabel = new JLabel(" ");
 		cityStateLabel.setBounds(89, 173, 234, 38);
 		cityStateLabel.setFont(new Font("Times New Roman", Font.BOLD, 16));
 		profileSection.add(cityStateLabel);
@@ -411,32 +385,36 @@ public class mainPanel extends JPanel {
 		optionProfilePanel.add(viewBillButton);
 		
 		checkinButton = new JButton("Check-in");
-		checkinButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				loadPatientAssignmentForm();
-			}
-		});
 		checkinButton.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		checkinButton.setBounds(10, 171, 155, 37);
 		optionProfilePanel.add(checkinButton);
 
 		profileInputPanel = new JPanel();
 		profileInputPanel.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		profileInputPanel.setLayout(new BorderLayout(0, 0));
 		centerPanel.add(profileInputPanel, BorderLayout.CENTER);
+
 
 		addNewButton = new JButton("Add New Patient");
 		addNewButton.setBackground(Color.WHITE);
 		addNewButton.setFont(new Font("Times New Roman", Font.PLAIN, 20));
-		addNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				pressAddNewPatient();
-			}
-		});
-		profileInputPanel.setLayout(new BorderLayout(0, 0));
 		addNewButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		profileInputPanel.add(addNewButton);
 
+		// add action listener to buttons
+		searchButton.addActionListener(new actionListener());
+		logoutButton.addActionListener(new actionListener());
+		homeButton.addActionListener(new actionListener());
+		addNewButton.addActionListener(new actionListener());
+		checkinButton.addActionListener(new actionListener());
+		editPatientProfile.addActionListener(new actionListener());
+		patientHistoryButton.addActionListener(new actionListener());
+		viewBillButton.addActionListener(new actionListener());
+
+
+
 	}// end panel
+
 
 	JTextField getNameSearchField() {
 		return nameSearch;
@@ -452,6 +430,34 @@ public class mainPanel extends JPanel {
 	}// end add action listener
 	
 
+	private class actionListener implements ActionListener {
+
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource().equals(addNewButton))
+				pressAddNewPatient();
+
+			else if (e.getSource().equals(checkinButton))
+				loadPatientAssignmentForm();
+
+			else if (e.getSource().equals(homeButton))
+				backToHome();
+
+			else if (e.getSource().equals(logoutButton))
+				System.exit(0);
+
+			else if (e.getSource().equals(searchButton)) {
+				try {
+					searchProfile();
+				} catch (InterruptedException e1) {
+					return;
+				}
+			}
+
+			// TODO Auto-generated method stub
+			// If there's more button
+		}
+	};// End ActionListener class
+
 
 	void pressAddNewPatient() {
 		profileInputPanel.removeAll();
@@ -460,9 +466,9 @@ public class mainPanel extends JPanel {
 		profileInputPanel.repaint();
 		profileInputPanel.validate();
 
-	}
+	}// End press Add New Patient function
 
-	void searchPatient() throws InterruptedException {
+	void searchProfile() throws InterruptedException {
 		if (idSearch.getText().isEmpty()) {
 			if (ssnSearch.getText().isEmpty() && nameSearch.getText().isEmpty()) {
 				nameSearch.setBackground(Color.YELLOW);
@@ -480,7 +486,7 @@ public class mainPanel extends JPanel {
 		// else do following
 		dbc.getProfile(idSearch.getText(), nameSearch.getText(), ssnSearch.getText());
 
-		if (patientProfile.found) {
+		if (ClientProfile.found) {
 			nameSearch.setText("");
 			idSearch.setText("");
 			ssnSearch.setText("");
@@ -504,24 +510,24 @@ public class mainPanel extends JPanel {
 
 		// patient info
 		patientIDLabel.setForeground(Color.BLACK);
-		patientIDLabel.setText(patientProfile.patientID);
-		firstNameLabel.setText(patientProfile.firstName);
-		midNameLabel.setText(patientProfile.midName);
-		lastNameLabel.setText(patientProfile.lastName);
-		DOBLabel.setText(patientProfile.dateOfBirth);
-		genderLabel.setText(patientProfile.gender);
-		primaryDoctorLabel.setText(patientProfile.PrimaryDoctor);
-		phoneNumberLabel.setText(patientProfile.phoneNumber);
-		SSNLabel.setText("XXX-XX-" + patientProfile.ssnSerial);
+		patientIDLabel.setText(ClientProfile.patientID);
+		firstNameLabel.setText(ClientProfile.firstName);
+		midNameLabel.setText(ClientProfile.midName);
+		lastNameLabel.setText(ClientProfile.lastName);
+		DOBLabel.setText(ClientProfile.dateOfBirth);
+		genderLabel.setText(ClientProfile.gender);
+		primaryDoctorLabel.setText(ClientProfile.PrimaryDoctor);
+		phoneNumberLabel.setText(ClientProfile.phoneNumber);
+		SSNLabel.setText("XXX-XX-" + ClientProfile.ssnSerial);
 
 		// address
-		String address = patientProfile.streetNum + " " + patientProfile.streetName;
-		String cityStateZip = patientProfile.cityName + ", " + patientProfile.stateName + " " + patientProfile.zipcode;
+		String address = ClientProfile.streetNum + " " + ClientProfile.streetName;
+		String cityStateZip = ClientProfile.cityName + ", " + ClientProfile.stateName + " " + ClientProfile.zipcode;
 		streetLabel.setText(address);
-		aptLabel.setText("Apt#" + patientProfile.aptNum);
+		aptLabel.setText("Apt#" + ClientProfile.aptNum);
 		cityStateLabel.setText(cityStateZip);
 
-		if (patientProfile.active == 0) {
+		if (ClientProfile.active == 0) {
 			loadLastPatientHistory();
 
 		} else {

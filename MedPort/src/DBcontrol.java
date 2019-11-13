@@ -7,11 +7,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class db_control {
+public class DBcontrol {
 
+	private OwnProfile profile = new OwnProfile();
 	private Connection mpCon ;
 
-	db_control() {	}
+	DBcontrol() {	}
 
 	Connection getcon() {	return mpCon;	}
 
@@ -52,10 +53,10 @@ public class db_control {
 				Statement statement2 = mpCon.createStatement();
 				ResultSet resultSet2 = statement2.executeQuery(getProfile);
 				if(resultSet.next()) {
-					userProfile.setEmployeeID(resultSet2.getNString("ee_id"));
-					userProfile.setFirstName(resultSet2.getNString("first_name"));
-					userProfile.setLastName(resultSet2.getNString("last_name"));
-					userProfile.setRole(resultSet2.getNString("position"));
+					profile.setEmployeeID(resultSet2.getNString("ee_id"));
+					profile.setFirstName(resultSet2.getNString("first_name"));
+					profile.setLastName(resultSet2.getNString("last_name"));
+					profile.setRole(resultSet2.getNString("position"));
 				}
 						
 				mpCon.close();
@@ -71,7 +72,7 @@ public class db_control {
 	void getProfile(String id, String name, String ssn) {
 		checkConnection();
 
-		if(userProfile.getRole() == "admin") {
+		if (profile.getRole() == "admin") {
 			searchByAdmin(id, name, ssn);
 		}
 		
@@ -104,7 +105,7 @@ public class db_control {
 							
 						}else {
 							
-						patientProfile.found = false;
+						ClientProfile.found = false;
 						}
 					}
 				
@@ -112,7 +113,7 @@ public class db_control {
 
 		} catch (SQLException e) {
 
-			patientProfile.found = false;
+			ClientProfile.found = false;
 		}
 
 	}// end get patient profile
@@ -149,7 +150,7 @@ public class db_control {
 								
 							}else {
 								
-							patientProfile.found = false;
+							ClientProfile.found = false;
 							}
 						}
 					
@@ -157,28 +158,28 @@ public class db_control {
 
 			} catch (SQLException e) {
 
-				patientProfile.found = false;
+				ClientProfile.found = false;
 			}
 	}
 
 	void patientFound(ResultSet resultSet) {
 		String id = "";
-		patientProfile.found = true;
+		ClientProfile.found = true;
 		
 		try {
 			id = resultSet.getNString("patient_id");
-			patientProfile.setID(id);
-			patientProfile.setFName(resultSet.getNString("first_name"));
-			patientProfile.setMName(resultSet.getNString("mid_name"));
-			patientProfile.setLName(resultSet.getNString("last_name"));
-			patientProfile.setDOB(resultSet.getNString("DOB"));
-			patientProfile.setGender(resultSet.getNString("gender"));
-			patientProfile.setPDoctor(resultSet.getNString("primaryDoctor"));
-			patientProfile.setSSNArea(resultSet.getNString("ssnArea"));
-			patientProfile.setSSNGroup(resultSet.getNString("ssnGroup"));
-			patientProfile.setSSNSerial(resultSet.getNString("ssnSerial"));
-			patientProfile.setPhoneNumber(resultSet.getNString("phone_num"));
-			patientProfile.setActive(resultSet.getInt("active"));
+			ClientProfile.setID(id);
+			ClientProfile.setFName(resultSet.getNString("first_name"));
+			ClientProfile.setMName(resultSet.getNString("mid_name"));
+			ClientProfile.setLName(resultSet.getNString("last_name"));
+			ClientProfile.setDOB(resultSet.getNString("DOB"));
+			ClientProfile.setGender(resultSet.getNString("gender"));
+			ClientProfile.setPDoctor(resultSet.getNString("primaryDoctor"));
+			ClientProfile.setSSNArea(resultSet.getNString("ssnArea"));
+			ClientProfile.setSSNGroup(resultSet.getNString("ssnGroup"));
+			ClientProfile.setSSNSerial(resultSet.getNString("ssnSerial"));
+			ClientProfile.setPhoneNumber(resultSet.getNString("phone_num"));
+			ClientProfile.setActive(resultSet.getInt("active"));
 
 			// getting address from address table
 			setAddress(id);
@@ -196,20 +197,20 @@ public class db_control {
 			ResultSet resultset5 = checkAddress.executeQuery();
 
 			if (resultset5.next()) {
-				patientProfile.setStreetNum(resultset5.getNString("street_num"));
-				patientProfile.setAptNum(resultset5.getNString("apt_num"));
-				patientProfile.setStreetName(resultset5.getNString("street_name"));
-				patientProfile.setCity(resultset5.getNString("city"));
-				patientProfile.setState(resultset5.getNString("state").toUpperCase());
-				patientProfile.setZipcode(resultset5.getNString("zipcode"));
+				ClientProfile.setStreetNum(resultset5.getNString("street_num"));
+				ClientProfile.setAptNum(resultset5.getNString("apt_num"));
+				ClientProfile.setStreetName(resultset5.getNString("street_name"));
+				ClientProfile.setCity(resultset5.getNString("city"));
+				ClientProfile.setState(resultset5.getNString("state").toUpperCase());
+				ClientProfile.setZipcode(resultset5.getNString("zipcode"));
 			} // end if
 			else {
-				patientProfile.setStreetNum("N/A");
-				patientProfile.setAptNum(" ");
-				patientProfile.setStreetName("        ");
-				patientProfile.setCity("N/A   ");
-				patientProfile.setState("   ");
-				patientProfile.setZipcode("     ");
+				ClientProfile.setStreetNum("N/A");
+				ClientProfile.setAptNum(" ");
+				ClientProfile.setStreetName("        ");
+				ClientProfile.setCity("N/A   ");
+				ClientProfile.setState("   ");
+				ClientProfile.setZipcode("     ");
 			}
 
 		} catch (SQLException e) {

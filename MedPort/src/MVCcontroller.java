@@ -3,9 +3,9 @@ import java.awt.event.ActionListener;
 
 public class MVCcontroller {
 
-	private mainPanel mPanel;
-	private newPatientForm npForm; 
-	MVCcontroller(mainPanel mp, newPatientForm npf,  patientAssignmentForm paf){
+	private MainPanel mPanel;
+	private NewPatientForm npForm; 
+	MVCcontroller(MainPanel mp, NewPatientForm npf,  patientAssignmentForm paf){
 		mPanel  = mp;
 		npForm = npf;
 		mPanel.addSaveButtonListener(new addSaveButtonListener());
