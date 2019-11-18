@@ -1,21 +1,8 @@
-import javax.swing.JPanel;
 import java.awt.BorderLayout;
-import javax.swing.JTextField;
-import javax.swing.text.DateFormatter;
-import javax.swing.text.MaskFormatter;
-import javax.swing.text.NumberFormatter;
-
-import java.awt.Font;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
-import javax.swing.ButtonGroup;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
 import java.awt.Color;
-import javax.swing.JRadioButton;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -24,9 +11,22 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.awt.event.ItemEvent;
+
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
+import javax.swing.text.DateFormatter;
+import javax.swing.text.MaskFormatter;
+import javax.swing.text.NumberFormatter;
+
 import org.eclipse.wb.swing.FocusTraversalOnArray;
-import java.awt.Component;
 
 public class NewPatientForm extends JPanel{
 	/**
@@ -437,7 +437,7 @@ public class NewPatientForm extends JPanel{
 			if (JOptionPane.showConfirmDialog(null, "This patient is already exist in record, do you want to load his/her profile?", "WARNING",
 					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 
-				dbc.getProfile(firstNameField.getText(), lastNameField.getText(), ssnSerialField.getText());
+				dbc.getProfile(firstNameField.getText(), lastNameField.getText(), ssnSerialField.getText(), "patient");
 				return true;
 			}
 		}	
@@ -485,21 +485,21 @@ public class NewPatientForm extends JPanel{
 	void loadPatientInfo() {
 
 
-		PatientProfile.setID(patientID);
-		PatientProfile.setFName(firstName);
-		PatientProfile.setMName(midName);
-		PatientProfile.setLName(lastName);
+		PatientProfile.setPatientID(patientID);
+		PatientProfile.setFirstName(firstName);
+		PatientProfile.setMidName(midName);
+		PatientProfile.setLastName(lastName);
 		PatientProfile.setDOB(DOB);
 		PatientProfile.setGender(gender);
-		PatientProfile.setSSNArea(ssnArea);
-		PatientProfile.setSSNGroup(ssnGroup);
-		PatientProfile.setSSNSerial(ssnSerial);
+		PatientProfile.setSsnArea(ssnArea);
+		PatientProfile.setSsnGroup(ssnGroup);
+		PatientProfile.setSsnSerial(ssnSerial);
 		PatientProfile.setPhoneNumber(phoneNumber);
 		PatientProfile.setStreetNum(streetNum);
 		PatientProfile.setStreetName(streetName);
 		PatientProfile.setAptNum(aptNum);
-		PatientProfile.setCity(city);
-		PatientProfile.setState(state);
+		PatientProfile.setCityName(city);
+		PatientProfile.setStateName(state);
 		PatientProfile.setZipcode(zipcode);
 		PatientProfile.setActive(active);		
 
@@ -533,19 +533,17 @@ public class NewPatientForm extends JPanel{
 
 	boolean isFormClear() {
 		if(
-				firstNameField.getText().isEmpty() && 
-				midNameField.getText().isEmpty() && 
-				lastNameField.getText().isEmpty() && 
-				DOBField.getText().isEmpty() && 
+		firstNameField.getText().isEmpty() && midNameField.getText().isEmpty() && lastNameField.getText().isEmpty()
+				&& DOBField.getText().isEmpty() && ssnAreaField.getText().isEmpty() && ssnGroupField.getText().isEmpty()
+				&& ssnSerialField.getText().isEmpty()
 				//		genderField.getText().isEmpty() && 
 				//		streetNumField.getText().isEmpty() && 
 				//		streetNameField.getText().isEmpty() && 
 				//		cityField.getText().isEmpty() && 
 				//		zipcodeField.getText().isEmpty() && 
-				//		ssnAreaField.getText().isEmpty() && 
-				//		ssnGroupField.getText().isEmpty() && 
-				//		ssnSerialField.getText().isEmpty() && 
-				phoneNumberField.getText().isEmpty() ) {
+
+//				 && phoneNumberField.getText().isEmpty() 
+		) {
 
 			return true;
 		}

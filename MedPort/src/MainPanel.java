@@ -465,7 +465,7 @@ public class MainPanel extends JPanel {
 		profileInputPanel.removeAll();
 		
 		if (OwnProfile.getRole().equalsIgnoreCase("admin")) {
-				
+			profileInputPanel.add(nef);
 			nef.setVisible(true);
 			profileInputPanel.repaint();
 			profileInputPanel.validate();
@@ -494,23 +494,26 @@ public class MainPanel extends JPanel {
 			}
 		}
 		// else do following
-		dbc.getProfile(idSearch.getText(), nameSearch.getText(), ssnSearch.getText(), "patient");
-		if (!OwnProfile.getRole().equalsIgnoreCase("admin") && PatientProfile.found) {
-			nameSearch.setText("");
-			idSearch.setText("");
-			ssnSearch.setText("");
+		
+		else if (!OwnProfile.getRole().equalsIgnoreCase("admin")) {
+			dbc.getProfile(idSearch.getText(), nameSearch.getText(), ssnSearch.getText(), "patient");
+			if (PatientProfile.found) {
+				nameSearch.setText("");
+				idSearch.setText("");
+				ssnSearch.setText("");
 
-			loadPatient();
-			return;
-		}
+				loadPatient();
+				return;
+			}
+		} else if (OwnProfile.getRole().equalsIgnoreCase("admin")) {
+			dbc.getProfile(idSearch.getText(), nameSearch.getText(), ssnSearch.getText(), "employee");
+			if (EmployeeProfile.found) {
+				nameSearch.setText("");
+				idSearch.setText("");
+				ssnSearch.setText("");
 
-		dbc.getProfile(idSearch.getText(), nameSearch.getText(), ssnSearch.getText(), "employee");
-		if (OwnProfile.getRole().equalsIgnoreCase("admin") && EmployeeProfile.found) {
-			nameSearch.setText("");
-			idSearch.setText("");
-			ssnSearch.setText("");
-
-			loadEmployee();
+				loadEmployee();
+			}
 		} else {
 
 			IDLabel.setForeground(Color.RED);
@@ -541,21 +544,15 @@ public class MainPanel extends JPanel {
 		SSNLabel.setText("XXX-XX-" + EmployeeProfile.getSsnSerial());
 
 		// address
-		String address = PatientProfile.getStreetNum() + " " + PatientProfile.getStreetName();
-		String cityStateZip = PatientProfile.getCityName() + ", " + PatientProfile.getStateName() + " "
-				+ PatientProfile.getZipcode();
+		String address = EmployeeProfile.getStreetNum() + " " + EmployeeProfile.getStreetName();
+		String cityStateZip = EmployeeProfile.getCityName() + ", " + EmployeeProfile.getStateName() + " "
+				+ EmployeeProfile.getZipCode();
 		streetLabel.setText(address);
-		aptLabel.setText("Apt#" + PatientProfile.getAptNum());
 		cityStateLabel.setText(cityStateZip);
 
-		if (PatientProfile.getActive() == 0) {
-			loadLastPatientHistory();
-
-		} else {
-			loadPatientAssignmentForm();
-		}
 
 	}// end load employee
+
 
 	void loadPatient() {
 

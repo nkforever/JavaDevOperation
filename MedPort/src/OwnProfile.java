@@ -2,8 +2,8 @@
 public class OwnProfile {
 
 	private static String user, role;
-	private static String employeeID = "", firstName = "", midName = "", lastName = "", addressNum = "", aptNum = "",
-			streeName = "", cityName = "", stateName = "", zipCode = "", gender = "", email = "", phoneNumber = "",
+	private static String employeeID = "", firstName = "", midName = "", lastName = "", streetNum = "", aptNum = "",
+			streetName = "", cityName = "", stateName = "", zipCode = "", gender = "", email = "", phoneNumber = "",
 			DOB = "", ssnArea = "", ssnGroup = "", ssnSerial = "";
 	
 	
@@ -63,20 +63,20 @@ public class OwnProfile {
 		OwnProfile.aptNum = aptNum;
 	}
 
-	public static String getAddressNum() {
-		return addressNum;
+	public static String getStreetNum() {
+		return streetNum;
 	}
 
-	public static void setAddressNum(String addressNum) {
-		OwnProfile.addressNum = addressNum;
+	public static void setStreetNum(String addressNum) {
+		OwnProfile.streetNum = addressNum;
 	}
 
-	public static String getStreeName() {
-		return streeName;
+	public static String getStreetName() {
+		return streetName;
 	}
 
-	public static void setStreeName(String streeName) {
-		OwnProfile.streeName = streeName;
+	public static void setStreetName(String streeName) {
+		OwnProfile.streetName = streeName;
 	}
 
 	public static String getCityName() {

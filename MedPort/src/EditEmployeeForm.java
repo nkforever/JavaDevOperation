@@ -449,6 +449,8 @@ public class EditEmployeeForm extends JPanel{
 			if(ssnAreaField.getText() != null) ssnArea = ssnAreaField.getText();
 			if(ssnGroupField.getText() != null)ssnGroup = ssnGroupField.getText();
 			if(ssnSerialField.getText() != null)ssnSerial = ssnSerialField.getText();
+			if (roleComboBox.getSelectedItem().toString() != "")
+				role = roleComboBox.getSelectedItem().toString();
 			if(phoneNumberField.getText() != null) phoneNumber = phoneNumberField.getText();
 			if(streetNumField.getText() != null) streetNum = streetNumField.getText();
 			if(aptNumField.getText() != null) aptNum = aptNumField.getText();
@@ -459,7 +461,7 @@ public class EditEmployeeForm extends JPanel{
 
 			loadEmployeeInfo();
 
-			dbc.updateEmployeeProfile(patientID, firstName, midName, lastName, DOB, gender, " ", ssnArea, ssnGroup,
+			dbc.updateEmployeeProfile(patientID, firstName, midName, lastName, DOB, gender, role, ssnArea, ssnGroup,
 					ssnSerial, phoneNumber);
 
 			dbc.updateAddress(patientID, streetNum, aptNum, streetName, city, state, zipcode);
@@ -467,7 +469,6 @@ public class EditEmployeeForm extends JPanel{
 
 			return true;
 		}
-		return false;
 	}
 
 	void loadEmployeeInfo() {
@@ -520,19 +521,16 @@ public class EditEmployeeForm extends JPanel{
 
 	boolean isFormClear() {
 		if(
-				firstNameField.getText().isEmpty() && 
-				midNameField.getText().isEmpty() && 
-				lastNameField.getText().isEmpty() && 
-				DOBField.getText().isEmpty() && 
+		firstNameField.getText().isEmpty() && midNameField.getText().isEmpty() && lastNameField.getText().isEmpty()
+				&& DOBField.getText().isEmpty() && ssnAreaField.getText().isEmpty() && ssnGroupField.getText().isEmpty()
+				&& ssnSerialField.getText().isEmpty()
 				//		genderField.getText().isEmpty() && 
 				//		streetNumField.getText().isEmpty() && 
 				//		streetNameField.getText().isEmpty() && 
 				//		cityField.getText().isEmpty() && 
 				//		zipcodeField.getText().isEmpty() && 
-				//		ssnAreaField.getText().isEmpty() && 
-				//		ssnGroupField.getText().isEmpty() && 
-				//		ssnSerialField.getText().isEmpty() && 
-				phoneNumberField.getText().isEmpty() ) {
+		// phoneNumberField.getText().isEmpty()
+		) {
 
 			return true;
 		}

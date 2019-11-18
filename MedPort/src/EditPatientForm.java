@@ -414,7 +414,8 @@ public class EditPatientForm extends JPanel{
 			if(aptNumField.getText() != null) aptNum = aptNumField.getText();
 			if(streetNameField.getText() != null) streetName = streetNameField.getText();
 			if(cityField.getText() != null) city = cityField.getText();
-			if(stateField.getSelectedItem().toString() != null) state = stateField.getSelectedItem().toString();
+			if (stateField.getSelectedItem().toString() != "")
+				state = stateField.getSelectedItem().toString();
 			if(zipcodeField.getText() != null) zipcode = zipcodeField.getText();
 
 			loadPatientInfo();
