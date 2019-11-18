@@ -77,8 +77,10 @@ public class DBcontrol {
 	// staff search
 	void searchByStaff(String id, String name, String ssn) {
 
-		String checkFirstName = "SELECT * FROM patient_table where first_Name = \"" + name + "\" AND ssnSerial = \"" + ssn + "\";";
-		String checkLastName = "SELECT * FROM patient_table where last_Name = \"" + name + "\" AND ssnSerial = \"" + ssn + "\";";
+		String checkFirstName = "SELECT * FROM patient_table where first_name = \"" + name + "\" AND ssnSerial = \""
+				+ ssn + "\";";
+		String checkLastName = "SELECT * FROM patient_table where last_name = \"" + name + "\" AND ssnSerial = \"" + ssn
+				+ "\";";
 		String checkID = "SELECT * FROM patient_table where patient_id = \"" + id + "\";";
 
 		try {
@@ -103,12 +105,9 @@ public class DBcontrol {
 					resultSet3 = statement3.executeQuery(checkID);
 					if (resultSet3.next()) {
 						patientFound(resultSet3);
-							
-						}else {
-							
-						PatientProfile.found = false;
-						}
 					}
+						PatientProfile.found = false;
+				}
 				
 			} // end else
 
@@ -121,9 +120,9 @@ public class DBcontrol {
 	
 	void searchByAdmin(String id, String name, String ssn) {
 			
-		String checkFirstName = "SELECT * FROM employee_info WHERE first_Name = \"" + name + "\" AND ssnSerial = \""
+		String checkFirstName = "SELECT * FROM employee_info WHERE first_name = \"" + name + "\" AND ssnSerial = \""
 				+ ssn + "\";";
-		String checkLastName = "SELECT * FROM employee_info WHERE last_Name = \"" + name + "\" AND ssnSerial = \"" + ssn
+		String checkLastName = "SELECT * FROM employee_info WHERE last_name = \"" + name + "\" AND ssnSerial = \"" + ssn
 				+ "\";";
 		String checkID = "SELECT * FROM employee_info WHERE employee_id = \"" + id + "\" OR user_id = \"" + id + "\";";
 
@@ -137,7 +136,6 @@ public class DBcontrol {
 			resultSet = statement.executeQuery(checkFirstName);
 			if (resultSet.next()) {
 				employeeFound(resultSet);
-				
 			} // end if
 			else {
 				statement2 = mpCon.createStatement();
@@ -146,17 +144,16 @@ public class DBcontrol {
 					employeeFound(resultSet2);
 				} else {
 					statement3 = mpCon.createStatement();
-						resultSet3 = statement3.executeQuery(checkID);
-						if (resultSet3.next()) {
-							employeeFound(resultSet3);
-						}
-						PatientProfile.found = false;
+					resultSet3 = statement3.executeQuery(checkID);
+					if (resultSet3.next()) {
+						employeeFound(resultSet3);
+					}
+					PatientProfile.found = false;
 				} // end else
-
 			}
-			} catch (SQLException e) {
+		} catch (SQLException e) {
 			EmployeeProfile.found = false;
-			}
+		}
 	}
 
 	void patientFound(ResultSet resultSet) {
@@ -189,8 +186,7 @@ public class DBcontrol {
 
 	void employeeFound(ResultSet resultSet) {
 		String id = "";
-		PatientProfile.found = true;
-
+		EmployeeProfile.found = true;
 		try {
 			id = resultSet.getNString("employee_id");
 			EmployeeProfile.setEmployeeID(id);
@@ -261,6 +257,7 @@ public class DBcontrol {
 				PatientProfile.setCityName(resultset.getNString("city"));
 				PatientProfile.setStateName(resultset.getNString("state").toUpperCase());
 				PatientProfile.setZipcode(resultset.getNString("zipcode"));
+				mpCon.close();
 			} // end if
 			else {
 				PatientProfile.setStreetNum("N/A");
@@ -269,10 +266,10 @@ public class DBcontrol {
 				PatientProfile.setCityName("N/A   ");
 				PatientProfile.setStateName("   ");
 				PatientProfile.setZipcode("     ");
+				mpCon.close();
 			}
 
 		} catch (SQLException e) {
-			
 			e.printStackTrace();
 		}
 		

@@ -495,7 +495,7 @@ public class MainPanel extends JPanel {
 		}
 		// else do following
 		
-		else if (!OwnProfile.getRole().equalsIgnoreCase("admin")) {
+		if (!OwnProfile.getRole().equalsIgnoreCase("admin")) {
 			dbc.getProfile(idSearch.getText(), nameSearch.getText(), ssnSearch.getText(), "patient");
 			if (PatientProfile.found) {
 				nameSearch.setText("");
