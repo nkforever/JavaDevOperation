@@ -204,8 +204,7 @@ public class MainFrame {
 
 				valid = dbc.validate(user, pass);
 				if(valid) {
-				OwnProfile profile = new OwnProfile();
-					profile.setUser(user);
+				OwnProfile.setUser(user);
 					ErrorMessageLabel.setText("SUCCESS!");
 					mainFrame.getContentPane().removeAll();
 					mainFrame.setExtendedState( mainFrame.getExtendedState()|JFrame.MAXIMIZED_BOTH );

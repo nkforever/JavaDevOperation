@@ -16,7 +16,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.text.DateFormatter;
@@ -43,8 +42,8 @@ public class EditEmployeeForm extends JPanel{
 	private JButton saveButton;
 
 	private String patientID = "", firstName = "", midName = "", lastName= "", DOB = "", gender = "", ssnArea = "", ssnGroup = "", ssnSerial ="",
-			phoneNumber = "", streetNum = "", aptNum = "", streetName = "", city = "", state = "", zipcode = ""; 
-	private int active = 0;
+			phoneNumber = "", streetNum = "", aptNum = "", streetName = "", city = "", state = "", zipcode = "",
+			role = "";
 
 
 	DateFormat  dateFormat = new SimpleDateFormat("MM/dd/yyyy"); 
@@ -423,8 +422,11 @@ public class EditEmployeeForm extends JPanel{
 	JButton getSaveButton() {
 		return saveButton;
 	}
+// TODO 
+//	need fix for
+//	editing employee
 
-	boolean generatePatientID() {
+	boolean updateEmployeeInfo() {
 		if(!isMandatoryFieldFill()) {
 			if(firstNameField.getText().isEmpty()) firstNameField.setBackground(Color.YELLOW);
 			if(lastNameField.getText().isEmpty()) lastNameField.setBackground(Color.yellow);
@@ -436,27 +438,8 @@ public class EditEmployeeForm extends JPanel{
 			mandatoryError.setBackground(Color.YELLOW);
 
 			return false;
-		}
-
-		else if(dbc.checkIfPatientAlreadyExist(firstNameField.getText(), lastNameField.getText(), ssnSerialField.getText())) {
-			if (JOptionPane.showConfirmDialog(null, "This patient is already exist in record, do you want to load his/her profile?", "WARNING",
-					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-
-				dbc.getProfile(firstNameField.getText(), lastNameField.getText(), ssnSerialField.getText());
-				return true;
-			}
 		}	
 		else {
-			long time = System.currentTimeMillis();
-			patientID = Long.toString((time));
-
-			patientID = patientID.substring(5, patientID.length());
-
-			while(dbc.checkExistingID(patientID)){
-				time = System.currentTimeMillis();
-				patientID = Long.toString((time));
-				patientID = patientID.substring(5, patientID.length());
-			}
 
 			if(firstNameField.getText() != null) 	firstName = firstNameField.getText();
 			if(midNameField.getText() !=null) midName = midNameField.getText();		
@@ -474,39 +457,39 @@ public class EditEmployeeForm extends JPanel{
 			if(stateField.getSelectedItem().toString() != null) state = stateField.getSelectedItem().toString();
 			if(zipcodeField.getText() != null) zipcode = zipcodeField.getText();
 
-			loadPatientInfo();
+			loadEmployeeInfo();
 
-			dbc.addPatientProfile(patientID, firstName, midName, lastName, DOB,	gender, " ", ssnArea, ssnGroup, ssnSerial, phoneNumber);
+			dbc.updateEmployeeProfile(patientID, firstName, midName, lastName, DOB, gender, " ", ssnArea, ssnGroup,
+					ssnSerial, phoneNumber);
 
-			dbc.addAddress(patientID, streetNum, aptNum,streetName,city, state, zipcode);
+			dbc.updateAddress(patientID, streetNum, aptNum, streetName, city, state, zipcode);
 
-			dbc.addID(patientID);
 
 			return true;
 		}
 		return false;
 	}
 
-	void loadPatientInfo() {
+	void loadEmployeeInfo() {
 
 
-		ClientProfile.setID(patientID);
-		ClientProfile.setFName(firstName);
-		ClientProfile.setMName(midName);
-		ClientProfile.setLName(lastName);
-		ClientProfile.setDOB(DOB);
-		ClientProfile.setGender(gender);
-		ClientProfile.setSSNArea(ssnArea);
-		ClientProfile.setSSNGroup(ssnGroup);
-		ClientProfile.setSSNSerial(ssnSerial);
-		ClientProfile.setPhoneNumber(phoneNumber);
-		ClientProfile.setStreetNum(streetNum);
-		ClientProfile.setStreetName(streetName);
-		ClientProfile.setAptNum(aptNum);
-		ClientProfile.setCity(city);
-		ClientProfile.setState(state);
-		ClientProfile.setZipcode(zipcode);
-		ClientProfile.setActive(active);		
+		EmployeeProfile.setEmployeeID(patientID);
+		EmployeeProfile.setFirstName(firstName);
+		EmployeeProfile.setMidName(midName);
+		EmployeeProfile.setLastName(lastName);
+		EmployeeProfile.setDOB(DOB);
+		EmployeeProfile.setGender(gender);
+		EmployeeProfile.setSsnArea(ssnArea);
+		EmployeeProfile.setSsnGroup(ssnGroup);
+		EmployeeProfile.setSsnSerial(ssnSerial);
+		EmployeeProfile.setPhoneNumber(phoneNumber);
+		EmployeeProfile.setStreetNum(streetNum);
+		EmployeeProfile.setStreetName(streetName);
+		EmployeeProfile.setAptNum(aptNum);
+		EmployeeProfile.setCityName(city);
+		EmployeeProfile.setStateName(state);
+		EmployeeProfile.setZipCode(zipcode);
+		EmployeeProfile.setRole(role);
 
 		clearForm();
 	}

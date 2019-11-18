@@ -43,7 +43,8 @@ public class NewEmployeeForm extends JPanel{
 	private JButton saveButton;
 
 	private String patientID = "", firstName = "", midName = "", lastName= "", DOB = "", gender = "", ssnArea = "", ssnGroup = "", ssnSerial ="",
-			phoneNumber = "", streetNum = "", aptNum = "", streetName = "", city = "", state = "", zipcode = ""; 
+			phoneNumber = "", streetNum = "", aptNum = "", streetName = "", city = "", state = "", zipcode = "",
+			role = "";
 	private int active = 0;
 
 
@@ -425,7 +426,7 @@ public class NewEmployeeForm extends JPanel{
 		return saveButton;
 	}
 
-	boolean generatePatientID() {
+	boolean generateEmployeeID() {
 		if(!isMandatoryFieldFill()) {
 			if(firstNameField.getText().isEmpty()) firstNameField.setBackground(Color.YELLOW);
 			if(lastNameField.getText().isEmpty()) lastNameField.setBackground(Color.yellow);
@@ -439,14 +440,27 @@ public class NewEmployeeForm extends JPanel{
 			return false;
 		}
 
+		// TODO
+//need fix for adding new employee
+
 		else if(dbc.checkIfPatientAlreadyExist(firstNameField.getText(), lastNameField.getText(), ssnSerialField.getText())) {
-			if (JOptionPane.showConfirmDialog(null, "This patient is already exist in record, do you want to load his/her profile?", "WARNING",
+			if (JOptionPane.showConfirmDialog(null,
+					"This person is also a patient in record, do you want to load his/her profile?", "WARNING",
 					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 
-				dbc.getProfile(firstNameField.getText(), lastNameField.getText(), ssnSerialField.getText());
+				dbc.getProfile(firstNameField.getText(), lastNameField.getText(), ssnSerialField.getText(), "patient");
 				return true;
 			}
-		}	
+		} else if (dbc.checkIfEmployeeAlreadyExist(firstNameField.getText(), lastNameField.getText(),
+				ssnSerialField.getText())) {
+			if (JOptionPane.showConfirmDialog(null,
+					"This person already exist in record, do you want to load his/her profile?", "WARNING",
+					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+
+				dbc.getProfile(firstNameField.getText(), lastNameField.getText(), ssnSerialField.getText(), "employee");
+				return true;
+			}
+		}
 		else {
 			long time = System.currentTimeMillis();
 			patientID = Long.toString((time));
@@ -474,6 +488,8 @@ public class NewEmployeeForm extends JPanel{
 			if(cityField.getText() != null) city = cityField.getText();
 			if(stateField.getSelectedItem().toString() != null) state = stateField.getSelectedItem().toString();
 			if(zipcodeField.getText() != null) zipcode = zipcodeField.getText();
+			if (roleComboBox.getSelectedItem().toString() != null)
+				role = roleComboBox.getSelectedItem().toString();
 
 			loadPatientInfo();
 
@@ -491,23 +507,23 @@ public class NewEmployeeForm extends JPanel{
 	void loadPatientInfo() {
 
 
-		ClientProfile.setID(patientID);
-		ClientProfile.setFName(firstName);
-		ClientProfile.setMName(midName);
-		ClientProfile.setLName(lastName);
-		ClientProfile.setDOB(DOB);
-		ClientProfile.setGender(gender);
-		ClientProfile.setSSNArea(ssnArea);
-		ClientProfile.setSSNGroup(ssnGroup);
-		ClientProfile.setSSNSerial(ssnSerial);
-		ClientProfile.setPhoneNumber(phoneNumber);
-		ClientProfile.setStreetNum(streetNum);
-		ClientProfile.setStreetName(streetName);
-		ClientProfile.setAptNum(aptNum);
-		ClientProfile.setCity(city);
-		ClientProfile.setState(state);
-		ClientProfile.setZipcode(zipcode);
-		ClientProfile.setActive(active);		
+		EmployeeProfile.setEmployeeID(patientID);
+		EmployeeProfile.setFirstName(firstName);
+		EmployeeProfile.setMidName(midName);
+		EmployeeProfile.setLastName(lastName);
+		EmployeeProfile.setDOB(DOB);
+		EmployeeProfile.setGender(gender);
+		EmployeeProfile.setSsnArea(ssnArea);
+		EmployeeProfile.setSsnGroup(ssnGroup);
+		EmployeeProfile.setSsnSerial(ssnSerial);
+		EmployeeProfile.setPhoneNumber(phoneNumber);
+		EmployeeProfile.setStreetNum(streetNum);
+		EmployeeProfile.setStreetName(streetName);
+		EmployeeProfile.setAptNum(aptNum);
+		EmployeeProfile.setCityName(city);
+		EmployeeProfile.setStateName(state);
+		EmployeeProfile.setZipCode(zipcode);
+		EmployeeProfile.setRole(role);
 
 		clearForm();
 	}

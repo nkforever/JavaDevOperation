@@ -36,8 +36,8 @@ public class MainPanel extends JPanel {
 
 	private JPanel profilePanel, profileInputPanel, bottomPanel, profileSection, searchPanel, centerPanel,
 			optionProfilePanel;
-	private JLabel userLabel, SSNLabel, genderLabel, DOBLabel, patientIDLabel, firstNameLabel, midNameLabel,
-			lastNameLabel, primaryDoctorLabel, lblPhone, updateStatusLabel, streetLabel, cityStateLabel,
+	private JLabel userLabel, SSNLabel, genderLabel, DOBLabel, IDLabel, firstNameLabel, midNameLabel,
+			lastNameLabel, primaryLabel, lblPhone, updateStatusLabel, streetLabel, cityStateLabel,
 			phoneNumberLabel, aptLabel;
 
 	private DBcontrol dbc = new DBcontrol();
@@ -46,12 +46,14 @@ public class MainPanel extends JPanel {
 	NewPatientForm npf = new NewPatientForm();
 	lastPatientHistory lph = new lastPatientHistory();
 	patientAssignmentForm paf = new patientAssignmentForm();
+	NewEmployeeForm nef = new NewEmployeeForm();
 
 	MVCcontroller mvc = new MVCcontroller(this, npf, paf);
 	// End MVC controller group
 
 	private DefaultListModel<String> model;
 	private OwnProfile profile = new OwnProfile();
+	private Label lblPrimaryDoctor;
 
 	// Begin main panel class
 	public MainPanel() {
@@ -258,16 +260,16 @@ public class MainPanel extends JPanel {
 		profilePanel.add(profileSection);
 		profileSection.setLayout(null);
 
-		JLabel lblNewLabel = new JLabel("Patient ID: ");
-		lblNewLabel.setBounds(11, 0, 89, 38);
+		JLabel lblNewLabel = new JLabel("ID: ");
+		lblNewLabel.setBounds(11, 0, 42, 38);
 		lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD, 16));
 		profileSection.add(lblNewLabel);
 
-		patientIDLabel = new JLabel("-");
-		patientIDLabel.setBounds(101, 0, 127, 38);
-		patientIDLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		patientIDLabel.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		profileSection.add(patientIDLabel);
+		IDLabel = new JLabel("-");
+		IDLabel.setBounds(57, 0, 127, 38);
+		IDLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		IDLabel.setFont(new Font("Times New Roman", Font.BOLD, 16));
+		profileSection.add(IDLabel);
 
 		JLabel lblDOB = new JLabel("DOB: ");
 		lblDOB.setBounds(11, 62, 64, 38);
@@ -312,17 +314,17 @@ public class MainPanel extends JPanel {
 		streetLabel.setFont(new Font("Times New Roman", Font.BOLD, 16));
 		profileSection.add(streetLabel);
 
-		Label lblPrimaryDoctor = new Label("Primary Doctor:");
+		lblPrimaryDoctor = new Label("Primary Doctor:");
 		lblPrimaryDoctor.setBounds(341, 143, 139, 38);
 		lblPrimaryDoctor.setFont(new Font("Times New Roman", Font.BOLD, 15));
 		profileSection.add(lblPrimaryDoctor);
 
-		primaryDoctorLabel = new JLabel(" ");
-		primaryDoctorLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		primaryDoctorLabel.setHorizontalTextPosition(SwingConstants.CENTER);
-		primaryDoctorLabel.setBounds(335, 173, 145, 38);
-		primaryDoctorLabel.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		profileSection.add(primaryDoctorLabel);
+		primaryLabel = new JLabel(" ");
+		primaryLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		primaryLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+		primaryLabel.setBounds(335, 173, 145, 38);
+		primaryLabel.setFont(new Font("Times New Roman", Font.BOLD, 16));
+		profileSection.add(primaryLabel);
 
 		cityStateLabel = new JLabel(" ");
 		cityStateLabel.setBounds(89, 173, 234, 38);
@@ -395,7 +397,7 @@ public class MainPanel extends JPanel {
 		centerPanel.add(profileInputPanel, BorderLayout.CENTER);
 
 
-		addNewButton = new JButton("Add New Patient");
+		addNewButton = new JButton("Add New Profile");
 		addNewButton.setBackground(Color.WHITE);
 		addNewButton.setFont(new Font("Times New Roman", Font.PLAIN, 20));
 		addNewButton.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -434,7 +436,7 @@ public class MainPanel extends JPanel {
 
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource().equals(addNewButton))
-				pressAddNewPatient();
+				pressAddNewProfile();
 
 			else if (e.getSource().equals(checkinButton))
 				loadPatientAssignmentForm();
@@ -454,17 +456,26 @@ public class MainPanel extends JPanel {
 			}
 
 			// TODO Auto-generated method stub
-			// If there's more button
+			// If there's more button -----------------------------------------
 		}
 	};// End ActionListener class
 
 
-	void pressAddNewPatient() {
+	void pressAddNewProfile() {
 		profileInputPanel.removeAll();
-		profileInputPanel.add(npf);
-		npf.setVisible(true);
-		profileInputPanel.repaint();
-		profileInputPanel.validate();
+		
+		if (OwnProfile.getRole().equalsIgnoreCase("admin")) {
+				
+			nef.setVisible(true);
+			profileInputPanel.repaint();
+			profileInputPanel.validate();
+		}
+		else {
+			profileInputPanel.add(npf);
+			npf.setVisible(true);
+			profileInputPanel.repaint();
+			profileInputPanel.validate();
+		}
 
 	}// End press Add New Patient function
 
@@ -481,53 +492,94 @@ public class MainPanel extends JPanel {
 				ssnSearch.setBackground(Color.YELLOW);
 				return;
 			}
-
 		}
 		// else do following
-		dbc.getProfile(idSearch.getText(), nameSearch.getText(), ssnSearch.getText());
-
-		if (ClientProfile.found) {
+		dbc.getProfile(idSearch.getText(), nameSearch.getText(), ssnSearch.getText(), "patient");
+		if (!OwnProfile.getRole().equalsIgnoreCase("admin") && PatientProfile.found) {
 			nameSearch.setText("");
 			idSearch.setText("");
 			ssnSearch.setText("");
 
 			loadPatient();
+			return;
+		}
+
+		dbc.getProfile(idSearch.getText(), nameSearch.getText(), ssnSearch.getText(), "employee");
+		if (OwnProfile.getRole().equalsIgnoreCase("admin") && EmployeeProfile.found) {
+			nameSearch.setText("");
+			idSearch.setText("");
+			ssnSearch.setText("");
+
+			loadEmployee();
 		} else {
 
-			patientIDLabel.setForeground(Color.RED);
-			patientIDLabel.setText("Search Not Found!");
+			IDLabel.setForeground(Color.RED);
+			IDLabel.setText("Search Not Found!");
 			firstNameLabel.setText("");
 			midNameLabel.setText("");
 			lastNameLabel.setText("");
 			DOBLabel.setText("");
 			genderLabel.setText("");
-			primaryDoctorLabel.setText("");
+			primaryLabel.setText("");
 		}
 
 	}// end search
 
+	void loadEmployee() {
+
+		// patient info
+		IDLabel.setForeground(Color.BLACK);
+		IDLabel.setText(EmployeeProfile.getEmployeeID());
+		firstNameLabel.setText(EmployeeProfile.getFirstName());
+		midNameLabel.setText(EmployeeProfile.getMidName());
+		lastNameLabel.setText(EmployeeProfile.getLastName());
+		DOBLabel.setText(EmployeeProfile.getDOB());
+		genderLabel.setText(EmployeeProfile.getGender());
+		lblPrimaryDoctor.setText("Primary Role");
+		primaryLabel.setText(EmployeeProfile.getRole());
+		phoneNumberLabel.setText(EmployeeProfile.getPhoneNumber());
+		SSNLabel.setText("XXX-XX-" + EmployeeProfile.getSsnSerial());
+
+		// address
+		String address = PatientProfile.getStreetNum() + " " + PatientProfile.getStreetName();
+		String cityStateZip = PatientProfile.getCityName() + ", " + PatientProfile.getStateName() + " "
+				+ PatientProfile.getZipcode();
+		streetLabel.setText(address);
+		aptLabel.setText("Apt#" + PatientProfile.getAptNum());
+		cityStateLabel.setText(cityStateZip);
+
+		if (PatientProfile.getActive() == 0) {
+			loadLastPatientHistory();
+
+		} else {
+			loadPatientAssignmentForm();
+		}
+
+	}// end load employee
+
 	void loadPatient() {
 
 		// patient info
-		patientIDLabel.setForeground(Color.BLACK);
-		patientIDLabel.setText(ClientProfile.patientID);
-		firstNameLabel.setText(ClientProfile.firstName);
-		midNameLabel.setText(ClientProfile.midName);
-		lastNameLabel.setText(ClientProfile.lastName);
-		DOBLabel.setText(ClientProfile.dateOfBirth);
-		genderLabel.setText(ClientProfile.gender);
-		primaryDoctorLabel.setText(ClientProfile.PrimaryDoctor);
-		phoneNumberLabel.setText(ClientProfile.phoneNumber);
-		SSNLabel.setText("XXX-XX-" + ClientProfile.ssnSerial);
+		IDLabel.setForeground(Color.BLACK);
+		IDLabel.setText(PatientProfile.getPatientID());
+		firstNameLabel.setText(PatientProfile.getFirstName());
+		midNameLabel.setText(PatientProfile.getMidName());
+		lastNameLabel.setText(PatientProfile.getLastName());
+		DOBLabel.setText(PatientProfile.getDOB());
+		genderLabel.setText(PatientProfile.getGender());
+		primaryLabel.setText(PatientProfile.getPrimaryDoctor());
+		phoneNumberLabel.setText(PatientProfile.getPhoneNumber());
+		SSNLabel.setText("XXX-XX-" + PatientProfile.getSsnSerial());
 
 		// address
-		String address = ClientProfile.streetNum + " " + ClientProfile.streetName;
-		String cityStateZip = ClientProfile.cityName + ", " + ClientProfile.stateName + " " + ClientProfile.zipcode;
+		String address = PatientProfile.getStreetNum() + " " + PatientProfile.getStreetName();
+		String cityStateZip = PatientProfile.getCityName() + ", " + PatientProfile.getStateName() + " "
+				+ PatientProfile.getZipcode();
 		streetLabel.setText(address);
-		aptLabel.setText("Apt#" + ClientProfile.aptNum);
+		aptLabel.setText("Apt#" + PatientProfile.getAptNum());
 		cityStateLabel.setText(cityStateZip);
 
-		if (ClientProfile.active == 0) {
+		if (PatientProfile.getActive() == 0) {
 			loadLastPatientHistory();
 
 		} else {
@@ -560,7 +612,7 @@ public class MainPanel extends JPanel {
 				idSearch.setText("");
 				ssnSearch.setText("");
 
-				patientIDLabel.setText("_");
+				IDLabel.setText("_");
 				firstNameLabel.setText("_");
 				midNameLabel.setText("_");
 				lastNameLabel.setText("_");
@@ -569,7 +621,7 @@ public class MainPanel extends JPanel {
 				streetLabel.setText("_____" + " _____ __");
 				aptLabel.setText("");
 				cityStateLabel.setText("________" + ", __" + " _____");
-				primaryDoctorLabel.setText("________");
+				primaryLabel.setText("________");
 				DOBLabel.setText("_");
 				genderLabel.setText("_");
 
@@ -586,7 +638,7 @@ public class MainPanel extends JPanel {
 		idSearch.setText("");
 		ssnSearch.setText("");
 
-		patientIDLabel.setText("_");
+		IDLabel.setText("_");
 		firstNameLabel.setText("_");
 		midNameLabel.setText("_");
 		lastNameLabel.setText("_");
@@ -595,7 +647,7 @@ public class MainPanel extends JPanel {
 		streetLabel.setText("_____" + " _____ __");
 		aptLabel.setText("");
 		cityStateLabel.setText("________" + ", __" + " _____");
-		primaryDoctorLabel.setText("________");
+		primaryLabel.setText("________");
 		DOBLabel.setText("_");
 		genderLabel.setText("_");
 

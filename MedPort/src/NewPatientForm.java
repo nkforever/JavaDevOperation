@@ -485,23 +485,23 @@ public class NewPatientForm extends JPanel{
 	void loadPatientInfo() {
 
 
-		ClientProfile.setID(patientID);
-		ClientProfile.setFName(firstName);
-		ClientProfile.setMName(midName);
-		ClientProfile.setLName(lastName);
-		ClientProfile.setDOB(DOB);
-		ClientProfile.setGender(gender);
-		ClientProfile.setSSNArea(ssnArea);
-		ClientProfile.setSSNGroup(ssnGroup);
-		ClientProfile.setSSNSerial(ssnSerial);
-		ClientProfile.setPhoneNumber(phoneNumber);
-		ClientProfile.setStreetNum(streetNum);
-		ClientProfile.setStreetName(streetName);
-		ClientProfile.setAptNum(aptNum);
-		ClientProfile.setCity(city);
-		ClientProfile.setState(state);
-		ClientProfile.setZipcode(zipcode);
-		ClientProfile.setActive(active);		
+		PatientProfile.setID(patientID);
+		PatientProfile.setFName(firstName);
+		PatientProfile.setMName(midName);
+		PatientProfile.setLName(lastName);
+		PatientProfile.setDOB(DOB);
+		PatientProfile.setGender(gender);
+		PatientProfile.setSSNArea(ssnArea);
+		PatientProfile.setSSNGroup(ssnGroup);
+		PatientProfile.setSSNSerial(ssnSerial);
+		PatientProfile.setPhoneNumber(phoneNumber);
+		PatientProfile.setStreetNum(streetNum);
+		PatientProfile.setStreetName(streetName);
+		PatientProfile.setAptNum(aptNum);
+		PatientProfile.setCity(city);
+		PatientProfile.setState(state);
+		PatientProfile.setZipcode(zipcode);
+		PatientProfile.setActive(active);		
 
 		clearForm();
 	}

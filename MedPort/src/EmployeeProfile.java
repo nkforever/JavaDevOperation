@@ -1,18 +1,18 @@
 
-public class OwnProfile {
+public class EmployeeProfile {
 
 	private static String user, role;
-	private static String employeeID = "", firstName = "", midName = "", lastName = "", addressNum = "", aptNum = "",
-			streeName = "", cityName = "", stateName = "", zipCode = "", gender = "", email = "", phoneNumber = "",
+	private static String employeeID = "", firstName = "", midName = "", lastName = "", streetNum = "", aptNum = "",
+			streetName = "", cityName = "", stateName = "", zipCode = "", gender = "", email = "", phoneNumber = "",
 			DOB = "", ssnArea = "", ssnGroup = "", ssnSerial = "";
-	
+	static boolean found = false;
 	
 	public static String getSsnArea() {
 		return ssnArea;
 	}
 
 	public static void setSsnArea(String ssnArea) {
-		OwnProfile.ssnArea = ssnArea;
+		EmployeeProfile.ssnArea = ssnArea;
 	}
 
 	public static String getSsnGroup() {
@@ -20,7 +20,7 @@ public class OwnProfile {
 	}
 
 	public static void setSsnGroup(String ssnGroup) {
-		OwnProfile.ssnGroup = ssnGroup;
+		EmployeeProfile.ssnGroup = ssnGroup;
 	}
 
 	public static String getSsnSerial() {
@@ -28,7 +28,7 @@ public class OwnProfile {
 	}
 
 	public static void setSsnSerial(String ssnSerial) {
-		OwnProfile.ssnSerial = ssnSerial;
+		EmployeeProfile.ssnSerial = ssnSerial;
 	}
 
 	public static String getDOB() {
@@ -44,7 +44,7 @@ public class OwnProfile {
 	}
 
 	public static void setEmail(String email) {
-		OwnProfile.email = email;
+		EmployeeProfile.email = email;
 	}
 
 	public static String getZipCode() {
@@ -52,7 +52,7 @@ public class OwnProfile {
 	}
 
 	public static void setZipCode(String zipCode) {
-		OwnProfile.zipCode = zipCode;
+		EmployeeProfile.zipCode = zipCode;
 	}
 
 	public static String getAptNum() {
@@ -60,23 +60,23 @@ public class OwnProfile {
 	}
 
 	public static void setAptNum(String aptNum) {
-		OwnProfile.aptNum = aptNum;
+		EmployeeProfile.aptNum = aptNum;
 	}
 
-	public static String getAddressNum() {
-		return addressNum;
+	public static String getStreetNum() {
+		return streetNum;
 	}
 
-	public static void setAddressNum(String addressNum) {
-		OwnProfile.addressNum = addressNum;
+	public static void setStreetNum(String addressNum) {
+		EmployeeProfile.streetNum = addressNum;
 	}
 
-	public static String getStreeName() {
-		return streeName;
+	public static String getStreetName() {
+		return streetName;
 	}
 
-	public static void setStreeName(String streeName) {
-		OwnProfile.streeName = streeName;
+	public static void setStreetName(String streeName) {
+		EmployeeProfile.streetName = streeName;
 	}
 
 	public static String getCityName() {
@@ -84,7 +84,7 @@ public class OwnProfile {
 	}
 
 	public static void setCityName(String cityName) {
-		OwnProfile.cityName = cityName;
+		EmployeeProfile.cityName = cityName;
 	}
 
 	public static String getStateName() {
@@ -92,7 +92,7 @@ public class OwnProfile {
 	}
 
 	public static void setStateName(String stateName) {
-		OwnProfile.stateName = stateName;
+		EmployeeProfile.stateName = stateName;
 	}
 
 	public static String getGender() {
@@ -100,7 +100,7 @@ public class OwnProfile {
 	}
 
 	public static void setGender(String gender) {
-		OwnProfile.gender = gender;
+		EmployeeProfile.gender = gender;
 	}
 
 	public static String getPhoneNumber() {
@@ -108,7 +108,7 @@ public class OwnProfile {
 	}
 
 	public static void setPhoneNumber(String phoneNumber) {
-		OwnProfile.phoneNumber = phoneNumber;
+		EmployeeProfile.phoneNumber = phoneNumber;
 	}
 
 	public static String getEmployeeID() {
@@ -132,7 +132,7 @@ public class OwnProfile {
 	}
 
 	public static void setRole(String role) {
-		OwnProfile.role = role;
+		EmployeeProfile.role = role;
 	}
 
 	public static void setFirstName(String fn) {

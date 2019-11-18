@@ -16,7 +16,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
@@ -76,7 +75,7 @@ public class EditPatientForm extends JPanel{
 		lblStreetAddr.setBounds(11, 141, 105, 29);
 		formPanel.add(lblStreetAddr);
 
-		firstNameField = new JTextField();
+		firstNameField = new JTextField(PatientProfile.getFirstName());
 		firstNameField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -94,7 +93,7 @@ public class EditPatientForm extends JPanel{
 		formPanel.add(firstNameField);
 		firstNameField.setColumns(10);
 
-		midNameField = new JTextField();
+		midNameField = new JTextField(PatientProfile.getMidName());
 		midNameField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -112,7 +111,7 @@ public class EditPatientForm extends JPanel{
 		formPanel.add(midNameField);
 		midNameField.setColumns(10);
 
-		lastNameField = new JTextField();
+		lastNameField = new JTextField(PatientProfile.getLastName());
 		lastNameField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -131,6 +130,7 @@ public class EditPatientForm extends JPanel{
 		lastNameField.setColumns(10);
 
 		try {
+			DOBField = new JFormattedTextField(PatientProfile.getDOB());
 			DOBField = new JFormattedTextField(new MaskFormatter("##/##/####"));
 		}catch (ParseException e) {
 			e.printStackTrace();
@@ -142,17 +142,18 @@ public class EditPatientForm extends JPanel{
 
 		genderField = new JComboBox<String>();
 		genderField.setModel(new DefaultComboBoxModel<String>(new String[] {"", "Male", "Female", "Other()"}));
+		genderField.setSelectedItem(PatientProfile.getGender());
 		genderField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		genderField.setBounds(305, 67, 86, 29);
 		formPanel.add(genderField);
 
-		streetNameField = new JFormattedTextField();
+		streetNameField = new JFormattedTextField(PatientProfile.getStreetName());
 		streetNameField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		streetNameField.setBounds(202, 141, 234, 29);
 		formPanel.add(streetNameField);
 		streetNameField.setColumns(10);
 
-		cityField = new JTextField();
+		cityField = new JTextField(PatientProfile.getCityName());
 		cityField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		cityField.setBounds(120, 180, 152, 29);
 		formPanel.add(cityField);
@@ -160,10 +161,12 @@ public class EditPatientForm extends JPanel{
 
 		stateField = new JComboBox<String>();
 		stateField.setModel(new DefaultComboBoxModel<String>(new String[] {"", "AK", "AL", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"}));
+		stateField.setSelectedItem(PatientProfile.getStateName());
 		stateField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		stateField.setBounds(362, 180, 74, 29);
 		formPanel.add(stateField);
 
+		zipcodeField = new JFormattedTextField(PatientProfile.getZipcode());
 		zipcodeField = new JFormattedTextField(zipFormatter);
 		zipcodeField.addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent e) { 
@@ -179,6 +182,7 @@ public class EditPatientForm extends JPanel{
 
 
 		try {
+			phoneNumberField = new JFormattedTextField(PatientProfile.getPhoneNumber());
 			phoneNumberField = new JFormattedTextField(	new MaskFormatter("(###) ###-####"));
 		} catch (ParseException e1) {
 			System.out.println("Error formating phone number");
@@ -250,14 +254,14 @@ public class EditPatientForm extends JPanel{
 		lblApt.setBounds(489, 141, 48, 29);
 		formPanel.add(lblApt);
 
-		aptNumField = new JTextField();
+		aptNumField = new JTextField(PatientProfile.getAptNum());
 		aptNumField.setText(" ");
 		aptNumField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		aptNumField.setColumns(5);
 		aptNumField.setBounds(549, 134, 94, 29);
 		formPanel.add(aptNumField);
 
-		streetNumField = new JFormattedTextField();
+		streetNumField = new JFormattedTextField(PatientProfile.getStreetNum());
 		streetNumField.addKeyListener(new KeyAdapter() {
 
 			public void keyTyped(KeyEvent e) {		
@@ -271,7 +275,7 @@ public class EditPatientForm extends JPanel{
 		streetNumField.setBounds(121, 141, 74, 29);
 		formPanel.add(streetNumField);
 
-		ssnAreaField = new JFormattedTextField();
+		ssnAreaField = new JFormattedTextField(PatientProfile.getSsnArea());
 		ssnAreaField.addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent e) { 
 				if(firstNameField.getText().isEmpty()) firstNameField.setBackground(Color.white);
@@ -291,7 +295,7 @@ public class EditPatientForm extends JPanel{
 		ssnAreaField.setBounds(534, 67, 33, 29);
 		formPanel.add(ssnAreaField);
 
-		ssnGroupField = new JFormattedTextField();
+		ssnGroupField = new JFormattedTextField(PatientProfile.getSsnGroup());
 		ssnGroupField.addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent e) { 
 				if(firstNameField.getText().isEmpty()) firstNameField.setBackground(Color.white);
@@ -312,7 +316,7 @@ public class EditPatientForm extends JPanel{
 		ssnGroupField.setBounds(568, 67, 26, 29);
 		formPanel.add(ssnGroupField);
 
-		ssnSerialField = new JFormattedTextField();
+		ssnSerialField = new JFormattedTextField(PatientProfile.getSsnSerial());
 		ssnSerialField.addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent e) {
 				if(firstNameField.getText().isEmpty()) firstNameField.setBackground(Color.white);
@@ -382,7 +386,7 @@ public class EditPatientForm extends JPanel{
 		return saveButton;
 	}
 
-	boolean generatePatientID() {
+	boolean updatePatientInfo() {
 		if(!isMandatoryFieldFill()) {
 			if(firstNameField.getText().isEmpty()) firstNameField.setBackground(Color.YELLOW);
 			if(lastNameField.getText().isEmpty()) lastNameField.setBackground(Color.yellow);
@@ -395,26 +399,7 @@ public class EditPatientForm extends JPanel{
 
 			return false;
 		}
-
-		else if(dbc.checkIfPatientAlreadyExist(firstNameField.getText(), lastNameField.getText(), ssnSerialField.getText())) {
-			if (JOptionPane.showConfirmDialog(null, "This patient is already exist in record, do you want to load his/her profile?", "WARNING",
-					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-
-				dbc.getProfile(firstNameField.getText(), lastNameField.getText(), ssnSerialField.getText());
-				return true;
-			}
-		}	
 		else {
-			long time = System.currentTimeMillis();
-			patientID = Long.toString((time));
-
-			patientID = patientID.substring(5, patientID.length());
-
-			while(dbc.checkExistingID(patientID)){
-				time = System.currentTimeMillis();
-				patientID = Long.toString((time));
-				patientID = patientID.substring(5, patientID.length());
-			}
 
 			if(firstNameField.getText() != null) 	firstName = firstNameField.getText();
 			if(midNameField.getText() !=null) midName = midNameField.getText();		
@@ -434,36 +419,33 @@ public class EditPatientForm extends JPanel{
 
 			loadPatientInfo();
 
-			dbc.addPatientProfile(patientID, firstName, midName, lastName, DOB,	gender, " ", ssnArea, ssnGroup, ssnSerial, phoneNumber);
+			dbc.updatePatientProfile(patientID, firstName, midName, lastName, DOB,	gender, " ", ssnArea, ssnGroup, ssnSerial, phoneNumber);
 
-			dbc.addAddress(patientID, streetNum, aptNum,streetName,city, state, zipcode);
-
-			dbc.addID(patientID);
+			dbc.updateAddress(patientID, streetNum, aptNum,streetName,city, state, zipcode);
 
 			return true;
 		}
-		return false;
 	}
 
 	void loadPatientInfo() {
 
 
-		ClientProfile.setID(patientID);
-		ClientProfile.setFName(firstName);
-		ClientProfile.setMName(midName);
-		ClientProfile.setLName(lastName);
-		ClientProfile.setDOB(DOB);
-		ClientProfile.setGender(gender);
-		ClientProfile.setSSNArea(ssnArea);
-		ClientProfile.setSSNGroup(ssnGroup);
-		ClientProfile.setSSNSerial(ssnSerial);
-		ClientProfile.setPhoneNumber(phoneNumber);
-		ClientProfile.setStreetNum(streetNum);
-		ClientProfile.setStreetName(streetName);
-		ClientProfile.setAptNum(aptNum);
-		ClientProfile.setCity(city);
-		ClientProfile.setState(state);
-		ClientProfile.setZipcode(zipcode);
+		PatientProfile.setPatientID(patientID);
+		PatientProfile.setFirstName(firstName);
+		PatientProfile.setMidName(midName);
+		PatientProfile.setLastName(lastName);
+		PatientProfile.setDOB(DOB);
+		PatientProfile.setGender(gender);
+		PatientProfile.setSsnArea(ssnArea);
+		PatientProfile.setSsnGroup(ssnGroup);
+		PatientProfile.setSsnSerial(ssnSerial);
+		PatientProfile.setPhoneNumber(phoneNumber);
+		PatientProfile.setStreetNum(streetNum);
+		PatientProfile.setStreetName(streetName);
+		PatientProfile.setAptNum(aptNum);
+		PatientProfile.setCityName(city);
+		PatientProfile.setStateName(state);
+		PatientProfile.setZipcode(zipcode);
 
 		clearForm();
 	}
