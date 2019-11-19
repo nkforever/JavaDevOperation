@@ -502,10 +502,10 @@ public class DBcontrol {
 			String state, String zipcode) {
 
 		if (checkConnection()) {
-			String insertProfile = "INSERT INTO `metportdb`.`patient_table` (`patient_id`, `first_name`, `mid_name`, `last_name`, `DOB`, `gender`, `primaryDoctor`, `ssnArea`, `ssnGroup`, `ssnSerial`, ) "
+			String insertProfile = "INSERT INTO employee_table (patient_id, first_name, mid_name, last_name, DOB, gender, primaryDoctor, ssnArea, ssnGroup, ssnSerial, ) "
 					+ "VALUES ('" + eeID + "', '" + firstName + "', '" + midName + "'" + "		'" + lastName + "', '"
 					+ dob + "', '" + gender + "', '" + SSN + "', '" + doctor + "')";
-			String insertAddress = "INSERT INTO `metportdb`.`address_table` (`address_id`, `street_num`, `apt_num`, `street_name`, `city`, `state`, `zipcode`, "
+			String insertAddress = "INSERT INTO metportdb.address_table (address_id, street_num, apt_num, street_name, city, state, zipcode, "
 					+ "VALUES ('" + eeID + "', '" + streetNum + "', '" + aptNum + "'" + "		'" + streetName + "', '"
 					+ city + "', '" + state + "', '" + zipcode + "');";
 			

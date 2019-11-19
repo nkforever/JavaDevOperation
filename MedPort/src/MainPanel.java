@@ -31,7 +31,7 @@ public class MainPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private JTextField nameSearch, idSearch, ssnSearch;
-	private JButton searchButton, logoutButton, homeButton, addNewButton, checkinButton, editPatientProfile,
+	private JButton searchButton, logoutButton, homeButton, addNewButton, checkinButton, editProfile,
 			patientHistoryButton, viewBillButton;
 
 	private JPanel profilePanel, profileInputPanel, bottomPanel, profileSection, searchPanel, centerPanel,
@@ -43,17 +43,20 @@ public class MainPanel extends JPanel {
 	private DBcontrol dbc = new DBcontrol();
 
 	// MVC controller group
-	NewPatientForm npf = new NewPatientForm();
-	lastPatientHistory lph = new lastPatientHistory();
-	patientAssignmentForm paf = new patientAssignmentForm();
-	NewEmployeeForm nef = new NewEmployeeForm();
+	private NewPatientForm newPatientForm = new NewPatientForm();
+	private LastPatientHistory lastPatientHistory = new LastPatientHistory();
+	private PatientAssignmentForm patientAssignmentForm = new PatientAssignmentForm();
+	private NewEmployeeForm newEmployeForm = new NewEmployeeForm();
+	private EditEmployeeForm editEmployeeInfo = new EditEmployeeForm();
+	private EditPatientForm editPatientInfo = new EditPatientForm();
 
-	MVCcontroller mvc = new MVCcontroller(this, npf, paf);
+	MVCcontroller mvc = new MVCcontroller(this, newPatientForm, patientAssignmentForm, editPatientInfo,
+			editEmployeeInfo);
 	// End MVC controller group
 
-	private DefaultListModel<String> model;
-	private OwnProfile profile = new OwnProfile();
+	DefaultListModel<String> model;
 	private Label lblPrimaryDoctor;
+	private JLabel errormessageLabel;
 
 	// Begin main panel class
 	public MainPanel() {
@@ -94,7 +97,7 @@ public class MainPanel extends JPanel {
 		flowLayout.setAlignment(FlowLayout.RIGHT);
 		inputPanel.add(blank2);
 
-		userLabel = new JLabel("Login as: " + profile.getUser());
+		userLabel = new JLabel("Login as: " + OwnProfile.getUser());
 		userLabel.setForeground(Color.BLUE);
 		userLabel.setHorizontalTextPosition(SwingConstants.CENTER);
 		userLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -372,24 +375,36 @@ public class MainPanel extends JPanel {
 		optionProfilePanel.setLayout(null);
 		
 		patientHistoryButton = new JButton("View History");
+		patientHistoryButton.setEnabled(false);
 		patientHistoryButton.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		patientHistoryButton.setBounds(10, 67, 155, 37);
+		patientHistoryButton.setBounds(10, 53, 155, 37);
 		optionProfilePanel.add(patientHistoryButton);
 		
-		editPatientProfile = new JButton("Edit Profile");
-		editPatientProfile.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		editPatientProfile.setBounds(10, 15, 155, 37);
-		optionProfilePanel.add(editPatientProfile);
+
+		editProfile = new JButton("Edit Profile");
+		editProfile.setEnabled(false);
+		editProfile.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		editProfile.setBounds(10, 8, 155, 37);
+		optionProfilePanel.add(editProfile);
 		
 		viewBillButton = new JButton("View Bill");
+		viewBillButton.setEnabled(false);
 		viewBillButton.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		viewBillButton.setBounds(10, 119, 155, 37);
+		viewBillButton.setBounds(10, 98, 155, 37);
 		optionProfilePanel.add(viewBillButton);
 		
 		checkinButton = new JButton("Check-in");
+		checkinButton.setEnabled(false);
 		checkinButton.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		checkinButton.setBounds(10, 171, 155, 37);
+		checkinButton.setBounds(10, 143, 155, 37);
 		optionProfilePanel.add(checkinButton);
+
+		errormessageLabel = new JLabel("...");
+		errormessageLabel.setVisible(false);
+		errormessageLabel.setForeground(Color.RED);
+		errormessageLabel.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		errormessageLabel.setBounds(10, 189, 104, 28);
+		optionProfilePanel.add(errormessageLabel);
 
 		profileInputPanel = new JPanel();
 		profileInputPanel.setFont(new Font("Times New Roman", Font.PLAIN, 16));
@@ -409,11 +424,9 @@ public class MainPanel extends JPanel {
 		homeButton.addActionListener(new actionListener());
 		addNewButton.addActionListener(new actionListener());
 		checkinButton.addActionListener(new actionListener());
-		editPatientProfile.addActionListener(new actionListener());
+		editProfile.addActionListener(new actionListener());
 		patientHistoryButton.addActionListener(new actionListener());
 		viewBillButton.addActionListener(new actionListener());
-
-
 
 	}// end panel
 
@@ -422,15 +435,18 @@ public class MainPanel extends JPanel {
 		return nameSearch;
 	}
 	
-	
 	void addSaveButtonListener(ActionListener savePress) {
-		npf.getSaveButton().addActionListener(savePress);
+		newPatientForm.getSaveButton().addActionListener(savePress);
 	}// end add action listener
 
 	void addRecordButtonListener(ActionListener recordButtonPress) {
-		paf.getAddRecordButton().addActionListener(recordButtonPress);
+		patientAssignmentForm.getAddRecordButton().addActionListener(recordButtonPress);
 	}// end add action listener
 	
+	void addUpdateButtonListener(ActionListener saveUpdatePress) {
+		editPatientInfo.getSaveUpdateButton().addActionListener(saveUpdatePress);
+		editEmployeeInfo.getSaveUpdateButton().addActionListener(saveUpdatePress);
+	}
 
 	private class actionListener implements ActionListener {
 
@@ -440,6 +456,9 @@ public class MainPanel extends JPanel {
 
 			else if (e.getSource().equals(checkinButton))
 				loadPatientAssignmentForm();
+
+			else if (e.getSource().equals(editProfile))
+				loadEditProfile();
 
 			else if (e.getSource().equals(homeButton))
 				backToHome();
@@ -460,26 +479,41 @@ public class MainPanel extends JPanel {
 		}
 	};// End ActionListener class
 
+	private void loadEditProfile() {
+		profileInputPanel.removeAll();
 
-	void pressAddNewProfile() {
+		if (OwnProfile.getRole().equalsIgnoreCase("admin")) {
+			profileInputPanel.add(editEmployeeInfo);
+			newEmployeForm.setVisible(true);
+			profileInputPanel.repaint();
+			profileInputPanel.validate();
+		} else {
+			profileInputPanel.add(editPatientInfo);
+			newPatientForm.setVisible(true);
+			profileInputPanel.repaint();
+			profileInputPanel.validate();
+		}
+	}// end load edit profile
+
+	private void pressAddNewProfile() {
 		profileInputPanel.removeAll();
 		
 		if (OwnProfile.getRole().equalsIgnoreCase("admin")) {
-			profileInputPanel.add(nef);
-			nef.setVisible(true);
+			profileInputPanel.add(newEmployeForm);
+			newEmployeForm.setVisible(true);
 			profileInputPanel.repaint();
 			profileInputPanel.validate();
 		}
 		else {
-			profileInputPanel.add(npf);
-			npf.setVisible(true);
+			profileInputPanel.add(newPatientForm);
+			newPatientForm.setVisible(true);
 			profileInputPanel.repaint();
 			profileInputPanel.validate();
 		}
 
 	}// End press Add New Patient function
 
-	void searchProfile() throws InterruptedException {
+	private void searchProfile() throws InterruptedException {
 		if (idSearch.getText().isEmpty()) {
 			if (ssnSearch.getText().isEmpty() && nameSearch.getText().isEmpty()) {
 				nameSearch.setBackground(Color.YELLOW);
@@ -505,6 +539,7 @@ public class MainPanel extends JPanel {
 				loadPatient();
 				return;
 			}
+			setNotFound(); //set not found 
 		} else if (OwnProfile.getRole().equalsIgnoreCase("admin")) {
 			dbc.getProfile(idSearch.getText(), nameSearch.getText(), ssnSearch.getText(), "employee");
 			if (EmployeeProfile.found) {
@@ -513,22 +548,24 @@ public class MainPanel extends JPanel {
 				ssnSearch.setText("");
 
 				loadEmployee();
+				return;
 			}
-		} else {
-
-			IDLabel.setForeground(Color.RED);
-			IDLabel.setText("Search Not Found!");
-			firstNameLabel.setText("");
-			midNameLabel.setText("");
-			lastNameLabel.setText("");
-			DOBLabel.setText("");
-			genderLabel.setText("");
-			primaryLabel.setText("");
+			setNotFound(); // set not found
 		}
-
 	}// end search
 
-	void loadEmployee() {
+	private void setNotFound() {
+		IDLabel.setForeground(Color.RED);
+		IDLabel.setText("Search Not Found!");
+		firstNameLabel.setText("");
+		midNameLabel.setText("");
+		lastNameLabel.setText("");
+		DOBLabel.setText("");
+		genderLabel.setText("");
+		primaryLabel.setText("");
+	}
+
+	private void loadEmployee() {
 
 		// patient info
 		IDLabel.setForeground(Color.BLACK);
@@ -553,8 +590,16 @@ public class MainPanel extends JPanel {
 
 	}// end load employee
 
-
 	void loadPatient() {
+		editProfile.setEnabled(true);
+		viewBillButton.setEnabled(true);
+		patientHistoryButton.setEnabled(true);
+		{
+			if (PatientProfile.getActive() == 1)
+				checkinButton.setEnabled(false);
+			else
+				checkinButton.setEnabled(true);
+		}
 
 		// patient info
 		IDLabel.setForeground(Color.BLACK);
@@ -587,22 +632,22 @@ public class MainPanel extends JPanel {
 
 	void loadLastPatientHistory() {
 		profileInputPanel.removeAll();
-		profileInputPanel.add(lph);
-		lph.setVisible(true);
+		profileInputPanel.add(lastPatientHistory);
+		lastPatientHistory.setVisible(true);
 		profileInputPanel.repaint();
 		profileInputPanel.validate();
 	}
 
 	void loadPatientAssignmentForm() {
 		profileInputPanel.removeAll();
-		profileInputPanel.add(paf);
-		paf.setVisible(true);
+		profileInputPanel.add(patientAssignmentForm);
+		patientAssignmentForm.setVisible(true);
 		profileInputPanel.repaint();
 		profileInputPanel.validate();
 	}
 
-	void backToHome() {
-		if (npf.isFormClear() == false) {
+	private void backToHome() {
+		if (newPatientForm.isFormClear() == false) {
 			if (JOptionPane.showConfirmDialog(null, "Form hasn't save, are you sure you want to leave?", "WARNING",
 					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 				nameSearch.setText("");
@@ -627,7 +672,7 @@ public class MainPanel extends JPanel {
 				profileInputPanel.repaint();
 				profileInputPanel.validate();
 
-				npf.clearForm();
+				newPatientForm.clearForm();
 			}
 			return;
 		}

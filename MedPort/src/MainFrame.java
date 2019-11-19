@@ -60,6 +60,8 @@ public class MainFrame {
 
 	private DBcontrol dbc = new DBcontrol();
 
+	private JScrollPane scrPane;
+
 
 	private void initialize() {
 		mainFrame = new JFrame();
@@ -204,18 +206,18 @@ public class MainFrame {
 
 				valid = dbc.validate(user, pass);
 				if(valid) {
+
 				OwnProfile.setUser(user);
 					ErrorMessageLabel.setText("SUCCESS!");
 					mainFrame.getContentPane().removeAll();
 					mainFrame.setExtendedState( mainFrame.getExtendedState()|JFrame.MAXIMIZED_BOTH );
 					mainFrame.setResizable(true);
 
-
 					MainPanel mp = new MainPanel();
-					JScrollPane scrPane = new JScrollPane(mp);
+				scrPane = new JScrollPane(mp);
 					mp.getNameSearchField().requestFocus();
 					mainFrame.getContentPane().add(scrPane);
-					mainFrame.setMinimumSize(new Dimension(700, 500));
+				mainFrame.setMinimumSize(new Dimension(1050, 850));
 					mainFrame.validate();
 
 				}else {

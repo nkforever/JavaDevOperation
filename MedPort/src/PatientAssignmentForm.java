@@ -22,7 +22,7 @@ import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.text.NumberFormatter;
 
-public class patientAssignmentForm extends JPanel{
+public class PatientAssignmentForm extends JPanel{
 	/**
 	 * 
 	 */
@@ -58,7 +58,7 @@ public class patientAssignmentForm extends JPanel{
 	
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public patientAssignmentForm() {
+	public PatientAssignmentForm() {
 		setLayout(new BorderLayout(0, 0));
 		
 		JPanel formPanel = new JPanel();

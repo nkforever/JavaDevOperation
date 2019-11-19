@@ -9,7 +9,7 @@ import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
-public class lastPatientHistory extends JPanel{
+public class LastPatientHistory extends JPanel{
 	/**
 	 * 
 	 */
@@ -22,7 +22,7 @@ public class lastPatientHistory extends JPanel{
 	private JTextPane txtpnThisIsWhere;
 	private JLabel roomLabel;
 	
-	public lastPatientHistory() {
+	public LastPatientHistory() {
 		setLayout(new BorderLayout(0, 0));
 		
 		JPanel formPanel = new JPanel();

@@ -19,8 +19,11 @@
 /EditPatientForm$8.class
 /EditPatientForm.class
 /EmployeeProfile.class
+/LastPatientHistory.class
 /MVCcontroller$addRecordButtonListener.class
 /MVCcontroller$addSaveButtonListener.class
+/MVCcontroller$addUpdateEmployeeButtonListener.class
+/MVCcontroller$addUpdatePatientButtonListener.class
 /MVCcontroller.class
 /MainFrame$1.class
 /MainFrame$2.class
@@ -40,6 +43,14 @@
 /MainPanel$actionListener.class
 /MainPanel.class
 /NewEmployeeForm$1.class
+/NewEmployeeForm$10.class
+/NewEmployeeForm$11.class
+/NewEmployeeForm$12.class
+/NewEmployeeForm$13.class
+/NewEmployeeForm$14.class
+/NewEmployeeForm$15.class
+/NewEmployeeForm$16.class
+/NewEmployeeForm$17.class
 /NewEmployeeForm$2.class
 /NewEmployeeForm$3.class
 /NewEmployeeForm$4.class
@@ -47,6 +58,7 @@
 /NewEmployeeForm$6.class
 /NewEmployeeForm$7.class
 /NewEmployeeForm$8.class
+/NewEmployeeForm$9.class
 /NewEmployeeForm.class
 /NewPatientForm$1.class
 /NewPatientForm$10.class
@@ -60,9 +72,8 @@
 /NewPatientForm$9.class
 /NewPatientForm.class
 /OwnProfile.class
+/PatientAssignmentForm$1.class
+/PatientAssignmentForm.class
 /PatientProfile.class
 /RoomList.class
-/lastPatientHistory.class
 /org/
-/patientAssignmentForm$1.class
-/patientAssignmentForm.class

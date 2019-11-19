@@ -2,6 +2,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.text.DateFormat;
@@ -32,47 +36,40 @@ public class NewEmployeeForm extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private JFormattedTextField DOBField, zipcodeField, streetNumField, ssnAreaField, ssnGroupField, ssnSerialField, phoneNumberField;
 	private JTextField firstNameField, midNameField, lastNameField,streetNameField, cityField;
-	private JComboBox<String> stateField, genderField;
+	private JComboBox<String> stateField, genderField, roleComboBox;
 
-	private JLabel lblNewLabel, lblMidName, lblLastName, lblDob;
-	private JLabel lblGender, lblSsn, lblStreetAddr, lblState, lblCity, lblZipcode, lblPhone;
+	private JLabel lblNewLabel, lblMidName, lblLastName, lblDob, lblGender, lblSsn, lblStreetAddr, lblState, lblCity,
+			lblZipcode, lblPhone, lblNewLabel_2, lblstreetNumber, lblstreetName, mandatoryError, label, label_1,
+			label_2;
 
+	private JCheckBox addEditPatientCheckBox, userAdminCheckBox, ownProfileCheckBox, viewPatientCheckBox,
+			viewBillCheckBox, processPaymentCheckBox;
+	private JCheckBox activeCheckBox;
 
 	private DBcontrol dbc = new DBcontrol();
 	private JTextField aptNumField;
-	private JButton saveButton;
+	private JButton saveNewEmployeeButton;
+	JPanel formPanel;
 
 	private String patientID = "", firstName = "", midName = "", lastName= "", DOB = "", gender = "", ssnArea = "", ssnGroup = "", ssnSerial ="",
 			phoneNumber = "", streetNum = "", aptNum = "", streetName = "", city = "", state = "", zipcode = "",
 			role = "";
-	private int active = 0;
+	private int active = 1, userAdmin = 0, addEditPatient = 0, viewPatient = 0, ownProfile = 1, viewBill = 0,
+			processPayment = 0;
 
 
-	DateFormat  dateFormat = new SimpleDateFormat("MM/dd/yyyy"); 
-	DateFormatter dateFormatter  = new DateFormatter(dateFormat); 	
+	private DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+	private DateFormatter dateFormatter = new DateFormatter(dateFormat);
 
-	NumberFormat num = new DecimalFormat("#####"); 
-	NumberFormatter zipFormatter  = new NumberFormatter(num); 
+	private NumberFormat num = new DecimalFormat("#####");
+	private NumberFormatter zipFormatter = new NumberFormatter(num);
 
-	private JLabel lblNewLabel_2;
-	private JLabel lblstreetNumber;
-	private JLabel lblstreetName;
-	private JLabel mandatoryError;
-	private JLabel label;
-	private JLabel label_1;
-	private JLabel label_2;
-	private JCheckBox addEditPatientCheckBox;
-	private JCheckBox editOwnProfilecheckBox;
-	private JCheckBox viewPatientCheckBoc;
-	private JCheckBox viewBillCheckBox;
-	private JComboBox<String> roleComboBox;
-	private JCheckBox processPaymentCheckBox;
 
 
 	public NewEmployeeForm() {
 		setLayout(new BorderLayout(0, 0));
 
-		JPanel formPanel = new JPanel();
+		formPanel = new JPanel();
 		formPanel.setBackground(new Color(253, 245, 230));
 		add(formPanel);
 		formPanel.setLayout(null);
@@ -196,10 +193,14 @@ public class NewEmployeeForm extends JPanel{
 		formPanel.add(phoneNumberField);
 		phoneNumberField.setColumns(10);
 
-		saveButton = new JButton("Save");
-		saveButton.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		saveButton.setBounds(548, 303, 94, 37);
-		formPanel.add(saveButton);
+		saveNewEmployeeButton = new JButton("ADD NEW EMPLOYEE");
+		saveNewEmployeeButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		saveNewEmployeeButton.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		saveNewEmployeeButton.setBounds(408, 303, 234, 37);
+		formPanel.add(saveNewEmployeeButton);
 
 		lblNewLabel = new JLabel("First Name");
 		lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD, 16));
@@ -363,7 +364,7 @@ public class NewEmployeeForm extends JPanel{
 		mandatoryError = new JLabel("** Please fill out all the required field.");
 		mandatoryError.setVisible(false);
 		mandatoryError.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 14));
-		mandatoryError.setBounds(402, 337, 240, 29);
+		mandatoryError.setBounds(408, 337, 234, 29);
 		formPanel.add(mandatoryError);
 
 		label = new JLabel("*");
@@ -381,30 +382,136 @@ public class NewEmployeeForm extends JPanel{
 		label_2.setBounds(75, 20, 14, 21);
 		formPanel.add(label_2);
 		
+		// role combo box and item state change listener
 		roleComboBox = new JComboBox<String>();
+		roleComboBox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getItem().equals("Admin")) {
+					userAdminCheckBox.setSelected(true);
+					addEditPatientCheckBox.setSelected(false);
+					ownProfileCheckBox.setSelected(true);
+					viewBillCheckBox.setSelected(false);
+					viewPatientCheckBox.setSelected(false);
+					processPaymentCheckBox.setSelected(false);
+					System.out.println("access status: " +
+							addEditPatient + " " + viewPatient + " " + userAdmin + " " + " " + ownProfile + " "
+							+ viewBill
+							+ " " + processPayment);
+				}
+				else if (e.getItem().equals("Doctor")) {
+					userAdminCheckBox.setSelected(false);
+					addEditPatientCheckBox.setSelected(true);
+					ownProfileCheckBox.setSelected(true);
+					viewBillCheckBox.setSelected(false);
+					viewPatientCheckBox.setSelected(true);
+					processPaymentCheckBox.setSelected(false);
+					System.out.println("access status: " +
+							addEditPatient + " " + viewPatient + " " + userAdmin + " " + " " + ownProfile + " "
+							+ viewBill + " " + processPayment);
+				} else if (e.getItem().equals("Nurse")) {
+					userAdminCheckBox.setSelected(false);
+					addEditPatientCheckBox.setSelected(true);
+					ownProfileCheckBox.setSelected(true);
+					viewBillCheckBox.setSelected(false);
+					viewPatientCheckBox.setSelected(true);
+					processPaymentCheckBox.setSelected(false);
+					System.out.println("access status: " +
+							addEditPatient + " " + viewPatient + " " + userAdmin + " " + " " + ownProfile + " "
+							+ viewBill + " " + processPayment);
+				}
+				else if (e.getItem().equals("Secretary")) {
+					userAdminCheckBox.setSelected(false);
+					addEditPatientCheckBox.setSelected(true);
+					ownProfileCheckBox.setSelected(true);
+					viewBillCheckBox.setSelected(true);
+					viewPatientCheckBox.setSelected(true);
+					processPaymentCheckBox.setSelected(true);
+					System.out.println("access status: " +
+							addEditPatient + " " + viewPatient + " " + userAdmin + " " + " " + ownProfile + " "
+							+ viewBill + " " + processPayment);
+				}
+				else if (e.getItem().equals("Finance")) {
+					userAdminCheckBox.setSelected(false);
+					addEditPatientCheckBox.setSelected(false);
+					ownProfileCheckBox.setSelected(true);
+					viewBillCheckBox.setSelected(true);
+					viewPatientCheckBox.setSelected(false);
+					processPaymentCheckBox.setSelected(true);
+					System.out.println("access status: " +
+							addEditPatient + " " + viewPatient + " " + userAdmin + " " + " " + ownProfile + " "
+							+ viewBill + " " + processPayment);
+				}
+				else {
+					userAdminCheckBox.setSelected(false);
+					addEditPatientCheckBox.setSelected(false);
+					ownProfileCheckBox.setSelected(false);
+					viewBillCheckBox.setSelected(false);
+					viewPatientCheckBox.setSelected(false);
+					processPaymentCheckBox.setSelected(false);
+					System.out.println("access status: " +
+							addEditPatient + " " + viewPatient + " " + userAdmin + " " + ownProfile + " "
+							+ viewBill + " " + processPayment);
+				}
+			}
+		});
 		roleComboBox.setModel(new DefaultComboBoxModel<String>(
 				new String[] { "N/A", "Admin", "Doctor", "Finance", "Nurse", "Secretary" }));
 		roleComboBox.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		roleComboBox.setBounds(544, 233, 98, 29);
 		formPanel.add(roleComboBox);
+		// end role combo box
 		
 		addEditPatientCheckBox = new JCheckBox("Add/Edit Patient");
+		addEditPatientCheckBox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+
+					if (addEditPatientCheckBox.isSelected()) {
+					addEditPatient = 1;
+				} else
+					addEditPatient = 0;
+
+			}
+		});
 		addEditPatientCheckBox.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		addEditPatientCheckBox.setBounds(11, 282, 163, 29);
 		formPanel.add(addEditPatientCheckBox);
 		
-		editOwnProfilecheckBox = new JCheckBox("Own Profile");
-		editOwnProfilecheckBox.setSelected(true);
-		editOwnProfilecheckBox.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		editOwnProfilecheckBox.setBounds(188, 282, 163, 29);
-		formPanel.add(editOwnProfilecheckBox);
+		ownProfileCheckBox = new JCheckBox("Own Profile");
+		ownProfileCheckBox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				if (ownProfileCheckBox.isSelected()) {
+					ownProfile = 1;
+				} else
+				ownProfile = 0;
+			}
+		});
+		ownProfileCheckBox.setSelected(true);
+		ownProfileCheckBox.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		ownProfileCheckBox.setBounds(188, 282, 163, 29);
+		formPanel.add(ownProfileCheckBox);
 		
-		viewPatientCheckBoc = new JCheckBox("View Patient");
-		viewPatientCheckBoc.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		viewPatientCheckBoc.setBounds(11, 328, 163, 29);
-		formPanel.add(viewPatientCheckBoc);
+		viewPatientCheckBox = new JCheckBox("View Patient");
+		viewPatientCheckBox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				if (viewPatientCheckBox.isSelected()) {
+					viewPatient = 1;
+				} else
+				viewPatient = 0;
+			}
+		});
+		viewPatientCheckBox.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		viewPatientCheckBox.setBounds(11, 328, 163, 29);
+		formPanel.add(viewPatientCheckBox);
 		
 		viewBillCheckBox = new JCheckBox("View Bill");
+		viewBillCheckBox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				if (viewBillCheckBox.isSelected()) {
+					viewBill = 1;
+				} else
+				viewBill = 0;
+			}
+		});
 		viewBillCheckBox.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		viewBillCheckBox.setBounds(188, 328, 163, 29);
 		formPanel.add(viewBillCheckBox);
@@ -415,15 +522,53 @@ public class NewEmployeeForm extends JPanel{
 		formPanel.add(lbllimited);
 
 		processPaymentCheckBox = new JCheckBox("Process Payment");
+		processPaymentCheckBox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				if (processPaymentCheckBox.isSelected()) {
+					processPayment = 1;
+				} else
+				processPayment = 0;
+			}
+		});
 		processPaymentCheckBox.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		processPaymentCheckBox.setBounds(188, 373, 163, 29);
 		formPanel.add(processPaymentCheckBox);
-		formPanel.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{firstNameField, midNameField, lastNameField, DOBField, genderField, ssnAreaField, ssnGroupField, ssnSerialField, streetNumField, streetNameField, aptNumField, cityField, stateField, zipcodeField, phoneNumberField, saveButton}));
+
+		userAdminCheckBox = new JCheckBox("User Admin");
+		userAdminCheckBox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				if (userAdminCheckBox.isSelected()) {
+					userAdmin = 1;
+				}
+				userAdmin = 0;
+			}
+		});
+		userAdminCheckBox.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		userAdminCheckBox.setBounds(11, 373, 163, 29);
+		formPanel.add(userAdminCheckBox);
+
+		activeCheckBox = new JCheckBox("Active?");
+		activeCheckBox.setSelected(true);
+		activeCheckBox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				if (activeCheckBox.isSelected()) {
+					active = 1;
+				} else
+				active = 0;
+			}
+		});
+		activeCheckBox.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		activeCheckBox.setBounds(378, 373, 163, 29);
+		formPanel.add(activeCheckBox);
+		formPanel.setFocusTraversalPolicy(
+				new FocusTraversalOnArray(new Component[] { firstNameField, midNameField, lastNameField, DOBField,
+						genderField, ssnAreaField, ssnGroupField, ssnSerialField, streetNumField, streetNameField,
+						aptNumField, cityField, stateField, zipcodeField, phoneNumberField, saveNewEmployeeButton }));
 
 	}
 
 	JButton getSaveButton() {
-		return saveButton;
+		return saveNewEmployeeButton;
 	}
 
 	boolean generateEmployeeID() {

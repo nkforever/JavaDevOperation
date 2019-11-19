@@ -6,6 +6,8 @@ public class EmployeeProfile {
 			streetName = "", cityName = "", stateName = "", zipCode = "", gender = "", email = "", phoneNumber = "",
 			DOB = "", ssnArea = "", ssnGroup = "", ssnSerial = "";
 	static boolean found = false;
+
+	private int addEditPatient = 0, viewPatient = 0, ownProfile = 1, viewBill = 0, processPayment = 0;
 	
 	public static String getSsnArea() {
 		return ssnArea;

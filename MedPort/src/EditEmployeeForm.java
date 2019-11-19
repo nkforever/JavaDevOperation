@@ -39,7 +39,7 @@ public class EditEmployeeForm extends JPanel{
 
 	private DBcontrol dbc = new DBcontrol();
 	private JTextField aptNumField;
-	private JButton saveButton;
+	private JButton saveUpdateButton;
 
 	private String patientID = "", firstName = "", midName = "", lastName= "", DOB = "", gender = "", ssnArea = "", ssnGroup = "", ssnSerial ="",
 			phoneNumber = "", streetNum = "", aptNum = "", streetName = "", city = "", state = "", zipcode = "",
@@ -64,6 +64,8 @@ public class EditEmployeeForm extends JPanel{
 	private JCheckBox viewPatientCheckBoc;
 	private JCheckBox viewBillCheckBox;
 	private JComboBox<String> roleComboBox;
+	private JCheckBox userAdminCheckBox;
+	private JCheckBox activeCheckBox;
 
 
 	public EditEmployeeForm() {
@@ -193,10 +195,10 @@ public class EditEmployeeForm extends JPanel{
 		formPanel.add(phoneNumberField);
 		phoneNumberField.setColumns(10);
 
-		saveButton = new JButton("Save");
-		saveButton.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		saveButton.setBounds(548, 303, 94, 37);
-		formPanel.add(saveButton);
+		saveUpdateButton = new JButton("SAVE UPDATE");
+		saveUpdateButton.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		saveUpdateButton.setBounds(477, 303, 165, 37);
+		formPanel.add(saveUpdateButton);
 
 		lblNewLabel = new JLabel("First Name");
 		lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD, 16));
@@ -360,7 +362,7 @@ public class EditEmployeeForm extends JPanel{
 		mandatoryError = new JLabel("** Please fill out all the required field.");
 		mandatoryError.setVisible(false);
 		mandatoryError.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 14));
-		mandatoryError.setBounds(402, 337, 240, 29);
+		mandatoryError.setBounds(416, 337, 226, 29);
 		formPanel.add(mandatoryError);
 
 		label = new JLabel("*");
@@ -415,12 +417,26 @@ public class EditEmployeeForm extends JPanel{
 		processPaymentCheckBox.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		processPaymentCheckBox.setBounds(188, 373, 163, 29);
 		formPanel.add(processPaymentCheckBox);
-		formPanel.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{firstNameField, midNameField, lastNameField, DOBField, genderField, ssnAreaField, ssnGroupField, ssnSerialField, streetNumField, streetNameField, aptNumField, cityField, stateField, zipcodeField, phoneNumberField, saveButton}));
+
+		userAdminCheckBox = new JCheckBox("User Admin");
+		userAdminCheckBox.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		userAdminCheckBox.setBounds(11, 373, 163, 29);
+		formPanel.add(userAdminCheckBox);
+
+		activeCheckBox = new JCheckBox("Active?");
+		activeCheckBox.setSelected(true);
+		activeCheckBox.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		activeCheckBox.setBounds(374, 373, 163, 29);
+		formPanel.add(activeCheckBox);
+		formPanel.setFocusTraversalPolicy(
+				new FocusTraversalOnArray(new Component[] { firstNameField, midNameField, lastNameField, DOBField,
+						genderField, ssnAreaField, ssnGroupField, ssnSerialField, streetNumField, streetNameField,
+						aptNumField, cityField, stateField, zipcodeField, phoneNumberField, saveUpdateButton }));
 
 	}
 
-	JButton getSaveButton() {
-		return saveButton;
+	JButton getSaveUpdateButton() {
+		return saveUpdateButton;
 	}
 // TODO 
 //	need fix for
@@ -473,7 +489,6 @@ public class EditEmployeeForm extends JPanel{
 
 	void loadEmployeeInfo() {
 
-
 		EmployeeProfile.setEmployeeID(patientID);
 		EmployeeProfile.setFirstName(firstName);
 		EmployeeProfile.setMidName(midName);
@@ -493,6 +508,27 @@ public class EditEmployeeForm extends JPanel{
 		EmployeeProfile.setRole(role);
 
 		clearForm();
+	}
+
+	void loadEmployeeInfoToForm() {
+
+		firstNameField.setText(EmployeeProfile.getFirstName());
+		midNameField.setText(EmployeeProfile.getMidName());
+		lastNameField.setText(EmployeeProfile.getLastName());
+		DOBField.setText(EmployeeProfile.getDOB());
+		genderField.setSelectedItem(EmployeeProfile.getGender());
+		ssnAreaField.setText(EmployeeProfile.getSsnArea());
+		ssnGroupField.setText(EmployeeProfile.getSsnGroup());
+		ssnSerialField.setText(EmployeeProfile.getSsnSerial());
+		phoneNumberField.setText(EmployeeProfile.getPhoneNumber());
+		streetNumField.setText(EmployeeProfile.getStreetNum());
+		streetNameField.setText(EmployeeProfile.getStreetName());
+		aptNumField.setText(EmployeeProfile.getAptNum());
+		cityField.setText(EmployeeProfile.getCityName());
+		stateField.setSelectedItem(EmployeeProfile.getStateName());
+		zipcodeField.setText(EmployeeProfile.getZipCode());
+		roleComboBox.setSelectedItem(EmployeeProfile.getRole());
+
 	}
 
 	void clearForm() {
