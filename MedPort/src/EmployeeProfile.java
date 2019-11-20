@@ -18,7 +18,7 @@ public class EmployeeProfile {
 		EmployeeProfile.found = found;
 	}
 
-	public int getActive() {
+	public static int getActive() {
 		return active;
 	}
 
@@ -26,7 +26,7 @@ public class EmployeeProfile {
 		EmployeeProfile.active = active;
 	}
 
-	public int getUserAdmin() {
+	public static int getUserAdmin() {
 		return userAdmin;
 	}
 
@@ -34,7 +34,7 @@ public class EmployeeProfile {
 		EmployeeProfile.userAdmin = userAdmin;
 	}
 
-	public int getAddEditPatient() {
+	public static int getAddEditPatient() {
 		return addEditPatient;
 	}
 
@@ -42,7 +42,7 @@ public class EmployeeProfile {
 		EmployeeProfile.addEditPatient = addEditPatient;
 	}
 
-	public int getViewPatient() {
+	public static int getViewPatient() {
 		return viewPatient;
 	}
 
@@ -50,7 +50,7 @@ public class EmployeeProfile {
 		EmployeeProfile.viewPatient = viewPatient;
 	}
 
-	public int getOwnProfile() {
+	public static int getOwnProfile() {
 		return ownProfile;
 	}
 
@@ -58,7 +58,7 @@ public class EmployeeProfile {
 		EmployeeProfile.ownProfile = ownProfile;
 	}
 
-	public int getViewBill() {
+	public static int getViewBill() {
 		return viewBill;
 	}
 
@@ -66,7 +66,7 @@ public class EmployeeProfile {
 		EmployeeProfile.viewBill = viewBill;
 	}
 
-	public int getProcessPayment() {
+	public static int getProcessPayment() {
 		return processPayment;
 	}
 

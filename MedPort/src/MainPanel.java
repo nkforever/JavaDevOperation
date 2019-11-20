@@ -488,7 +488,7 @@ public class MainPanel extends JPanel {
 		if (OwnProfile.getRole().equalsIgnoreCase("admin")) {
 			editEmployeeInfo.loadEmployeeInfoToForm();
 			profileInputPanel.add(editEmployeeInfo);
-			newEmployeForm.setVisible(true);
+			editEmployeeInfo.setVisible(true);
 			profileInputPanel.repaint();
 			profileInputPanel.validate();
 		} else {
@@ -672,6 +672,12 @@ public class MainPanel extends JPanel {
 				primaryLabel.setText("________");
 				DOBLabel.setText("_");
 				genderLabel.setText("_");
+				//disable buttons 
+				checkinButton.setEnabled(false);
+				editProfile.setEnabled(false);
+				patientHistoryButton.setEnabled(false);
+				viewBillButton.setEnabled(false);
+				errormessageLabel.setVisible(false);
 
 				profileInputPanel.removeAll();
 				profileInputPanel.add(addNewButton);
@@ -709,7 +715,11 @@ public class MainPanel extends JPanel {
 	public void updateEmployeeInfoIsPressed() {
 		errormessageLabel.setVisible(true);
 		if (editEmployeeInfo.updateEmployeeInfo()) {
-			errormessageLabel.setText("Successfully updated!");
+			editEmployeeInfo.setVisible(false);
+			addNewButton.setVisible(true);
+			profileInputPanel.repaint();
+			profileInputPanel.validate();
+			errormessageLabel.setText("Updated.");
 		} else
 			errormessageLabel.setText("Update fail!");
 

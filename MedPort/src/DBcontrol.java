@@ -416,14 +416,17 @@ public class DBcontrol {
 
 	boolean updateEmployeeProfile(String firstName, String midName, String lastName,
 			String dateOfBirth, String gender, String role, String ssnArea, String ssnGroup, String ssnSerial,
-			String phone_num) {
+			String phone_num, int userAdmin, int addEditPatient, int viewPatient, int ownProfile, int viewBill
+			, int processPayment, int active) {
 
 		try {
 			checkConnection();
 
 			String update = "UPDATE employee_table "
 					+ "SET first_name = ?, mid_name = ?, last_name = ?, DOB = ?, gender = ?, "
-					+ "primaryDoctor = ?, ssnArea = ?, ssnGroup = ?, ssnSerial = ?, phone_num = ?, last_update = CURDATER() "
+					+ "primaryDoctor = ?, ssnArea = ?, ssnGroup = ?, ssnSerial = ?, phone_num = ?, last_update = CURDATER(), "
+					+ "update_by = ?, userAdmin = ? , addEditPatient = ?, viewPatient = ?, ownProfile = ? "
+					+ ", viewBill = ?, processPayment = ? , active = ?"
 					+ "WHERE patient_id = \"" + EmployeeProfile.getEmployeeID() + "\";";
 
 			PreparedStatement preparedStatement = mpCon.prepareStatement(update);
@@ -437,6 +440,14 @@ public class DBcontrol {
 			preparedStatement.setString(8, ssnGroup);
 			preparedStatement.setString(9, ssnSerial);
 			preparedStatement.setString(10, phone_num);
+			preparedStatement.setString(11, OwnProfile.getUser());
+			preparedStatement.setInt(12, userAdmin);
+			preparedStatement.setInt(13, addEditPatient);
+			preparedStatement.setInt(14, viewPatient);
+			preparedStatement.setInt(15, ownProfile);
+			preparedStatement.setInt(16, viewBill);
+			preparedStatement.setInt(17, processPayment);
+			preparedStatement.setInt(18, active);
 
 			preparedStatement.executeUpdate();
 			mpCon.close();

@@ -40,7 +40,7 @@ public class EditEmployeeForm extends JPanel{
 			label_2;
 
 	private JCheckBox addEditPatientCheckBox, editOwnProfilecheckBox, viewPatientCheckBoc, viewBillCheckBox,
-			userAdminCheckBox, activeCheckBox;
+			userAdminCheckBox, activeCheckBox, processPaymentCheckBox;
 
 	private DBcontrol dbc = new DBcontrol();
 
@@ -48,6 +48,8 @@ public class EditEmployeeForm extends JPanel{
 	private String employeeID = " ", firstName = " ", midName = " ", lastName = " ", DOB = " ", gender = " ",
 			ssnArea = " ", ssnGroup = " ", ssnSerial = " ", phoneNumber = " ", streetNum = " ", aptNum = " ",
 			streetName = " ", city = " ", state = " ", zipcode = " ", role = " ";
+	private int active = 1, userAdmin = 0, addEditPatient = 0, viewPatient = 0, ownProfile = 1, viewBill = 0,
+			processPayment = 0;
 	// end of variables
 
 	// declaration
@@ -404,7 +406,7 @@ public class EditEmployeeForm extends JPanel{
 		lbllimited.setBounds(350, 286, 104, 29);
 		formPanel.add(lbllimited);
 
-		JCheckBox processPaymentCheckBox = new JCheckBox("Process Payment");
+		processPaymentCheckBox = new JCheckBox("Process Payment");
 		processPaymentCheckBox.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		processPaymentCheckBox.setBounds(188, 373, 163, 29);
 		formPanel.add(processPaymentCheckBox);
@@ -452,24 +454,38 @@ public class EditEmployeeForm extends JPanel{
 			if(midNameField.getText() !=null) midName = midNameField.getText();		
 			if(lastNameField.getText() != null) lastName= lastNameField.getText();		
 			if(DOBField.getText() != null) DOB = DOBField.getText();
-			if (genderField.getSelectedIndex() != -1)
+			if (!(genderField.getSelectedIndex() < 1))
 				gender = genderField.getSelectedItem().toString();
 			if(ssnAreaField.getText() != null) ssnArea = ssnAreaField.getText();
 			if(ssnGroupField.getText() != null)ssnGroup = ssnGroupField.getText();
 			if(ssnSerialField.getText() != null)ssnSerial = ssnSerialField.getText();
-			if (roleComboBox.getSelectedIndex() != -1)
+			if (!(roleComboBox.getSelectedIndex() < 1))
 				role = roleComboBox.getSelectedItem().toString();
 			if(phoneNumberField.getText() != null) phoneNumber = phoneNumberField.getText();
 			if(streetNumField.getText() != null) streetNum = streetNumField.getText();
 			if(aptNumField.getText() != null) aptNum = aptNumField.getText();
 			if(streetNameField.getText() != null) streetName = streetNameField.getText();
 			if(cityField.getText() != null) city = cityField.getText();
-			if (stateField.getSelectedIndex() != -1)
+			if (!(stateField.getSelectedIndex() < 1))
 				state = stateField.getSelectedItem().toString();
 			if(zipcodeField.getText() != null) zipcode = zipcodeField.getText();
+			if (addEditPatientCheckBox.isSelected())
+				addEditPatient = 1;
+			if (viewPatientCheckBoc.isSelected())
+				viewPatient = 1;
+			if (editOwnProfilecheckBox.isSelected())
+				ownProfile = 1;
+			if (viewBillCheckBox.isSelected())
+				viewBill = 1;
+			if (processPaymentCheckBox.isSelected())
+				processPayment = 1;
+			if (userAdminCheckBox.isSelected())
+				userAdmin = 1;
+			if (activeCheckBox.isSelected())
+				active = 1;
 
 			 dbc.updateEmployeeProfile(firstName, midName, lastName, DOB, gender, role, ssnArea, ssnGroup, ssnSerial,
-					phoneNumber);
+					phoneNumber, userAdmin, addEditPatient, viewPatient, ownProfile, viewBill, processPayment, active);
 			dbc.updateAddress(employeeID, streetNum, aptNum, streetName, city, state, zipcode);
 
 			loadEmployeeInfo();
@@ -496,6 +512,13 @@ public class EditEmployeeForm extends JPanel{
 		EmployeeProfile.setStateName(state);
 		EmployeeProfile.setZipCode(zipcode);
 		EmployeeProfile.setRole(role);
+		EmployeeProfile.setActive(active);
+		EmployeeProfile.setAddEditPatient(addEditPatient);
+		EmployeeProfile.setOwnProfile(ownProfile);
+		EmployeeProfile.setUserAdmin(userAdmin);
+		EmployeeProfile.setViewPatient(viewPatient);
+		EmployeeProfile.setViewBill(viewBill);
+		EmployeeProfile.setProcessPayment(processPayment);
 
 		clearForm();
 	}
@@ -518,13 +541,20 @@ public class EditEmployeeForm extends JPanel{
 		stateField.setSelectedItem(EmployeeProfile.getStateName());
 		zipcodeField.setText(EmployeeProfile.getZipCode());
 		roleComboBox.setSelectedItem(EmployeeProfile.getRole());
-//		if(EmployeeProfile.getAddEditPatient() == 1);
-//		if(EmployeeProfile.getAddEditPatient() == 1);		
-//		if(EmployeeProfile.getAddEditPatient() == 1);
-//		if(EmployeeProfile.getAddEditPatient() == 1);
-//		if(EmployeeProfile.getAddEditPatient() == 1);
-//		if(EmployeeProfile.getAddEditPatient() == 1);
-//		if(EmployeeProfile.getAddEditPatient() == 1);
+		if (EmployeeProfile.getAddEditPatient() == 1)
+			addEditPatientCheckBox.isSelected();
+		if (EmployeeProfile.getViewPatient() == 1)
+			viewPatientCheckBoc.isSelected();
+		if (EmployeeProfile.getOwnProfile() == 1)
+			editOwnProfilecheckBox.isSelected();
+		if (EmployeeProfile.getViewBill() == 1)
+			viewBillCheckBox.isSelected();
+		if (EmployeeProfile.getProcessPayment() == 1)
+			processPaymentCheckBox.isSelected();
+		if (EmployeeProfile.getUserAdmin() == 1)
+			userAdminCheckBox.isSelected();
+		if (EmployeeProfile.getActive() == 1)
+			activeCheckBox.isSelected();
 	}
 
 	void clearForm() {
@@ -556,7 +586,7 @@ public class EditEmployeeForm extends JPanel{
 		firstNameField.getText().isEmpty() && midNameField.getText().isEmpty() && lastNameField.getText().isEmpty()
 				&& DOBField.getText().isEmpty() && ssnAreaField.getText().isEmpty() && ssnGroupField.getText().isEmpty()
 				&& ssnSerialField.getText().isEmpty()
-				//		genderField.getText().isEmpty() && 
+		// genderField.getText().isEmpty() && //these may not be necessary
 				//		streetNumField.getText().isEmpty() && 
 				//		streetNameField.getText().isEmpty() && 
 				//		cityField.getText().isEmpty() && 
