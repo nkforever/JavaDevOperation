@@ -1,11 +1,69 @@
 
 public class OwnProfile {
 
-	private static String user, role;
-	private static String employeeID = "", firstName = "", midName = "", lastName = "", streetNum = "", aptNum = "",
-			streetName = "", cityName = "", stateName = "", zipCode = "", gender = "", email = "", phoneNumber = "",
-			DOB = "", ssnArea = "", ssnGroup = "", ssnSerial = "";
-	private int addEditPatient = 0, viewPatient = 0, ownProfile = 1, viewBill = 0, processPayment = 0;
+	private static String user = " ", role = " ";
+	private static String employeeID = " ", firstName = " ", midName = " ", lastName = " ", streetNum = " ",
+			aptNum = " ", streetName = " ", cityName = " ", stateName = " ", zipCode = " ", gender = " ", email = " ",
+			phoneNumber = " ", DOB = " ", ssnArea = " ", ssnGroup = " ", ssnSerial = " ";
+
+	private static int userAdmin = 0, addEditPatient = 0, viewPatient = 0, ownProfile = 1, viewBill = 0,
+			processPayment = 0, active = 1;
+
+	public static int getActive() {
+		return active;
+	}
+
+	public static void setActive(int active) {
+		OwnProfile.active = active;
+	}
+
+	public static int getUserAdmin() {
+		return userAdmin;
+	}
+
+	public static void setUserAdmin(int userAdmin) {
+		OwnProfile.userAdmin = userAdmin;
+	}
+
+	public static int getAddEditPatient() {
+		return addEditPatient;
+	}
+
+	public static void setAddEditPatient(int addEditPatient) {
+		OwnProfile.addEditPatient = addEditPatient;
+	}
+
+	public static int getViewPatient() {
+		return viewPatient;
+	}
+
+	public static void setViewPatient(int viewPatient) {
+		OwnProfile.viewPatient = viewPatient;
+	}
+
+	public int getOwnProfile() {
+		return ownProfile;
+	}
+
+	public static void setOwnProfile(int ownProfile) {
+		OwnProfile.ownProfile = ownProfile;
+	}
+
+	public static int getViewBill() {
+		return viewBill;
+	}
+
+	public static void setViewBill(int viewBill) {
+		OwnProfile.viewBill = viewBill;
+	}
+
+	public static int getProcessPayment() {
+		return processPayment;
+	}
+
+	public static void setProcessPayment(int processPayment) {
+		OwnProfile.processPayment = processPayment;
+	}
 	
 	public static String getSsnArea() {
 		return ssnArea;

@@ -50,7 +50,6 @@ public class DBcontrol {
 				// get employee info
 				String employeeID = resultSet.getNString("employee_id");
 				OwnProfile.setEmployeeID(employeeID);
-
 				LoadOwnProfile(employeeID);
 
 				mpCon.close();
@@ -190,6 +189,15 @@ public class DBcontrol {
 		try {
 			id = resultSet.getNString("employee_id");
 			EmployeeProfile.setEmployeeID(id);
+			EmployeeProfile.setRole(resultSet.getNString("role"));
+			EmployeeProfile.setAddEditPatient(resultSet.getInt("addEditPatient"));
+			EmployeeProfile.setViewPatient(resultSet.getInt("viewPatient"));
+			EmployeeProfile.setUserAdmin(resultSet.getInt("userAdmin"));
+			EmployeeProfile.setOwnProfile(resultSet.getInt("ownProfile"));
+			EmployeeProfile.setViewBill(resultSet.getInt("viewBill"));
+			EmployeeProfile.setProcessPayment(resultSet.getInt("processPayment"));
+			EmployeeProfile.setActive(resultSet.getInt("active"));
+
 			EmployeeProfile.setFirstName(resultSet.getNString("first_name"));
 			EmployeeProfile.setMidName(resultSet.getNString("mid_name"));
 			EmployeeProfile.setLastName(resultSet.getNString("last_name"));
@@ -222,6 +230,14 @@ public class DBcontrol {
 
 			if (resultSet.next()) {
 				OwnProfile.setEmployeeID(employeeID);
+				OwnProfile.setAddEditPatient(resultSet.getInt("addEditPatient"));
+				OwnProfile.setViewPatient(resultSet.getInt("viewPatient"));
+				OwnProfile.setUserAdmin(resultSet.getInt("userAdmin"));
+				OwnProfile.setOwnProfile(resultSet.getInt("ownProfile"));
+				OwnProfile.setViewBill(resultSet.getInt("viewBill"));
+				OwnProfile.setProcessPayment(resultSet.getInt("processPayment"));
+				OwnProfile.setActive(resultSet.getInt("active"));
+
 				OwnProfile.setFirstName(resultSet.getNString("first_name"));
 				OwnProfile.setMidName(resultSet.getNString("mid_name"));
 				OwnProfile.setLastName(resultSet.getNString("last_name"));
@@ -282,20 +298,20 @@ public class DBcontrol {
 			ResultSet resultset = getAddress.executeQuery();
 
 			if (resultset.next()) {
-				PatientProfile.setStreetNum(resultset.getNString("street_num"));
-				PatientProfile.setAptNum(resultset.getNString("apt_num"));
-				PatientProfile.setStreetName(resultset.getNString("street_name"));
-				PatientProfile.setCityName(resultset.getNString("city"));
-				PatientProfile.setStateName(resultset.getNString("state").toUpperCase());
-				PatientProfile.setZipcode(resultset.getNString("zipcode"));
+				EmployeeProfile.setStreetNum(resultset.getNString("street_num"));
+				EmployeeProfile.setAptNum(resultset.getNString("apt_num"));
+				EmployeeProfile.setStreetName(resultset.getNString("street_name"));
+				EmployeeProfile.setCityName(resultset.getNString("city"));
+				EmployeeProfile.setStateName(resultset.getNString("state").toUpperCase());
+				EmployeeProfile.setZipCode(resultset.getNString("zipcode"));
 			} // end if
 			else {
-				PatientProfile.setStreetNum("N/A");
-				PatientProfile.setAptNum(" ");
-				PatientProfile.setStreetName("        ");
-				PatientProfile.setCityName("N/A   ");
-				PatientProfile.setStateName("   ");
-				PatientProfile.setZipcode("     ");
+				EmployeeProfile.setStreetNum("N/A");
+				EmployeeProfile.setAptNum(" ");
+				EmployeeProfile.setStreetName("        ");
+				EmployeeProfile.setCityName("N/A   ");
+				EmployeeProfile.setStateName("   ");
+				EmployeeProfile.setZipCode("     ");
 			}
 
 		} catch (SQLException e) {
@@ -367,29 +383,28 @@ public class DBcontrol {
 
 	}// add patient profile
 
-	void updatePatientProfile(String patientID, String firstName, String midName, String lastName, String dateOfBirth,
+	void updatePatientProfile(String firstName, String midName, String lastName, String dateOfBirth,
 			String gender, String primaryDoctor, String ssnArea, String ssnGroup, String ssnSerial, String phone_num) {
 
 		try {
 			checkConnection();
 
 			String insert = "UPDATE patient_table "
-					+ "SET patient_id = ?, first_name = ?, mid_name = ?, last_name = ?, DOB = ?, gender = ?, "
+					+ "SET first_name = ?, mid_name = ?, last_name = ?, DOB = ?, gender = ?, "
 					+ "primaryDoctor = ?, ssnArea = ?, ssnGroup = ?, ssnSerial = ?, phone_num = ?, last_update = CURDATER() "
-					+ "WHERE patient_id = \"" + patientID + "\";";
+					+ "WHERE patient_id = \"" + PatientProfile.getPatientID() + "\";";
 
 			PreparedStatement preparedStatement = mpCon.prepareStatement(insert);
-			preparedStatement.setString(1, patientID);
-			preparedStatement.setString(2, firstName);
-			preparedStatement.setString(3, midName);
-			preparedStatement.setString(4, lastName);
-			preparedStatement.setString(5, dateOfBirth);
-			preparedStatement.setString(6, gender);
-			preparedStatement.setString(7, primaryDoctor);
-			preparedStatement.setString(8, ssnArea);
-			preparedStatement.setString(9, ssnGroup);
-			preparedStatement.setString(10, ssnSerial);
-			preparedStatement.setString(11, phone_num);
+			preparedStatement.setString(1, firstName);
+			preparedStatement.setString(2, midName);
+			preparedStatement.setString(3, lastName);
+			preparedStatement.setString(4, dateOfBirth);
+			preparedStatement.setString(5, gender);
+			preparedStatement.setString(6, primaryDoctor);
+			preparedStatement.setString(7, ssnArea);
+			preparedStatement.setString(8, ssnGroup);
+			preparedStatement.setString(9, ssnSerial);
+			preparedStatement.setString(10, phone_num);
 
 			preparedStatement.executeUpdate();
 			mpCon.close();
@@ -399,7 +414,7 @@ public class DBcontrol {
 
 	}// add patient profile
 
-	void updateEmployeeProfile(String employeeID, String firstName, String midName, String lastName,
+	boolean updateEmployeeProfile(String firstName, String midName, String lastName,
 			String dateOfBirth, String gender, String role, String ssnArea, String ssnGroup, String ssnSerial,
 			String phone_num) {
 
@@ -407,28 +422,29 @@ public class DBcontrol {
 			checkConnection();
 
 			String update = "UPDATE employee_table "
-					+ "SET patient_id = ?, first_name = ?, mid_name = ?, last_name = ?, DOB = ?, gender = ?, "
+					+ "SET first_name = ?, mid_name = ?, last_name = ?, DOB = ?, gender = ?, "
 					+ "primaryDoctor = ?, ssnArea = ?, ssnGroup = ?, ssnSerial = ?, phone_num = ?, last_update = CURDATER() "
-					+ "WHERE patient_id = \"" + employeeID + "\";";
+					+ "WHERE patient_id = \"" + EmployeeProfile.getEmployeeID() + "\";";
 
 			PreparedStatement preparedStatement = mpCon.prepareStatement(update);
-			preparedStatement.setString(1, employeeID);
-			preparedStatement.setString(2, firstName);
-			preparedStatement.setString(3, midName);
-			preparedStatement.setString(4, lastName);
-			preparedStatement.setString(5, dateOfBirth);
-			preparedStatement.setString(6, gender);
-			preparedStatement.setString(7, role);
-			preparedStatement.setString(8, ssnArea);
-			preparedStatement.setString(9, ssnGroup);
-			preparedStatement.setString(10, ssnSerial);
-			preparedStatement.setString(11, phone_num);
+			preparedStatement.setString(1, firstName);
+			preparedStatement.setString(2, midName);
+			preparedStatement.setString(3, lastName);
+			preparedStatement.setString(4, dateOfBirth);
+			preparedStatement.setString(5, gender);
+			preparedStatement.setString(6, role);
+			preparedStatement.setString(7, ssnArea);
+			preparedStatement.setString(8, ssnGroup);
+			preparedStatement.setString(9, ssnSerial);
+			preparedStatement.setString(10, phone_num);
 
 			preparedStatement.executeUpdate();
 			mpCon.close();
 
+			return true;
+
 		} catch (SQLException e) {
-			return;
+			return false;
 		}
 
 	}// add patient profile
@@ -457,7 +473,8 @@ public class DBcontrol {
 		}
 	}
 
-	void updateAddress(String id, String streetNum, String aptNum,String streetName,  String cityName, String stateName, String zipcode ) {
+	boolean updateAddress(String id, String streetNum, String aptNum, String streetName, String cityName,
+			String stateName, String zipcode) {
 		try {
 		checkConnection();
 		
@@ -477,8 +494,9 @@ public class DBcontrol {
 		preparedStatement.executeUpdate();
 		
 		mpCon.close();
+			return true;
 		}catch (SQLException e) {
-			return;
+			return false;
 		}
 	}
 	

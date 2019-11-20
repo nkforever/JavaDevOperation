@@ -28,46 +28,37 @@ public class EditEmployeeForm extends JPanel{
 	/**
 	 * 
 	 */
+	// variables
 	private static final long serialVersionUID = 1L;
 	private JFormattedTextField DOBField, zipcodeField, streetNumField, ssnAreaField, ssnGroupField, ssnSerialField, phoneNumberField;
-	private JTextField firstNameField, midNameField, lastNameField,streetNameField, cityField;
-	private JComboBox<String> stateField, genderField;
-
-	private JLabel lblNewLabel, lblMidName, lblLastName, lblDob;
-	private JLabel lblGender, lblSsn, lblStreetAddr, lblState, lblCity, lblZipcode, lblPhone;
-
-
-	private DBcontrol dbc = new DBcontrol();
-	private JTextField aptNumField;
+	private JTextField firstNameField, midNameField, lastNameField, streetNameField, cityField, aptNumField;
+	private JComboBox<String> stateField, genderField, roleComboBox;
 	private JButton saveUpdateButton;
 
-	private String patientID = "", firstName = "", midName = "", lastName= "", DOB = "", gender = "", ssnArea = "", ssnGroup = "", ssnSerial ="",
-			phoneNumber = "", streetNum = "", aptNum = "", streetName = "", city = "", state = "", zipcode = "",
-			role = "";
+	private JLabel lblNewLabel, lblMidName, lblLastName, lblDob, lblGender, lblSsn, lblStreetAddr, lblState, lblCity,
+			lblZipcode, lblPhone, lblNewLabel_2, lblstreetNumber, lblstreetName, mandatoryError, label, label_1,
+			label_2;
+
+	private JCheckBox addEditPatientCheckBox, editOwnProfilecheckBox, viewPatientCheckBoc, viewBillCheckBox,
+			userAdminCheckBox, activeCheckBox;
+
+	private DBcontrol dbc = new DBcontrol();
 
 
+	private String employeeID = " ", firstName = " ", midName = " ", lastName = " ", DOB = " ", gender = " ",
+			ssnArea = " ", ssnGroup = " ", ssnSerial = " ", phoneNumber = " ", streetNum = " ", aptNum = " ",
+			streetName = " ", city = " ", state = " ", zipcode = " ", role = " ";
+	// end of variables
+
+	// declaration
 	DateFormat  dateFormat = new SimpleDateFormat("MM/dd/yyyy"); 
 	DateFormatter dateFormatter  = new DateFormatter(dateFormat); 	
 
 	NumberFormat num = new DecimalFormat("#####"); 
 	NumberFormatter zipFormatter  = new NumberFormatter(num); 
+	// end of declaration
 
-	private JLabel lblNewLabel_2;
-	private JLabel lblstreetNumber;
-	private JLabel lblstreetName;
-	private JLabel mandatoryError;
-	private JLabel label;
-	private JLabel label_1;
-	private JLabel label_2;
-	private JCheckBox addEditPatientCheckBox;
-	private JCheckBox editOwnProfilecheckBox;
-	private JCheckBox viewPatientCheckBoc;
-	private JCheckBox viewBillCheckBox;
-	private JComboBox<String> roleComboBox;
-	private JCheckBox userAdminCheckBox;
-	private JCheckBox activeCheckBox;
-
-
+	// class begin
 	public EditEmployeeForm() {
 		setLayout(new BorderLayout(0, 0));
 
@@ -81,7 +72,7 @@ public class EditEmployeeForm extends JPanel{
 		lblStreetAddr.setBounds(11, 141, 105, 29);
 		formPanel.add(lblStreetAddr);
 
-		firstNameField = new JTextField();
+		firstNameField = new JTextField(); // first name field
 		firstNameField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -99,7 +90,7 @@ public class EditEmployeeForm extends JPanel{
 		formPanel.add(firstNameField);
 		firstNameField.setColumns(10);
 
-		midNameField = new JTextField();
+		midNameField = new JTextField(); // middle name field
 		midNameField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -117,7 +108,7 @@ public class EditEmployeeForm extends JPanel{
 		formPanel.add(midNameField);
 		midNameField.setColumns(10);
 
-		lastNameField = new JTextField();
+		lastNameField = new JTextField(); // last name field
 		lastNameField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -135,7 +126,7 @@ public class EditEmployeeForm extends JPanel{
 		formPanel.add(lastNameField);
 		lastNameField.setColumns(10);
 
-		try {
+		try { // date of birth field
 			DOBField = new JFormattedTextField(new MaskFormatter("##/##/####"));
 		}catch (ParseException e) {
 			e.printStackTrace();
@@ -145,7 +136,7 @@ public class EditEmployeeForm extends JPanel{
 		formPanel.add(DOBField);
 		DOBField.setColumns(10);
 
-		genderField = new JComboBox<String>();
+		genderField = new JComboBox<String>(); // gender combo box
 		genderField.setModel(new DefaultComboBoxModel<String>(new String[] {"", "Male", "Female", "Other()"}));
 		genderField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		genderField.setBounds(305, 67, 86, 29);
@@ -461,35 +452,34 @@ public class EditEmployeeForm extends JPanel{
 			if(midNameField.getText() !=null) midName = midNameField.getText();		
 			if(lastNameField.getText() != null) lastName= lastNameField.getText();		
 			if(DOBField.getText() != null) DOB = DOBField.getText();
-			if(genderField.getSelectedItem().toString() != "") gender = genderField.getSelectedItem().toString();
+			if (genderField.getSelectedIndex() != -1)
+				gender = genderField.getSelectedItem().toString();
 			if(ssnAreaField.getText() != null) ssnArea = ssnAreaField.getText();
 			if(ssnGroupField.getText() != null)ssnGroup = ssnGroupField.getText();
 			if(ssnSerialField.getText() != null)ssnSerial = ssnSerialField.getText();
-			if (roleComboBox.getSelectedItem().toString() != "")
+			if (roleComboBox.getSelectedIndex() != -1)
 				role = roleComboBox.getSelectedItem().toString();
 			if(phoneNumberField.getText() != null) phoneNumber = phoneNumberField.getText();
 			if(streetNumField.getText() != null) streetNum = streetNumField.getText();
 			if(aptNumField.getText() != null) aptNum = aptNumField.getText();
 			if(streetNameField.getText() != null) streetName = streetNameField.getText();
 			if(cityField.getText() != null) city = cityField.getText();
-			if(stateField.getSelectedItem().toString() != null) state = stateField.getSelectedItem().toString();
+			if (stateField.getSelectedIndex() != -1)
+				state = stateField.getSelectedItem().toString();
 			if(zipcodeField.getText() != null) zipcode = zipcodeField.getText();
 
+			 dbc.updateEmployeeProfile(firstName, midName, lastName, DOB, gender, role, ssnArea, ssnGroup, ssnSerial,
+					phoneNumber);
+			dbc.updateAddress(employeeID, streetNum, aptNum, streetName, city, state, zipcode);
+
 			loadEmployeeInfo();
-
-			dbc.updateEmployeeProfile(patientID, firstName, midName, lastName, DOB, gender, role, ssnArea, ssnGroup,
-					ssnSerial, phoneNumber);
-
-			dbc.updateAddress(patientID, streetNum, aptNum, streetName, city, state, zipcode);
-
-
 			return true;
 		}
 	}
 
 	void loadEmployeeInfo() {
 
-		EmployeeProfile.setEmployeeID(patientID);
+		EmployeeProfile.setEmployeeID(employeeID);
 		EmployeeProfile.setFirstName(firstName);
 		EmployeeProfile.setMidName(midName);
 		EmployeeProfile.setLastName(lastName);
@@ -510,7 +500,7 @@ public class EditEmployeeForm extends JPanel{
 		clearForm();
 	}
 
-	void loadEmployeeInfoToForm() {
+	public void loadEmployeeInfoToForm() {
 
 		firstNameField.setText(EmployeeProfile.getFirstName());
 		midNameField.setText(EmployeeProfile.getMidName());
@@ -528,7 +518,13 @@ public class EditEmployeeForm extends JPanel{
 		stateField.setSelectedItem(EmployeeProfile.getStateName());
 		zipcodeField.setText(EmployeeProfile.getZipCode());
 		roleComboBox.setSelectedItem(EmployeeProfile.getRole());
-
+//		if(EmployeeProfile.getAddEditPatient() == 1);
+//		if(EmployeeProfile.getAddEditPatient() == 1);		
+//		if(EmployeeProfile.getAddEditPatient() == 1);
+//		if(EmployeeProfile.getAddEditPatient() == 1);
+//		if(EmployeeProfile.getAddEditPatient() == 1);
+//		if(EmployeeProfile.getAddEditPatient() == 1);
+//		if(EmployeeProfile.getAddEditPatient() == 1);
 	}
 
 	void clearForm() {

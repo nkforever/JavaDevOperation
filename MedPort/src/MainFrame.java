@@ -8,6 +8,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -65,6 +69,19 @@ public class MainFrame {
 
 	private void initialize() {
 		mainFrame = new JFrame();
+		mainFrame.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				connection();
+			}
+		});
+		mainFrame.addWindowFocusListener(new WindowFocusListener() {
+			public void windowGainedFocus(WindowEvent e) {
+				connection();
+			}
+			public void windowLostFocus(WindowEvent e) {
+			}
+		});
 		mainFrame.setResizable(false);
 		mainFrame.setTitle("Welcome to MedPort");
 		mainFrame.setBounds(100, 100, 694, 441);
@@ -139,9 +156,10 @@ public class MainFrame {
 		passwordField.setColumns(10);
 
 		ErrorMessageLabel = new JLabel("");
+		ErrorMessageLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		ErrorMessageLabel.setForeground(new Color(255, 0, 0));
-		ErrorMessageLabel.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		ErrorMessageLabel.setBounds(85, 119, 221, 29);
+		ErrorMessageLabel.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		ErrorMessageLabel.setBounds(-101, 155, 687, 29);
 		CenterPanel.add(ErrorMessageLabel);
 
 
@@ -176,13 +194,13 @@ public class MainFrame {
 			serverStatus.setBounds(70, 277, 120, 36);
 			return true;
 		}
-
-		serverStatus.setText("No Connection");
-		serverStatus.setForeground(Color.ORANGE);
-		serverStatus.setFont(new Font("Dialog", Font.BOLD, 12));
-		serverStatus.setBounds(70, 277, 120, 36);
-
-		return false;
+		else {
+			serverStatus.setText("No Connection");
+			serverStatus.setForeground(Color.RED);
+			serverStatus.setFont(new Font("Dialog", Font.BOLD, 12));
+			serverStatus.setBounds(70, 277, 120, 36);
+			return false;
+		}
 	}
 	private ActionListener actions = new ActionListener(){
 
@@ -195,41 +213,45 @@ public class MainFrame {
 
 	@SuppressWarnings("deprecation")
 	void verifyUser() {
-			
-			if(!(passwordField.getText().isEmpty()) && !(usernameField.getText().isEmpty())) {
-				String user = usernameField.getText();
-				String pass = passwordField.getText();
-				boolean valid = false;
 
-				ErrorMessageLabel.setText("checking credential....");
+		if (!(passwordField.getText().isEmpty()) && !(usernameField.getText().isEmpty())) {
+			String user = usernameField.getText();
+			String pass = passwordField.getText();
+			boolean valid = false;
+
+			ErrorMessageLabel.setText("checking credential....");
 
 
-				valid = dbc.validate(user, pass);
-				if(valid) {
+			valid = dbc.validate(user, pass);
+			if (valid) {
 
-				OwnProfile.setUser(user);
+				if (OwnProfile.getActive() == 1) {
+					OwnProfile.setUser(user);
 					ErrorMessageLabel.setText("SUCCESS!");
 					mainFrame.getContentPane().removeAll();
 					mainFrame.setExtendedState( mainFrame.getExtendedState()|JFrame.MAXIMIZED_BOTH );
 					mainFrame.setResizable(true);
 
 					MainPanel mp = new MainPanel();
-				scrPane = new JScrollPane(mp);
+					scrPane = new JScrollPane(mp);
 					mp.getNameSearchField().requestFocus();
 					mainFrame.getContentPane().add(scrPane);
-				mainFrame.setMinimumSize(new Dimension(1050, 850));
+					mainFrame.setMinimumSize(new Dimension(950, 750));
 					mainFrame.validate();
-
-				}else {
-					ErrorMessageLabel.setText("Invalid credential, try again!");
+				} else {
+					ErrorMessageLabel.setText("Your account is deactived.\nPlease contact your account administrator.");
 				}
-			}
 
-			else{
-				ErrorMessageLabel.setText("Enter all credential.");
-				usernameField.getSelectionStart();
+			} else {
+				ErrorMessageLabel.setText("Invalid credential, try again!");
 			}
+		}
 
-		}//end verify user
+		else {
+			ErrorMessageLabel.setText("Enter all credential.");
+			usernameField.getSelectionStart();
+		}
+
+	}// end verify user
 
 }

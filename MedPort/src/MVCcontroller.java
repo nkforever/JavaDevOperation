@@ -18,8 +18,8 @@ public class MVCcontroller {
 		npForm = npf;
 		mPanel.addSaveButtonListener(new addSaveButtonListener());
 		mPanel.addRecordButtonListener(new addRecordButtonListener());
-		mPanel.addUpdateButtonListener(new addUpdatePatientButtonListener());
-		mPanel.addUpdateButtonListener(new addUpdateEmployeeButtonListener());
+		mPanel.addUpdatePatientButtonListener(new addUpdatePatientButtonListener());
+		mPanel.addUpdateEmployeeButtonListener(new addUpdateEmployeeButtonListener());
 		
 	}
 	
@@ -45,7 +45,8 @@ public class MVCcontroller {
 	class addUpdatePatientButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if(true) {
-				mPanel.do something();
+//				mPanel.do something();
+				System.out.println("update patient info button is pressed");
 			}
 		}
 	}
@@ -53,7 +54,7 @@ public class MVCcontroller {
 	class addUpdateEmployeeButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if(true) {
-				mPanel.do something();
+				mPanel.updateEmployeeInfoIsPressed();
 			}
 		}
 	}

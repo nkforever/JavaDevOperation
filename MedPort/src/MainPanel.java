@@ -443,9 +443,12 @@ public class MainPanel extends JPanel {
 		patientAssignmentForm.getAddRecordButton().addActionListener(recordButtonPress);
 	}// end add action listener
 	
-	void addUpdateButtonListener(ActionListener saveUpdatePress) {
-		editPatientInfo.getSaveUpdateButton().addActionListener(saveUpdatePress);
-		editEmployeeInfo.getSaveUpdateButton().addActionListener(saveUpdatePress);
+	void addUpdatePatientButtonListener(ActionListener updatePatientInfo) {
+		editPatientInfo.getSaveUpdateButton().addActionListener(updatePatientInfo);
+	}
+
+	void addUpdateEmployeeButtonListener(ActionListener upateEmployeeInfo) {
+		editEmployeeInfo.getSaveUpdateButton().addActionListener(upateEmployeeInfo);
 	}
 
 	private class actionListener implements ActionListener {
@@ -483,6 +486,7 @@ public class MainPanel extends JPanel {
 		profileInputPanel.removeAll();
 
 		if (OwnProfile.getRole().equalsIgnoreCase("admin")) {
+			editEmployeeInfo.loadEmployeeInfoToForm();
 			profileInputPanel.add(editEmployeeInfo);
 			newEmployeForm.setVisible(true);
 			profileInputPanel.repaint();
@@ -547,7 +551,9 @@ public class MainPanel extends JPanel {
 				idSearch.setText("");
 				ssnSearch.setText("");
 
+				editProfile.setEnabled(true);
 				loadEmployee();
+				editEmployeeInfo.loadEmployeeInfoToForm();
 				return;
 			}
 			setNotFound(); // set not found
@@ -699,4 +705,14 @@ public class MainPanel extends JPanel {
 		profileInputPanel.validate();
 
 	}
+
+	public void updateEmployeeInfoIsPressed() {
+		errormessageLabel.setVisible(true);
+		if (editEmployeeInfo.updateEmployeeInfo()) {
+			errormessageLabel.setText("Successfully updated!");
+		} else
+			errormessageLabel.setText("Update fail!");
+
+	}
+
 }

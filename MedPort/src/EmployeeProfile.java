@@ -1,14 +1,79 @@
 
 public class EmployeeProfile {
 
-	private static String user, role;
-	private static String employeeID = "", firstName = "", midName = "", lastName = "", streetNum = "", aptNum = "",
-			streetName = "", cityName = "", stateName = "", zipCode = "", gender = "", email = "", phoneNumber = "",
-			DOB = "", ssnArea = "", ssnGroup = "", ssnSerial = "";
+	private static String user = " ", role = " ";
+	private static String employeeID = " ", firstName = " ", midName = " ", lastName = " ", streetNum = " ",
+			aptNum = " ", streetName = " ", cityName = " ", stateName = " ", zipCode = " ", gender = " ", email = " ",
+			phoneNumber = " ", DOB = " ", ssnArea = " ", ssnGroup = " ", ssnSerial = " ";
 	static boolean found = false;
 
-	private int addEditPatient = 0, viewPatient = 0, ownProfile = 1, viewBill = 0, processPayment = 0;
+	private static int active = 1, userAdmin = 0, addEditPatient = 0, viewPatient = 0, ownProfile = 1, viewBill = 0,
+			processPayment = 0;
 	
+	public static boolean isFound() {
+		return found;
+	}
+
+	public static void setFound(boolean found) {
+		EmployeeProfile.found = found;
+	}
+
+	public int getActive() {
+		return active;
+	}
+
+	public static void setActive(int active) {
+		EmployeeProfile.active = active;
+	}
+
+	public int getUserAdmin() {
+		return userAdmin;
+	}
+
+	public static void setUserAdmin(int userAdmin) {
+		EmployeeProfile.userAdmin = userAdmin;
+	}
+
+	public int getAddEditPatient() {
+		return addEditPatient;
+	}
+
+	public static void setAddEditPatient(int addEditPatient) {
+		EmployeeProfile.addEditPatient = addEditPatient;
+	}
+
+	public int getViewPatient() {
+		return viewPatient;
+	}
+
+	public static void setViewPatient(int viewPatient) {
+		EmployeeProfile.viewPatient = viewPatient;
+	}
+
+	public int getOwnProfile() {
+		return ownProfile;
+	}
+
+	public static void setOwnProfile(int ownProfile) {
+		EmployeeProfile.ownProfile = ownProfile;
+	}
+
+	public int getViewBill() {
+		return viewBill;
+	}
+
+	public static void setViewBill(int viewBill) {
+		EmployeeProfile.viewBill = viewBill;
+	}
+
+	public int getProcessPayment() {
+		return processPayment;
+	}
+
+	public static void setProcessPayment(int processPayment) {
+		EmployeeProfile.processPayment = processPayment;
+	}
+
 	public static String getSsnArea() {
 		return ssnArea;
 	}

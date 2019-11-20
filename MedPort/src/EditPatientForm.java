@@ -420,7 +420,8 @@ public class EditPatientForm extends JPanel{
 
 			loadPatientInfo();
 
-			dbc.updatePatientProfile(patientID, firstName, midName, lastName, DOB,	gender, " ", ssnArea, ssnGroup, ssnSerial, phoneNumber);
+			dbc.updatePatientProfile(firstName, midName, lastName, DOB, gender, " ", ssnArea, ssnGroup, ssnSerial,
+					phoneNumber);
 
 			dbc.updateAddress(patientID, streetNum, aptNum,streetName,city, state, zipcode);
 

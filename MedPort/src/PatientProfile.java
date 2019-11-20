@@ -1,25 +1,23 @@
 
 public class PatientProfile {
 	
-	private static String patientID = "________", ssnArea = "  ", ssnGroup = "  ", ssnSerial = "    ",
-			phoneNumber = "(   )-   -    ", streetNum = "_____", aptNum = "", zipcode = "_____", firstName = "",
-			midName = "", lastName = "", streetName = "_____ __", cityName = "________", stateName = "__",
-			PrimaryDoctor = "________", dateOfBirth = "", gender = "", DOB = " ";
+	private static String patientID = " ", ssnArea = "  ", ssnGroup = "  ", ssnSerial = "    ",
+			phoneNumber = " ", streetNum = " ", aptNum = " ", zipcode = " ", firstName = " ",
+			midName = " ", lastName = " ", streetName = " ", cityName = " ", stateName = " ", PrimaryDoctor = " ",
+			dateOfBirth = " ", gender = " ", DOB = " ";
 	private static int active = 0;
 	static boolean found = false;
 	
+	PatientProfile() {
+
+	}
+
 	public static int getActive() {
 		return active;
 	}
 
 	public static void setActive(int active) {
 		PatientProfile.active = active;
-	}
-
-
-
-	PatientProfile(){
-		
 	}
 
 	public static String getPatientID() {
