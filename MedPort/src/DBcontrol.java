@@ -68,9 +68,8 @@ public class DBcontrol {
 	}
 
 	void getProfile(String id, String name, String ssn, String client) {
-		checkConnection();
 
-		if (client.equalsIgnoreCase("employee")) {
+		if (client.equals("employee")) {
 			searchByAdmin(id, name, ssn);
 		} else {
 			searchByStaff(id, name, ssn);
@@ -139,6 +138,7 @@ public class DBcontrol {
 			resultSet = statement.executeQuery(checkFirstName);
 			if (resultSet.next()) {
 				employeeFound(resultSet);
+
 			} // end if
 			else {
 				statement2 = mpCon.createStatement();
@@ -151,7 +151,8 @@ public class DBcontrol {
 					if (resultSet3.next()) {
 						employeeFound(resultSet3);
 					}
-					EmployeeProfile.found = false;
+					else
+						EmployeeProfile.found = false;
 				} // end else
 			}
 		} catch (SQLException e) {
@@ -424,39 +425,22 @@ public class DBcontrol {
 			String ssnGroup, String ssnSerial, int userAdmin, int addEditPatient, int viewPatient, int ownProfile,
 			int viewBill, int processPayment, int active) {
 
-		PreparedStatement preparedStatement;
+		PreparedStatement statement;
 		try {
 			checkConnection();
 
-			String update = "UPDATE employee_table "
-					+ "SET first_name = ?, mid_name = ?, last_name = ?, gender = ?, DOB = ?, email = ?"
-					+ "phone_number = ?, role = ?, ssnArea = ?, ssnGroup = ?, ssnSerial = ?, last_update = CURDATE(), "
-					+ "update_by = ?, userAdmin = ? , addEditPatient = ?, viewPatient = ?, ownProfile = ? "
-					+ ", viewBill = ?, processPayment = ? , active = ?"
-					+ "WHERE patient_id = \"" + EmployeeProfile.getEmployeeID() + "\";";
+			String update = "UPDATE employee_info "
+					+ "SET first_name = '" + firstName + "', mid_name = '" + midName + "', last_name = '" + lastName
+					+ "', gender = '" + lastName + "', DOB = '" + dateOfBirth + "', email = '" + email + "'"
+					+ "phone_number = '" + phonenumber + "', role = '" + role + "', ssnArea = '" + ssnArea
+					+ "', ssnGroup = '" + ssnGroup + "', ssnSerial = '" + ssnSerial + "', last_update = CURDATE(), "
+					+ "update_by = '" + OwnProfile.getUser() + "', userAdmin = '" + userAdmin + "' , addEditPatient = '"
+					+ addEditPatient + "', viewPatient = '" + viewPatient + "', ownProfile = '" + ownProfile + "' "
+					+ ", viewBill = '" + viewBill + "', processPayment = '" + processPayment + "' , active = '" + active
+					+ "' WHERE patient_id = '" + EmployeeProfile.getEmployeeID() + "';";
 
-			preparedStatement = mpCon.prepareStatement(update);
-			preparedStatement.setString(1, firstName);
-			preparedStatement.setString(2, midName);
-			preparedStatement.setString(3, lastName);
-			preparedStatement.setString(4, gender);
-			preparedStatement.setString(5, dateOfBirth);
-			preparedStatement.setString(6, email);
-			preparedStatement.setString(7, phonenumber);
-			preparedStatement.setString(8, role);
-			preparedStatement.setString(9, ssnArea);
-			preparedStatement.setString(10, ssnGroup);
-			preparedStatement.setString(11, ssnSerial);
-			preparedStatement.setString(12, OwnProfile.getUser());
-			preparedStatement.setInt(13, userAdmin);
-			preparedStatement.setInt(14, addEditPatient);
-			preparedStatement.setInt(15, viewPatient);
-			preparedStatement.setInt(16, ownProfile);
-			preparedStatement.setInt(17, viewBill);
-			preparedStatement.setInt(18, processPayment);
-			preparedStatement.setInt(19, active);
-
-			preparedStatement.executeUpdate();
+			statement = mpCon.prepareStatement(update);
+			statement.executeUpdate(update);
 			mpCon.close();
 
 			return true;
