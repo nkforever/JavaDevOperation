@@ -11,6 +11,7 @@ public class MVCcontroller {
 
 	MVCcontroller(MainPanel mp, NewPatientForm npf, PatientAssignmentForm paf, EditPatientForm epf,
 			EditEmployeeForm eef) {
+
 		editEmployee = eef;
 		editPatient = epf;
 		patientAssignmentForm = paf;
@@ -26,36 +27,31 @@ public class MVCcontroller {
 	class addSaveButtonListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (true) {
-				if(npForm.generatePatientID()) 	mPanel.loadPatient();
-
-			}
+			if (npForm.generatePatientID())
+				mPanel.loadPatient(); //
 		}		
 	}
 	
 	class addRecordButtonListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(true) {
 				mPanel.loadLastPatientHistory();
-			}
 		}		
 	}
 	
 	class addUpdatePatientButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			if(true) {
 //				mPanel.do something();
 				System.out.println("update patient info button is pressed");
-			}
+			mPanel.loadPatient();
 		}
 	}
 	
 	class addUpdateEmployeeButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			if(true) {
-				mPanel.updateEmployeeInfoIsPressed();
-			}
+			System.out.println("update employee info button is pressed");
+			editEmployee.updateEmployeeInfo();
+			mPanel.loadEmployee();
 		}
 	}
 	

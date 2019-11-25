@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
+import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -30,7 +31,8 @@ public class EditEmployeeForm extends JPanel{
 	 */
 	// variables
 	private static final long serialVersionUID = 1L;
-	private JFormattedTextField DOBField, zipcodeField, streetNumField, ssnAreaField, ssnGroupField, ssnSerialField, phoneNumberField;
+	private JFormattedTextField DOBField, zipcodeField, streetNumField, ssnAreaField, ssnGroupField, ssnSerialField,
+			phoneNumberField, emailTextField;
 	private JTextField firstNameField, midNameField, lastNameField, streetNameField, cityField, aptNumField;
 	private JComboBox<String> stateField, genderField, roleComboBox;
 	private JButton saveUpdateButton;
@@ -47,7 +49,7 @@ public class EditEmployeeForm extends JPanel{
 
 	private String employeeID = " ", firstName = " ", midName = " ", lastName = " ", DOB = " ", gender = " ",
 			ssnArea = " ", ssnGroup = " ", ssnSerial = " ", phoneNumber = " ", streetNum = " ", aptNum = " ",
-			streetName = " ", city = " ", state = " ", zipcode = " ", role = " ";
+			streetName = " ", city = " ", state = " ", zipcode = " ", role = " ", email = " ";
 	private int active = 1, userAdmin = 0, addEditPatient = 0, viewPatient = 0, ownProfile = 1, viewBill = 0,
 			processPayment = 0;
 	// end of variables
@@ -58,6 +60,7 @@ public class EditEmployeeForm extends JPanel{
 
 	NumberFormat num = new DecimalFormat("#####"); 
 	NumberFormatter zipFormatter  = new NumberFormatter(num); 
+	private JLabel emailLabel;
 	// end of declaration
 
 	// class begin
@@ -124,7 +127,7 @@ public class EditEmployeeForm extends JPanel{
 			}
 		});
 		lastNameField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		lastNameField.setBounds(512, 24, 130, 29);
+		lastNameField.setBounds(523, 24, 130, 29);
 		formPanel.add(lastNameField);
 		lastNameField.setColumns(10);
 
@@ -159,7 +162,7 @@ public class EditEmployeeForm extends JPanel{
 		stateField = new JComboBox<String>();
 		stateField.setModel(new DefaultComboBoxModel<String>(new String[] {"", "AK", "AL", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"}));
 		stateField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		stateField.setBounds(362, 180, 74, 29);
+		stateField.setBounds(344, 180, 74, 29);
 		formPanel.add(stateField);
 
 		zipcodeField = new JFormattedTextField(zipFormatter);
@@ -171,7 +174,7 @@ public class EditEmployeeForm extends JPanel{
 			}  
 		});
 		zipcodeField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		zipcodeField.setBounds(548, 180, 94, 29);
+		zipcodeField.setBounds(500, 180, 94, 29);
 		formPanel.add(zipcodeField);
 		zipcodeField.setColumns(5);
 
@@ -184,13 +187,13 @@ public class EditEmployeeForm extends JPanel{
 		}
 
 		phoneNumberField.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		phoneNumberField.setBounds(121, 233, 152, 29);
+		phoneNumberField.setBounds(502, 220, 152, 29);
 		formPanel.add(phoneNumberField);
 		phoneNumberField.setColumns(10);
 
 		saveUpdateButton = new JButton("SAVE UPDATE");
 		saveUpdateButton.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		saveUpdateButton.setBounds(477, 303, 165, 37);
+		saveUpdateButton.setBounds(534, 368, 226, 37);
 		formPanel.add(saveUpdateButton);
 
 		lblNewLabel = new JLabel("First Name");
@@ -205,7 +208,7 @@ public class EditEmployeeForm extends JPanel{
 
 		lblLastName = new JLabel("Last Name");
 		lblLastName.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		lblLastName.setBounds(432, 24, 79, 29);
+		lblLastName.setBounds(443, 24, 79, 29);
 		formPanel.add(lblLastName);
 
 		lblDob = new JLabel("DOB");
@@ -220,12 +223,12 @@ public class EditEmployeeForm extends JPanel{
 
 		lblSsn = new JLabel("SSN#");
 		lblSsn.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		lblSsn.setBounds(477, 67, 43, 29);
+		lblSsn.setBounds(486, 67, 43, 29);
 		formPanel.add(lblSsn);
 
 		lblState = new JLabel("State");
 		lblState.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		lblState.setBounds(312, 180, 48, 29);
+		lblState.setBounds(294, 180, 48, 29);
 		formPanel.add(lblState);
 
 		lblCity = new JLabel("City");
@@ -235,24 +238,24 @@ public class EditEmployeeForm extends JPanel{
 
 		lblZipcode = new JLabel("Zipcode");
 		lblZipcode.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		lblZipcode.setBounds(488, 180, 64, 29);
+		lblZipcode.setBounds(440, 180, 64, 29);
 		formPanel.add(lblZipcode);
 
 		lblPhone = new JLabel("Phone#");
 		lblPhone.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		lblPhone.setBounds(58, 233, 58, 29);
+		lblPhone.setBounds(439, 220, 58, 29);
 		formPanel.add(lblPhone);
 
 		JLabel lblApt = new JLabel("Apt#");
 		lblApt.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		lblApt.setBounds(489, 141, 48, 29);
+		lblApt.setBounds(464, 141, 48, 29);
 		formPanel.add(lblApt);
 
 		aptNumField = new JTextField();
 		aptNumField.setText(" ");
 		aptNumField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		aptNumField.setColumns(5);
-		aptNumField.setBounds(549, 134, 94, 29);
+		aptNumField.setBounds(500, 141, 58, 29);
 		formPanel.add(aptNumField);
 
 		streetNumField = new JFormattedTextField();
@@ -286,7 +289,7 @@ public class EditEmployeeForm extends JPanel{
 			}  
 		});
 		ssnAreaField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		ssnAreaField.setBounds(534, 67, 33, 29);
+		ssnAreaField.setBounds(545, 67, 33, 29);
 		formPanel.add(ssnAreaField);
 
 		ssnGroupField = new JFormattedTextField();
@@ -307,7 +310,7 @@ public class EditEmployeeForm extends JPanel{
 		});
 		ssnGroupField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		ssnGroupField.setColumns(2);
-		ssnGroupField.setBounds(568, 67, 26, 29);
+		ssnGroupField.setBounds(579, 67, 26, 29);
 		formPanel.add(ssnGroupField);
 
 		ssnSerialField = new JFormattedTextField();
@@ -329,17 +332,17 @@ public class EditEmployeeForm extends JPanel{
 		});
 		ssnSerialField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		ssnSerialField.setColumns(4);
-		ssnSerialField.setBounds(595, 67, 48, 29);
+		ssnSerialField.setBounds(606, 67, 48, 29);
 		formPanel.add(ssnSerialField);
 
 		JLabel lblNewLabel_1 = new JLabel("Staff Role");
 		lblNewLabel_1.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		lblNewLabel_1.setBounds(458, 233, 86, 29);
+		lblNewLabel_1.setBounds(11, 233, 86, 29);
 		formPanel.add(lblNewLabel_1);
 
 		lblNewLabel_2 = new JLabel("(Enter 10 digits)");
 		lblNewLabel_2.setFont(new Font("Times New Roman", Font.ITALIC, 12));
-		lblNewLabel_2.setBounds(275, 233, 104, 29);
+		lblNewLabel_2.setBounds(656, 220, 104, 29);
 		formPanel.add(lblNewLabel_2);
 
 		lblstreetNumber = new JLabel("(street number)");
@@ -355,17 +358,17 @@ public class EditEmployeeForm extends JPanel{
 		mandatoryError = new JLabel("** Please fill out all the required field.");
 		mandatoryError.setVisible(false);
 		mandatoryError.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 14));
-		mandatoryError.setBounds(416, 337, 226, 29);
+		mandatoryError.setBounds(534, 329, 226, 29);
 		formPanel.add(mandatoryError);
 
 		label = new JLabel("*");
 		label.setFont(new Font("Times New Roman", Font.BOLD, 18));
-		label.setBounds(522, 67, 14, 21);
+		label.setBounds(533, 71, 14, 21);
 		formPanel.add(label);
 
 		label_1 = new JLabel("*");
 		label_1.setFont(new Font("Times New Roman", Font.BOLD, 18));
-		label_1.setBounds(497, 20, 14, 21);
+		label_1.setBounds(508, 20, 14, 29);
 		formPanel.add(label_1);
 
 		label_2 = new JLabel("*");
@@ -377,7 +380,7 @@ public class EditEmployeeForm extends JPanel{
 		roleComboBox.setModel(new DefaultComboBoxModel<String>(
 				new String[] { "N/A", "Admin", "Doctor", "Finance", "Nurse", "Secretary" }));
 		roleComboBox.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		roleComboBox.setBounds(544, 233, 98, 29);
+		roleComboBox.setBounds(98, 233, 98, 29);
 		formPanel.add(roleComboBox);
 		
 		addEditPatientCheckBox = new JCheckBox("Add/Edit Patient");
@@ -419,8 +422,19 @@ public class EditEmployeeForm extends JPanel{
 		activeCheckBox = new JCheckBox("Active?");
 		activeCheckBox.setSelected(true);
 		activeCheckBox.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		activeCheckBox.setBounds(374, 373, 163, 29);
+		activeCheckBox.setBounds(374, 373, 94, 29);
 		formPanel.add(activeCheckBox);
+
+		emailLabel = new JLabel("E-mail");
+		emailLabel.setFont(new Font("Times New Roman", Font.BOLD, 16));
+		emailLabel.setBounds(439, 256, 58, 29);
+		formPanel.add(emailLabel);
+
+		emailTextField = new JFormattedTextField((AbstractFormatter) null);
+		emailTextField.setFont(new Font("Times New Roman", Font.BOLD, 16));
+		emailTextField.setColumns(10);
+		emailTextField.setBounds(502, 256, 152, 29);
+		formPanel.add(emailTextField);
 		formPanel.setFocusTraversalPolicy(
 				new FocusTraversalOnArray(new Component[] { firstNameField, midNameField, lastNameField, DOBField,
 						genderField, ssnAreaField, ssnGroupField, ssnSerialField, streetNumField, streetNameField,
@@ -450,25 +464,40 @@ public class EditEmployeeForm extends JPanel{
 		}	
 		else {
 
-			if(firstNameField.getText() != null) 	firstName = firstNameField.getText();
-			if(midNameField.getText() !=null) midName = midNameField.getText();		
-			if(lastNameField.getText() != null) lastName= lastNameField.getText();		
-			if(DOBField.getText() != null) DOB = DOBField.getText();
+			if (firstNameField.getText() != null)
+				firstName = firstNameField.getText();
+			if (midNameField.getText() != null)
+				midName = midNameField.getText();
+			if (lastNameField.getText() != null)
+				lastName = lastNameField.getText();
+			if (DOBField.getText() != null)
+				DOB = DOBField.getText();
 			if (!(genderField.getSelectedIndex() < 1))
 				gender = genderField.getSelectedItem().toString();
-			if(ssnAreaField.getText() != null) ssnArea = ssnAreaField.getText();
-			if(ssnGroupField.getText() != null)ssnGroup = ssnGroupField.getText();
-			if(ssnSerialField.getText() != null)ssnSerial = ssnSerialField.getText();
+			if (ssnAreaField.getText() != null)
+				ssnArea = ssnAreaField.getText();
+			if (ssnGroupField.getText() != null)
+				ssnGroup = ssnGroupField.getText();
+			if (ssnSerialField.getText() != null)
+				ssnSerial = ssnSerialField.getText();
 			if (!(roleComboBox.getSelectedIndex() < 1))
 				role = roleComboBox.getSelectedItem().toString();
-			if(phoneNumberField.getText() != null) phoneNumber = phoneNumberField.getText();
-			if(streetNumField.getText() != null) streetNum = streetNumField.getText();
-			if(aptNumField.getText() != null) aptNum = aptNumField.getText();
-			if(streetNameField.getText() != null) streetName = streetNameField.getText();
-			if(cityField.getText() != null) city = cityField.getText();
+			if (phoneNumberField.getText() != null)
+				phoneNumber = phoneNumberField.getText();
+			if (streetNumField.getText() != null)
+				streetNum = streetNumField.getText();
+			if (aptNumField.getText() != null)
+				aptNum = aptNumField.getText();
+			if (streetNameField.getText() != null)
+				streetName = streetNameField.getText();
+			if (cityField.getText() != null)
+				city = cityField.getText();
 			if (!(stateField.getSelectedIndex() < 1))
 				state = stateField.getSelectedItem().toString();
 			if(zipcodeField.getText() != null) zipcode = zipcodeField.getText();
+			if (emailTextField.getText() != null)
+				email = emailTextField.getText();
+
 			if (addEditPatientCheckBox.isSelected())
 				addEditPatient = 1;
 			if (viewPatientCheckBoc.isSelected())
@@ -484,12 +513,17 @@ public class EditEmployeeForm extends JPanel{
 			if (activeCheckBox.isSelected())
 				active = 1;
 
-			 dbc.updateEmployeeProfile(firstName, midName, lastName, DOB, gender, role, ssnArea, ssnGroup, ssnSerial,
-					phoneNumber, userAdmin, addEditPatient, viewPatient, ownProfile, viewBill, processPayment, active);
-			dbc.updateAddress(employeeID, streetNum, aptNum, streetName, city, state, zipcode);
+			if (dbc.updateEmployeeProfile(firstName, midName, lastName, gender, DOB, email, phoneNumber, role, ssnArea,
+					ssnGroup, ssnSerial, userAdmin, addEditPatient, viewPatient, ownProfile, viewBill, processPayment,
+					active)) {
+				dbc.updateAddress(employeeID, streetNum, aptNum, streetName, city, state, zipcode);
 
-			loadEmployeeInfo();
-			return true;
+				loadEmployeeInfo();
+				return true;
+			} else {
+				System.out.println("FAIL TO ADD TO DataBASE");
+				return false;
+			}
 		}
 	}
 
@@ -505,6 +539,7 @@ public class EditEmployeeForm extends JPanel{
 		EmployeeProfile.setSsnGroup(ssnGroup);
 		EmployeeProfile.setSsnSerial(ssnSerial);
 		EmployeeProfile.setPhoneNumber(phoneNumber);
+		EmployeeProfile.setEmail(email);
 		EmployeeProfile.setStreetNum(streetNum);
 		EmployeeProfile.setStreetName(streetName);
 		EmployeeProfile.setAptNum(aptNum);
@@ -541,20 +576,21 @@ public class EditEmployeeForm extends JPanel{
 		stateField.setSelectedItem(EmployeeProfile.getStateName());
 		zipcodeField.setText(EmployeeProfile.getZipCode());
 		roleComboBox.setSelectedItem(EmployeeProfile.getRole());
+		emailTextField.setText(EmployeeProfile.getEmail());
 		if (EmployeeProfile.getAddEditPatient() == 1)
-			addEditPatientCheckBox.isSelected();
+			addEditPatientCheckBox.setSelected(true);
 		if (EmployeeProfile.getViewPatient() == 1)
-			viewPatientCheckBoc.isSelected();
+			viewPatientCheckBoc.setSelected(true);
 		if (EmployeeProfile.getOwnProfile() == 1)
-			editOwnProfilecheckBox.isSelected();
+			editOwnProfilecheckBox.setSelected(true);
 		if (EmployeeProfile.getViewBill() == 1)
-			viewBillCheckBox.isSelected();
+			viewBillCheckBox.setSelected(true);
 		if (EmployeeProfile.getProcessPayment() == 1)
-			processPaymentCheckBox.isSelected();
+			processPaymentCheckBox.setSelected(true);
 		if (EmployeeProfile.getUserAdmin() == 1)
-			userAdminCheckBox.isSelected();
+			userAdminCheckBox.setSelected(true);
 		if (EmployeeProfile.getActive() == 1)
-			activeCheckBox.isSelected();
+			activeCheckBox.setSelected(true);
 	}
 
 	void clearForm() {

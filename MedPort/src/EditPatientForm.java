@@ -482,14 +482,6 @@ public class EditPatientForm extends JPanel{
 				midNameField.getText().isEmpty() && 
 				lastNameField.getText().isEmpty() && 
 				DOBField.getText().isEmpty() && 
-				//		genderField.getText().isEmpty() && 
-				//		streetNumField.getText().isEmpty() && 
-				//		streetNameField.getText().isEmpty() && 
-				//		cityField.getText().isEmpty() && 
-				//		zipcodeField.getText().isEmpty() && 
-				//		ssnAreaField.getText().isEmpty() && 
-				//		ssnGroupField.getText().isEmpty() && 
-				//		ssnSerialField.getText().isEmpty() && 
 				phoneNumberField.getText().isEmpty() ) {
 
 			return true;
@@ -501,7 +493,6 @@ public class EditPatientForm extends JPanel{
 	boolean isMandatoryFieldFill() {
 		if(firstNameField.getText().isEmpty() || lastNameField.getText().isEmpty() || ssnAreaField.getText().length() < 3 || 
 				ssnGroupField.getText().length() <2|| ssnSerialField.getText().length() < 4 ) return false;
-
 
 		return true;
 	}

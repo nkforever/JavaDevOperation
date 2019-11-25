@@ -477,7 +477,7 @@ public class MainPanel extends JPanel {
 				}
 			}
 
-			// TODO Auto-generated method stub
+			// TODO
 			// If there's more button -----------------------------------------
 		}
 	};// End ActionListener class
@@ -571,7 +571,7 @@ public class MainPanel extends JPanel {
 		primaryLabel.setText("");
 	}
 
-	private void loadEmployee() {
+	public void loadEmployee() {
 
 		// patient info
 		IDLabel.setForeground(Color.BLACK);
@@ -660,18 +660,18 @@ public class MainPanel extends JPanel {
 				idSearch.setText("");
 				ssnSearch.setText("");
 
-				IDLabel.setText("_");
-				firstNameLabel.setText("_");
-				midNameLabel.setText("_");
-				lastNameLabel.setText("_");
-				SSNLabel.setText("   -  -    ");
-				phoneNumberLabel.setText("(   ) -    ");
-				streetLabel.setText("_____" + " _____ __");
-				aptLabel.setText("");
-				cityStateLabel.setText("________" + ", __" + " _____");
-				primaryLabel.setText("________");
-				DOBLabel.setText("_");
-				genderLabel.setText("_");
+				IDLabel.setText(" ");
+				firstNameLabel.setText(" ");
+				midNameLabel.setText(" ");
+				lastNameLabel.setText(" ");
+				SSNLabel.setText(" ");
+				phoneNumberLabel.setText(" ");
+				streetLabel.setText(" ");
+				aptLabel.setText(" ");
+				cityStateLabel.setText(" ");
+				primaryLabel.setText(" ");
+				DOBLabel.setText(" ");
+				genderLabel.setText(" ");
 				//disable buttons 
 				checkinButton.setEnabled(false);
 				editProfile.setEnabled(false);
@@ -692,18 +692,18 @@ public class MainPanel extends JPanel {
 		idSearch.setText("");
 		ssnSearch.setText("");
 
-		IDLabel.setText("_");
-		firstNameLabel.setText("_");
-		midNameLabel.setText("_");
-		lastNameLabel.setText("_");
-		SSNLabel.setText("   -  -    ");
-		phoneNumberLabel.setText("(   ) -    ");
-		streetLabel.setText("_____" + " _____ __");
-		aptLabel.setText("");
-		cityStateLabel.setText("________" + ", __" + " _____");
-		primaryLabel.setText("________");
-		DOBLabel.setText("_");
-		genderLabel.setText("_");
+		IDLabel.setText(" ");
+		firstNameLabel.setText(" ");
+		midNameLabel.setText(" ");
+		lastNameLabel.setText(" ");
+		SSNLabel.setText(" ");
+		phoneNumberLabel.setText(" ");
+		streetLabel.setText(" ");
+		aptLabel.setText(" ");
+		cityStateLabel.setText(" ");
+		primaryLabel.setText(" ");
+		DOBLabel.setText(" ");
+		genderLabel.setText(" ");
 
 		profileInputPanel.removeAll();
 		profileInputPanel.add(addNewButton);
@@ -715,6 +715,7 @@ public class MainPanel extends JPanel {
 	public void updateEmployeeInfoIsPressed() {
 		errormessageLabel.setVisible(true);
 		if (editEmployeeInfo.updateEmployeeInfo()) {
+			editEmployeeInfo.clearForm();
 			editEmployeeInfo.setVisible(false);
 			addNewButton.setVisible(true);
 			profileInputPanel.repaint();

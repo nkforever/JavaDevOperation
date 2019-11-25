@@ -8,22 +8,20 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
+import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.text.DateFormatter;
 import javax.swing.text.MaskFormatter;
 import javax.swing.text.NumberFormatter;
 
@@ -34,7 +32,8 @@ public class NewEmployeeForm extends JPanel{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JFormattedTextField DOBField, zipcodeField, streetNumField, ssnAreaField, ssnGroupField, ssnSerialField, phoneNumberField;
+	private JFormattedTextField DOBField, zipcodeField, streetNumField, ssnAreaField, ssnGroupField, ssnSerialField
+			, phoneNumberField, emailTextField;
 	private JTextField firstNameField, midNameField, lastNameField,streetNameField, cityField;
 	private JComboBox<String> stateField, genderField, roleComboBox;
 
@@ -49,17 +48,14 @@ public class NewEmployeeForm extends JPanel{
 	private DBcontrol dbc = new DBcontrol();
 	private JTextField aptNumField;
 	private JButton saveNewEmployeeButton;
-	JPanel formPanel;
+	private JPanel formPanel;
 
-	private String patientID = "", firstName = "", midName = "", lastName= "", DOB = "", gender = "", ssnArea = "", ssnGroup = "", ssnSerial ="",
-			phoneNumber = "", streetNum = "", aptNum = "", streetName = "", city = "", state = "", zipcode = "",
-			role = "";
+	private String employeeID = " ", userID = " ", firstName = " ", midName = " ", lastName = " ", DOB = " ",
+			gender = " ", ssnArea = " ", ssnGroup = " ", ssnSerial = " ", phoneNumber = " ", streetNum = " ",
+			aptNum = " ", streetName = " ", city = " ", state = " ", zipcode = " ", role = " ", email = " ",
+			phone_number = " ";
 	private int active = 1, userAdmin = 0, addEditPatient = 0, viewPatient = 0, ownProfile = 1, viewBill = 0,
 			processPayment = 0;
-
-
-	private DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-	private DateFormatter dateFormatter = new DateFormatter(dateFormat);
 
 	private NumberFormat num = new DecimalFormat("#####");
 	private NumberFormatter zipFormatter = new NumberFormatter(num);
@@ -76,7 +72,7 @@ public class NewEmployeeForm extends JPanel{
 
 		lblStreetAddr = new JLabel("Street Address");
 		lblStreetAddr.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		lblStreetAddr.setBounds(11, 141, 105, 29);
+		lblStreetAddr.setBounds(10, 141, 105, 29);
 		formPanel.add(lblStreetAddr);
 
 		firstNameField = new JTextField();
@@ -129,7 +125,7 @@ public class NewEmployeeForm extends JPanel{
 			}
 		});
 		lastNameField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		lastNameField.setBounds(512, 24, 130, 29);
+		lastNameField.setBounds(522, 24, 130, 29);
 		formPanel.add(lastNameField);
 		lastNameField.setColumns(10);
 
@@ -151,7 +147,7 @@ public class NewEmployeeForm extends JPanel{
 
 		streetNameField = new JFormattedTextField();
 		streetNameField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		streetNameField.setBounds(202, 141, 234, 29);
+		streetNameField.setBounds(201, 141, 234, 29);
 		formPanel.add(streetNameField);
 		streetNameField.setColumns(10);
 
@@ -164,7 +160,7 @@ public class NewEmployeeForm extends JPanel{
 		stateField = new JComboBox<String>();
 		stateField.setModel(new DefaultComboBoxModel<String>(new String[] {"", "AK", "AL", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"}));
 		stateField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		stateField.setBounds(362, 180, 74, 29);
+		stateField.setBounds(331, 180, 74, 29);
 		formPanel.add(stateField);
 
 		zipcodeField = new JFormattedTextField(zipFormatter);
@@ -176,7 +172,7 @@ public class NewEmployeeForm extends JPanel{
 			}  
 		});
 		zipcodeField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		zipcodeField.setBounds(548, 180, 94, 29);
+		zipcodeField.setBounds(498, 180, 82, 29);
 		formPanel.add(zipcodeField);
 		zipcodeField.setColumns(5);
 
@@ -189,7 +185,7 @@ public class NewEmployeeForm extends JPanel{
 		}
 
 		phoneNumberField.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		phoneNumberField.setBounds(121, 233, 152, 29);
+		phoneNumberField.setBounds(500, 222, 152, 29);
 		formPanel.add(phoneNumberField);
 		phoneNumberField.setColumns(10);
 
@@ -199,7 +195,7 @@ public class NewEmployeeForm extends JPanel{
 			}
 		});
 		saveNewEmployeeButton.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		saveNewEmployeeButton.setBounds(408, 303, 234, 37);
+		saveNewEmployeeButton.setBounds(512, 369, 234, 37);
 		formPanel.add(saveNewEmployeeButton);
 
 		lblNewLabel = new JLabel("First Name");
@@ -214,7 +210,7 @@ public class NewEmployeeForm extends JPanel{
 
 		lblLastName = new JLabel("Last Name");
 		lblLastName.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		lblLastName.setBounds(432, 24, 79, 29);
+		lblLastName.setBounds(442, 24, 79, 29);
 		formPanel.add(lblLastName);
 
 		lblDob = new JLabel("DOB");
@@ -229,12 +225,12 @@ public class NewEmployeeForm extends JPanel{
 
 		lblSsn = new JLabel("SSN#");
 		lblSsn.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		lblSsn.setBounds(477, 67, 43, 29);
+		lblSsn.setBounds(486, 67, 43, 29);
 		formPanel.add(lblSsn);
 
 		lblState = new JLabel("State");
 		lblState.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		lblState.setBounds(312, 180, 48, 29);
+		lblState.setBounds(281, 180, 48, 29);
 		formPanel.add(lblState);
 
 		lblCity = new JLabel("City");
@@ -244,24 +240,24 @@ public class NewEmployeeForm extends JPanel{
 
 		lblZipcode = new JLabel("Zipcode");
 		lblZipcode.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		lblZipcode.setBounds(488, 180, 64, 29);
+		lblZipcode.setBounds(440, 180, 64, 29);
 		formPanel.add(lblZipcode);
 
 		lblPhone = new JLabel("Phone#");
 		lblPhone.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		lblPhone.setBounds(58, 233, 58, 29);
+		lblPhone.setBounds(437, 222, 58, 29);
 		formPanel.add(lblPhone);
 
 		JLabel lblApt = new JLabel("Apt#");
 		lblApt.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		lblApt.setBounds(489, 141, 48, 29);
+		lblApt.setBounds(461, 141, 40, 29);
 		formPanel.add(lblApt);
 
 		aptNumField = new JTextField();
 		aptNumField.setText(" ");
 		aptNumField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		aptNumField.setColumns(5);
-		aptNumField.setBounds(549, 134, 94, 29);
+		aptNumField.setBounds(498, 141, 64, 29);
 		formPanel.add(aptNumField);
 
 		streetNumField = new JFormattedTextField();
@@ -275,7 +271,7 @@ public class NewEmployeeForm extends JPanel{
 		});
 		streetNumField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		streetNumField.setColumns(5);
-		streetNumField.setBounds(121, 141, 74, 29);
+		streetNumField.setBounds(120, 141, 74, 29);
 		formPanel.add(streetNumField);
 
 		ssnAreaField = new JFormattedTextField();
@@ -295,7 +291,7 @@ public class NewEmployeeForm extends JPanel{
 			}  
 		});
 		ssnAreaField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		ssnAreaField.setBounds(534, 67, 33, 29);
+		ssnAreaField.setBounds(543, 67, 33, 29);
 		formPanel.add(ssnAreaField);
 
 		ssnGroupField = new JFormattedTextField();
@@ -316,7 +312,7 @@ public class NewEmployeeForm extends JPanel{
 		});
 		ssnGroupField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		ssnGroupField.setColumns(2);
-		ssnGroupField.setBounds(568, 67, 26, 29);
+		ssnGroupField.setBounds(577, 67, 26, 29);
 		formPanel.add(ssnGroupField);
 
 		ssnSerialField = new JFormattedTextField();
@@ -338,43 +334,43 @@ public class NewEmployeeForm extends JPanel{
 		});
 		ssnSerialField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		ssnSerialField.setColumns(4);
-		ssnSerialField.setBounds(595, 67, 48, 29);
+		ssnSerialField.setBounds(604, 67, 48, 29);
 		formPanel.add(ssnSerialField);
 
 		JLabel lblNewLabel_1 = new JLabel("Staff Role");
 		lblNewLabel_1.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		lblNewLabel_1.setBounds(458, 233, 86, 29);
+		lblNewLabel_1.setBounds(10, 233, 86, 29);
 		formPanel.add(lblNewLabel_1);
 
 		lblNewLabel_2 = new JLabel("(Enter 10 digits)");
 		lblNewLabel_2.setFont(new Font("Times New Roman", Font.ITALIC, 12));
-		lblNewLabel_2.setBounds(275, 233, 104, 29);
+		lblNewLabel_2.setBounds(654, 222, 86, 29);
 		formPanel.add(lblNewLabel_2);
 
 		lblstreetNumber = new JLabel("(street number)");
 		lblstreetNumber.setFont(new Font("Times New Roman", Font.ITALIC, 12));
-		lblstreetNumber.setBounds(121, 120, 74, 21);
+		lblstreetNumber.setBounds(120, 120, 74, 21);
 		formPanel.add(lblstreetNumber);
 
 		lblstreetName = new JLabel("(street name)");
 		lblstreetName.setFont(new Font("Times New Roman", Font.ITALIC, 12));
-		lblstreetName.setBounds(288, 120, 103, 21);
+		lblstreetName.setBounds(287, 120, 103, 21);
 		formPanel.add(lblstreetName);
 
 		mandatoryError = new JLabel("** Please fill out all the required field.");
 		mandatoryError.setVisible(false);
 		mandatoryError.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 14));
-		mandatoryError.setBounds(408, 337, 234, 29);
+		mandatoryError.setBounds(512, 329, 234, 29);
 		formPanel.add(mandatoryError);
 
 		label = new JLabel("*");
 		label.setFont(new Font("Times New Roman", Font.BOLD, 18));
-		label.setBounds(522, 67, 14, 21);
+		label.setBounds(531, 67, 14, 21);
 		formPanel.add(label);
 
 		label_1 = new JLabel("*");
 		label_1.setFont(new Font("Times New Roman", Font.BOLD, 18));
-		label_1.setBounds(497, 20, 14, 21);
+		label_1.setBounds(507, 20, 14, 21);
 		formPanel.add(label_1);
 
 		label_2 = new JLabel("*");
@@ -457,7 +453,7 @@ public class NewEmployeeForm extends JPanel{
 		roleComboBox.setModel(new DefaultComboBoxModel<String>(
 				new String[] { "N/A", "Admin", "Doctor", "Finance", "Nurse", "Secretary" }));
 		roleComboBox.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		roleComboBox.setBounds(544, 233, 98, 29);
+		roleComboBox.setBounds(96, 233, 98, 29);
 		formPanel.add(roleComboBox);
 		// end role combo box
 		
@@ -558,8 +554,19 @@ public class NewEmployeeForm extends JPanel{
 			}
 		});
 		activeCheckBox.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		activeCheckBox.setBounds(378, 373, 163, 29);
+		activeCheckBox.setBounds(365, 373, 105, 29);
 		formPanel.add(activeCheckBox);
+
+		JLabel emailLabel = new JLabel("E-mail");
+		emailLabel.setFont(new Font("Times New Roman", Font.BOLD, 16));
+		emailLabel.setBounds(437, 259, 58, 29);
+		formPanel.add(emailLabel);
+
+		emailTextField = new JFormattedTextField((AbstractFormatter) null);
+		emailTextField.setFont(new Font("Times New Roman", Font.BOLD, 16));
+		emailTextField.setColumns(10);
+		emailTextField.setBounds(500, 259, 152, 29);
+		formPanel.add(emailTextField);
 		formPanel.setFocusTraversalPolicy(
 				new FocusTraversalOnArray(new Component[] { firstNameField, midNameField, lastNameField, DOBField,
 						genderField, ssnAreaField, ssnGroupField, ssnSerialField, streetNumField, streetNameField,
@@ -608,21 +615,22 @@ public class NewEmployeeForm extends JPanel{
 		}
 		else {
 			long time = System.currentTimeMillis();
-			patientID = Long.toString((time));
+			employeeID = Long.toString((time));
 
-			patientID = patientID.substring(5, patientID.length());
+			employeeID = employeeID.substring(5, employeeID.length());
 
-			while(dbc.checkExistingID(patientID)){
+			while (dbc.checkExistingID(employeeID)) {
 				time = System.currentTimeMillis();
-				patientID = Long.toString((time));
-				patientID = patientID.substring(5, patientID.length());
+				employeeID = Long.toString((time));
+				employeeID = employeeID.substring(5, employeeID.length());
 			}
 
 			if(firstNameField.getText() != null) 	firstName = firstNameField.getText();
 			if(midNameField.getText() !=null) midName = midNameField.getText();		
 			if(lastNameField.getText() != null) lastName= lastNameField.getText();		
 			if(DOBField.getText() != null) DOB = DOBField.getText();
-			if(genderField.getSelectedItem().toString() != "") gender = genderField.getSelectedItem().toString();
+			if (!(genderField.getSelectedIndex() < 1))
+				gender = genderField.getSelectedItem().toString();
 			if(ssnAreaField.getText() != null) ssnArea = ssnAreaField.getText();
 			if(ssnGroupField.getText() != null)ssnGroup = ssnGroupField.getText();
 			if(ssnSerialField.getText() != null)ssnSerial = ssnSerialField.getText();
@@ -631,28 +639,51 @@ public class NewEmployeeForm extends JPanel{
 			if(aptNumField.getText() != null) aptNum = aptNumField.getText();
 			if(streetNameField.getText() != null) streetName = streetNameField.getText();
 			if(cityField.getText() != null) city = cityField.getText();
-			if(stateField.getSelectedItem().toString() != null) state = stateField.getSelectedItem().toString();
+			if (!(stateField.getSelectedIndex() < 1))
+				state = stateField.getSelectedItem().toString();
 			if(zipcodeField.getText() != null) zipcode = zipcodeField.getText();
-			if (roleComboBox.getSelectedItem().toString() != null)
+			if (emailTextField.getText() != "")
+				email = emailTextField.getText();
+
+			if (!(roleComboBox.getSelectedIndex() < 1))
 				role = roleComboBox.getSelectedItem().toString();
+			if (addEditPatientCheckBox.isSelected())
+				addEditPatient = 1;
+			if (viewPatientCheckBox.isSelected())
+				viewPatient = 1;
+			if (ownProfileCheckBox.isSelected())
+				ownProfile = 1;
+			if (viewBillCheckBox.isSelected())
+				viewBill = 1;
+			if (processPaymentCheckBox.isSelected())
+				processPayment = 1;
+			if (userAdminCheckBox.isSelected())
+				userAdmin = 1;
+			if (activeCheckBox.isSelected())
+				active = 1;
 
 			loadPatientInfo();
 
-			dbc.addPatientProfile(patientID, firstName, midName, lastName, DOB,	gender, " ", ssnArea, ssnGroup, ssnSerial, phoneNumber);
+			if (dbc.addEmployeeProfile(employeeID, userID, firstName, midName, lastName, gender, DOB, email,
+					phone_number, role, ssnArea, ssnGroup, ssnSerial, userAdmin, addEditPatient, viewPatient,
+					ownProfile, viewBill,
+					processPayment, active)) {
 
-			dbc.addAddress(patientID, streetNum, aptNum,streetName,city, state, zipcode);
+			dbc.addAddress(employeeID, streetNum, aptNum, streetName, city, state, zipcode);
 
-			dbc.addID(patientID);
+			dbc.addID(employeeID);
+
 
 			return true;
+			} else
+				return false;
 		}
 		return false;
 	}
 
 	void loadPatientInfo() {
 
-
-		EmployeeProfile.setEmployeeID(patientID);
+		EmployeeProfile.setEmployeeID(employeeID);
 		EmployeeProfile.setFirstName(firstName);
 		EmployeeProfile.setMidName(midName);
 		EmployeeProfile.setLastName(lastName);
@@ -669,6 +700,7 @@ public class NewEmployeeForm extends JPanel{
 		EmployeeProfile.setStateName(state);
 		EmployeeProfile.setZipCode(zipcode);
 		EmployeeProfile.setRole(role);
+		EmployeeProfile.setEmail(email);
 
 		clearForm();
 	}
@@ -689,6 +721,7 @@ public class NewEmployeeForm extends JPanel{
 		ssnSerialField.setText("");
 		phoneNumberField.setText("");
 		stateField.setSelectedIndex(0);
+		emailTextField.setText("");
 
 		firstNameField.setBackground(Color.white);
 		lastNameField.setBackground(Color.white);

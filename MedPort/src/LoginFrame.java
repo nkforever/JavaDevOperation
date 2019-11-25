@@ -22,7 +22,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-public class MainFrame {
+public class LoginFrame {
 
 	private JFrame mainFrame;
 
@@ -33,7 +33,7 @@ public class MainFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					MainFrame window = new MainFrame();
+					LoginFrame window = new LoginFrame();
 					window.mainFrame.setVisible(true);
 					window.mainFrame.setLocationRelativeTo(null);
 				} catch (Exception e) {
@@ -46,7 +46,7 @@ public class MainFrame {
 	/**
 	 * Create the application.
 	 */
-	public MainFrame() {
+	public LoginFrame() {
 		initialize();
 	}
 

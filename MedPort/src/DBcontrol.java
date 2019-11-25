@@ -33,7 +33,6 @@ public class DBcontrol {
 
 	boolean validate(String user, String pass) {
 		checkConnection();
-		boolean valid = false;
 		String checkuser = "SELECT * FROM employee_table WHERE username = \"" + user + "\" AND password = \"" + pass
 				+ "\" ;";
 
@@ -45,19 +44,24 @@ public class DBcontrol {
 			statement = mpCon.createStatement();
 			resultSet = statement.executeQuery(checkuser);
 
-			if (resultSet.next()) {
-				valid = true;
-				// get employee info
-				String employeeID = resultSet.getNString("employee_id");
-				OwnProfile.setEmployeeID(employeeID);
-				LoadOwnProfile(employeeID);
-
-				mpCon.close();
-				return valid;
+			if (resultSet.next() & pass.equals(resultSet.getNString("password"))) {
+//				if (!pass.equals(resultSet.getNString("password"))) {
+//					mpCon.close();
+//					return false;
+//				} else {
+					// get employee info
+					String employeeID = resultSet.getNString("employee_id");
+					OwnProfile.setEmployeeID(employeeID);
+					LoadOwnProfile(employeeID);
+	
+					mpCon.close();
+					return true;
+//				}
 			}
 			mpCon.close();
 			return false;
 		} catch (SQLException e) {
+			e.printStackTrace();
 			return false;
 		}
 
@@ -147,7 +151,7 @@ public class DBcontrol {
 					if (resultSet3.next()) {
 						employeeFound(resultSet3);
 					}
-					PatientProfile.found = false;
+					EmployeeProfile.found = false;
 				} // end else
 			}
 		} catch (SQLException e) {
@@ -207,6 +211,7 @@ public class DBcontrol {
 			EmployeeProfile.setSsnGroup(resultSet.getNString("ssnGroup"));
 			EmployeeProfile.setSsnSerial(resultSet.getNString("ssnSerial"));
 			EmployeeProfile.setPhoneNumber(resultSet.getNString("phone_number"));
+			EmployeeProfile.setEmail(resultSet.getNString("email"));
 
 			// getting address from address table
 			setEmployeeAddress(id);
@@ -415,39 +420,41 @@ public class DBcontrol {
 	}// add patient profile
 
 	boolean updateEmployeeProfile(String firstName, String midName, String lastName,
-			String dateOfBirth, String gender, String role, String ssnArea, String ssnGroup, String ssnSerial,
-			String phone_num, int userAdmin, int addEditPatient, int viewPatient, int ownProfile, int viewBill
-			, int processPayment, int active) {
+			String gender, String dateOfBirth, String email, String phonenumber, String role, String ssnArea,
+			String ssnGroup, String ssnSerial, int userAdmin, int addEditPatient, int viewPatient, int ownProfile,
+			int viewBill, int processPayment, int active) {
 
+		PreparedStatement preparedStatement;
 		try {
 			checkConnection();
 
 			String update = "UPDATE employee_table "
-					+ "SET first_name = ?, mid_name = ?, last_name = ?, DOB = ?, gender = ?, "
-					+ "primaryDoctor = ?, ssnArea = ?, ssnGroup = ?, ssnSerial = ?, phone_num = ?, last_update = CURDATER(), "
+					+ "SET first_name = ?, mid_name = ?, last_name = ?, gender = ?, DOB = ?, email = ?"
+					+ "phone_number = ?, role = ?, ssnArea = ?, ssnGroup = ?, ssnSerial = ?, last_update = CURDATE(), "
 					+ "update_by = ?, userAdmin = ? , addEditPatient = ?, viewPatient = ?, ownProfile = ? "
 					+ ", viewBill = ?, processPayment = ? , active = ?"
 					+ "WHERE patient_id = \"" + EmployeeProfile.getEmployeeID() + "\";";
 
-			PreparedStatement preparedStatement = mpCon.prepareStatement(update);
+			preparedStatement = mpCon.prepareStatement(update);
 			preparedStatement.setString(1, firstName);
 			preparedStatement.setString(2, midName);
 			preparedStatement.setString(3, lastName);
-			preparedStatement.setString(4, dateOfBirth);
-			preparedStatement.setString(5, gender);
-			preparedStatement.setString(6, role);
-			preparedStatement.setString(7, ssnArea);
-			preparedStatement.setString(8, ssnGroup);
-			preparedStatement.setString(9, ssnSerial);
-			preparedStatement.setString(10, phone_num);
-			preparedStatement.setString(11, OwnProfile.getUser());
-			preparedStatement.setInt(12, userAdmin);
-			preparedStatement.setInt(13, addEditPatient);
-			preparedStatement.setInt(14, viewPatient);
-			preparedStatement.setInt(15, ownProfile);
-			preparedStatement.setInt(16, viewBill);
-			preparedStatement.setInt(17, processPayment);
-			preparedStatement.setInt(18, active);
+			preparedStatement.setString(4, gender);
+			preparedStatement.setString(5, dateOfBirth);
+			preparedStatement.setString(6, email);
+			preparedStatement.setString(7, phonenumber);
+			preparedStatement.setString(8, role);
+			preparedStatement.setString(9, ssnArea);
+			preparedStatement.setString(10, ssnGroup);
+			preparedStatement.setString(11, ssnSerial);
+			preparedStatement.setString(12, OwnProfile.getUser());
+			preparedStatement.setInt(13, userAdmin);
+			preparedStatement.setInt(14, addEditPatient);
+			preparedStatement.setInt(15, viewPatient);
+			preparedStatement.setInt(16, ownProfile);
+			preparedStatement.setInt(17, viewBill);
+			preparedStatement.setInt(18, processPayment);
+			preparedStatement.setInt(19, active);
 
 			preparedStatement.executeUpdate();
 			mpCon.close();
@@ -455,6 +462,7 @@ public class DBcontrol {
 			return true;
 
 		} catch (SQLException e) {
+			e.printStackTrace();
 			return false;
 		}
 
@@ -526,23 +534,23 @@ public class DBcontrol {
 			}
 	}
 	
-	boolean addEmployeeProfile(String eeID, String firstName, String midName, String lastName, String dob,
-			String gender, String SSN, String doctor, String streetNum, String aptNum, String streetName, String city,
-			String state, String zipcode) {
+	boolean addEmployeeProfile(String eeID, String userID, String firstName, String midName, String lastName,
+			String gender, String dob, String email, String phone_number, String role, String ssnArea, String ssnGroup,
+			String ssnSerial, int userAdmin,
+			int addEditPatient, int viewPatient, int ownProfile, int viewBill, int processPayment, int active) {
 
 		if (checkConnection()) {
-			String insertProfile = "INSERT INTO employee_table (patient_id, first_name, mid_name, last_name, DOB, gender, primaryDoctor, ssnArea, ssnGroup, ssnSerial, ) "
-					+ "VALUES ('" + eeID + "', '" + firstName + "', '" + midName + "'" + "		'" + lastName + "', '"
-					+ dob + "', '" + gender + "', '" + SSN + "', '" + doctor + "')";
-			String insertAddress = "INSERT INTO metportdb.address_table (address_id, street_num, apt_num, street_name, city, state, zipcode, "
-					+ "VALUES ('" + eeID + "', '" + streetNum + "', '" + aptNum + "'" + "		'" + streetName + "', '"
-					+ city + "', '" + state + "', '" + zipcode + "');";
+			String insertProfile = "INSERT INTO employee_table (employee_id, user_id, first_name, mid_name, last_name"
+					+ ", gender , DOB, email, phone_number, role, ssnArea, ssnGroup, ssnSerial, userAdmin, addEditPatient"
+					+ ", viewPatient, ownProfile, viewBill, processPayment, active) "
+					+ "VALUES ('" + eeID + "', '" + userID + "','" + firstName + "', '" + midName + "','" + "', '"
+					+ lastName + "', '" + gender + "', '" + dob + "', '" + ssnArea + "','" + ssnGroup + "','"
+					+ ssnSerial + "', 'CURDATE()'+ '" + userAdmin + "', '" + addEditPatient + "','" + viewPatient
+					+ "','" + ownProfile + "','" + viewBill + "','" + processPayment + "','" + active + "';)";
 			
 			try {
-				Statement	statement9 = mpCon.createStatement();
-					statement9.executeQuery(insertProfile);
-				Statement	statement10 = mpCon.createStatement();
-				statement10.executeQuery(insertAddress);
+				Statement	statement = mpCon.createStatement();
+					statement.executeQuery(insertProfile);
 				
 				return true;
 			} catch (SQLException e) {
@@ -652,7 +660,6 @@ public class DBcontrol {
 		
 	}
 
-	
 	ArrayList<String> getTreatmentList() {
 
 		ArrayList<String> al = new ArrayList<String>();
