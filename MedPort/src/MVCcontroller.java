@@ -52,6 +52,7 @@ public class MVCcontroller {
 			System.out.println("update employee info button is pressed");
 			editEmployee.updateEmployeeInfo();
 			mPanel.loadEmployee();
+			mPanel.updateEmployeeInfoIsPressed();
 		}
 	}
 	

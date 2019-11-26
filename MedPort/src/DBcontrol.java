@@ -22,7 +22,7 @@ public class DBcontrol {
 //					"soumya98Wii-00");
 //			mpCon = DriverManager.getConnection("jdbc:sqlserver://nk.database.windows.net:1433", "nainnn01",
 //					"Nkforever2019");
-			mpCon = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/metportdb", "root", "nkforever2019");
+			mpCon = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/medport", "root", "nkforever2019");
 			
 			return true;
 		} catch (SQLException  e) {
@@ -425,21 +425,21 @@ public class DBcontrol {
 			String ssnGroup, String ssnSerial, int userAdmin, int addEditPatient, int viewPatient, int ownProfile,
 			int viewBill, int processPayment, int active) {
 
-		PreparedStatement statement;
+		Statement statement;
 		try {
 			checkConnection();
+			statement = mpCon.createStatement();
 
 			String update = "UPDATE employee_info "
-					+ "SET first_name = '" + firstName + "', mid_name = '" + midName + "', last_name = '" + lastName
-					+ "', gender = '" + lastName + "', DOB = '" + dateOfBirth + "', email = '" + email + "'"
-					+ "phone_number = '" + phonenumber + "', role = '" + role + "', ssnArea = '" + ssnArea
+					+ "SET first_name = '" + firstName + "'" + ", mid_name = '" + midName + "', last_name = '"
+					+ lastName + "', gender = '" + gender + "', DOB = '" + dateOfBirth + "', email = '" + email + "',"
+					+ " phone_number = '" + phonenumber + "', role = '" + role + "', ssnArea = '" + ssnArea
 					+ "', ssnGroup = '" + ssnGroup + "', ssnSerial = '" + ssnSerial + "', last_update = CURDATE(), "
 					+ "update_by = '" + OwnProfile.getUser() + "', userAdmin = '" + userAdmin + "' , addEditPatient = '"
 					+ addEditPatient + "', viewPatient = '" + viewPatient + "', ownProfile = '" + ownProfile + "' "
 					+ ", viewBill = '" + viewBill + "', processPayment = '" + processPayment + "' , active = '" + active
-					+ "' WHERE patient_id = '" + EmployeeProfile.getEmployeeID() + "';";
+					+ "' WHERE employee_id = \"" + EmployeeProfile.getEmployeeID() + "\";";
 
-			statement = mpCon.prepareStatement(update);
 			statement.executeUpdate(update);
 			mpCon.close();
 
@@ -450,7 +450,7 @@ public class DBcontrol {
 			return false;
 		}
 
-	}// add patient profile
+	}// update employee profile
 
 	void addAddress(String id, String streetNum, String aptNum,String streetName,  String cityName, String stateName, String zipcode ) {
 		try {
@@ -481,24 +481,20 @@ public class DBcontrol {
 		try {
 		checkConnection();
 		
-			String insert = "UPDATE address_table "
-					+ "SET address_id = ?, street_num = ?, apt_num = ?, street_name = ?, city, state = ?, zipcode = ?, lastupdate = CURDATE() "
-					+ "WHERE address_id = id";
+			String updateAddress = "UPDATE address_table "
+					+ "SET street_num = '" + streetNum + "', apt_num = '" + aptNum + "', street_name = '" + streetName
+					+ "', city = '" + cityName + "', state = '" + stateName
+					+ "', zipcode = '" + zipcode + "', lastupdate = CURDATE() , update_by = '" + OwnProfile.getUser()
+					+ "' WHERE address_id = \"" + id + "\";";
 		
-		PreparedStatement preparedStatement = mpCon.prepareStatement(insert);
-		preparedStatement.setString(1, id);
-		preparedStatement.setString(2, streetNum);
-		preparedStatement.setString(3, aptNum);
-		preparedStatement.setString(4, streetName);
-		preparedStatement.setString(5, cityName);
-		preparedStatement.setString(6, stateName);
-		preparedStatement.setString(7, zipcode);
+			Statement statement = mpCon.createStatement();
 		
-		preparedStatement.executeUpdate();
+			statement.executeUpdate(updateAddress);
 		
 		mpCon.close();
 			return true;
 		}catch (SQLException e) {
+			e.printStackTrace();
 			return false;
 		}
 	}

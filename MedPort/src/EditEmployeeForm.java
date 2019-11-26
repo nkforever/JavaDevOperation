@@ -521,7 +521,6 @@ public class EditEmployeeForm extends JPanel{
 				loadEmployeeInfo();
 				return true;
 			} else {
-				System.out.println("FAIL TO ADD TO DataBASE");
 				return false;
 			}
 		}
@@ -609,6 +608,9 @@ public class EditEmployeeForm extends JPanel{
 		ssnSerialField.setText("");
 		phoneNumberField.setText("");
 		stateField.setSelectedIndex(0);
+		emailTextField.setText("");
+		roleComboBox.setSelectedIndex(0);
+		userAdminCheckBox.setSelected(false);
 
 		firstNameField.setBackground(Color.white);
 		lastNameField.setBackground(Color.white);

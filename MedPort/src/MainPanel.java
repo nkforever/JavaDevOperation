@@ -235,6 +235,12 @@ public class MainPanel extends JPanel {
 				}
 			}
 		});
+
+		errormessageLabel = new JLabel("...");
+		bottomPanel.add(errormessageLabel);
+		errormessageLabel.setVisible(false);
+		errormessageLabel.setForeground(Color.RED);
+		errormessageLabel.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 				
 		updateStatusLabel = new JLabel("-");
 		updateStatusLabel.setForeground(Color.GREEN);
@@ -377,34 +383,27 @@ public class MainPanel extends JPanel {
 		patientHistoryButton = new JButton("View History");
 		patientHistoryButton.setEnabled(false);
 		patientHistoryButton.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		patientHistoryButton.setBounds(10, 53, 155, 37);
+		patientHistoryButton.setBounds(10, 67, 155, 37);
 		optionProfilePanel.add(patientHistoryButton);
 		
 
 		editProfile = new JButton("Edit Profile");
 		editProfile.setEnabled(false);
 		editProfile.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		editProfile.setBounds(10, 8, 155, 37);
+		editProfile.setBounds(10, 15, 155, 37);
 		optionProfilePanel.add(editProfile);
 		
 		viewBillButton = new JButton("View Bill");
 		viewBillButton.setEnabled(false);
 		viewBillButton.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		viewBillButton.setBounds(10, 98, 155, 37);
+		viewBillButton.setBounds(10, 119, 155, 37);
 		optionProfilePanel.add(viewBillButton);
 		
 		checkinButton = new JButton("Check-in");
 		checkinButton.setEnabled(false);
 		checkinButton.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		checkinButton.setBounds(10, 143, 155, 37);
+		checkinButton.setBounds(10, 171, 155, 37);
 		optionProfilePanel.add(checkinButton);
-
-		errormessageLabel = new JLabel("...");
-		errormessageLabel.setVisible(false);
-		errormessageLabel.setForeground(Color.RED);
-		errormessageLabel.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-		errormessageLabel.setBounds(10, 189, 104, 28);
-		optionProfilePanel.add(errormessageLabel);
 
 		profileInputPanel = new JPanel();
 		profileInputPanel.setFont(new Font("Times New Roman", Font.PLAIN, 16));
@@ -714,16 +713,13 @@ public class MainPanel extends JPanel {
 
 	public void updateEmployeeInfoIsPressed() {
 		errormessageLabel.setVisible(true);
-		if (editEmployeeInfo.updateEmployeeInfo()) {
+			errormessageLabel.setText("Updated.");
 			editEmployeeInfo.clearForm();
+
 			editEmployeeInfo.setVisible(false);
 			addNewButton.setVisible(true);
 			profileInputPanel.repaint();
 			profileInputPanel.validate();
-			errormessageLabel.setText("Updated.");
-		} else
-			errormessageLabel.setText("Update fail!");
 
 	}
-
 }
