@@ -516,7 +516,7 @@ public class EditEmployeeForm extends JPanel{
 			if (dbc.updateEmployeeProfile(firstName, midName, lastName, gender, DOB, email, phoneNumber, role, ssnArea,
 					ssnGroup, ssnSerial, userAdmin, addEditPatient, viewPatient, ownProfile, viewBill, processPayment,
 					active)) {
-				dbc.updateAddress(employeeID, streetNum, aptNum, streetName, city, state, zipcode);
+				dbc.updateAddress(EmployeeProfile.getEmployeeID(), streetNum, aptNum, streetName, city, state, zipcode);
 
 				loadEmployeeInfo();
 				return true;

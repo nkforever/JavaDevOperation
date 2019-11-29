@@ -134,6 +134,11 @@ public class LoginFrame {
 					verifyUser();
 				}
 			}
+
+			public void keyTyped(KeyEvent e) {
+				if (!isAlphaDigit(e.getKeyChar()))
+					e.consume();
+			}
 		});
 		usernameField.setHorizontalAlignment(SwingConstants.LEFT);
 		usernameField.setFont(new Font("Times New Roman", Font.PLAIN, 16));
@@ -221,9 +226,10 @@ public class LoginFrame {
 
 			ErrorMessageLabel.setText("checking credential....");
 
-
 			valid = dbc.validate(user, pass);
 			if (valid) {
+				dbc.LoadOwnProfile(user);
+				OwnProfile.setUser(user);
 
 				if (OwnProfile.getActive() == 1) {
 					OwnProfile.setUser(user);
@@ -251,7 +257,12 @@ public class LoginFrame {
 			ErrorMessageLabel.setText("Enter all credential.");
 			usernameField.getSelectionStart();
 		}
-
 	}// end verify user
 
+	boolean isAlphaDigit(char input) {
+		if ((input >= 48 && input <= 57) || (input >= 65 && input <= 90) || (input >= 97 && input <= 122))
+			return true;
+
+		return false;
+	}
 }

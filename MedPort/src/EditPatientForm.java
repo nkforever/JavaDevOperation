@@ -10,14 +10,12 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.text.DateFormatter;
 import javax.swing.text.MaskFormatter;
@@ -34,18 +32,17 @@ public class EditPatientForm extends JPanel{
 	private JTextField firstNameField, midNameField, lastNameField,streetNameField, cityField;
 	private JComboBox<String> stateField, genderField;
 
-	private JLabel lblNewLabel, lblMidName, lblLastName, lblDob;
-	private JLabel lblGender, lblSsn, lblStreetAddr, lblState, lblCity, lblZipcode, lblPhone;
+	private JLabel lblNewLabel, lblMidName, lblLastName, lblDob, lblGender, lblSsn, lblStreetAddr, lblState, lblCity,
+			lblZipcode, lblPhone;
 
 
 	private DBcontrol dbc = new DBcontrol();
 	private JTextField aptNumField;
 	private JButton saveUpdateButton;
 
-	private String patientID = "", firstName = "", midName = "", lastName= "", DOB = "", gender = "", ssnArea = "", ssnGroup = "", ssnSerial ="",
+	private String patientID = "", firstName = "", midName = "", lastName = "", DOB = "", gender = "",
+			primaryDoctor = "", ssnArea = "", ssnGroup = "", ssnSerial = "",
 			phoneNumber = "", streetNum = "", aptNum = "", streetName = "", city = "", state = "", zipcode = ""; 
-
-	private JRadioButton radioButtonYes, radioButtonNo;
 
 	DateFormat  dateFormat = new SimpleDateFormat("MM/dd/yyyy"); 
 	DateFormatter dateFormatter  = new DateFormatter(dateFormat); 	
@@ -60,6 +57,8 @@ public class EditPatientForm extends JPanel{
 	private JLabel label;
 	private JLabel label_1;
 	private JLabel label_2;
+	private JTextField primaryDoctorField;
+	private JLabel pLabelDoctor;
 
 
 	public EditPatientForm() {
@@ -187,7 +186,7 @@ public class EditPatientForm extends JPanel{
 		}
 
 		phoneNumberField.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		phoneNumberField.setBounds(121, 233, 152, 29);
+		phoneNumberField.setBounds(120, 226, 152, 29);
 		formPanel.add(phoneNumberField);
 		phoneNumberField.setColumns(10);
 
@@ -243,7 +242,7 @@ public class EditPatientForm extends JPanel{
 
 		lblPhone = new JLabel("Phone#");
 		lblPhone.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		lblPhone.setBounds(58, 233, 58, 29);
+		lblPhone.setBounds(57, 226, 58, 29);
 		formPanel.add(lblPhone);
 
 		JLabel lblApt = new JLabel("Apt#");
@@ -335,14 +334,9 @@ public class EditPatientForm extends JPanel{
 		ssnSerialField.setBounds(595, 67, 48, 29);
 		formPanel.add(ssnSerialField);
 
-
-		ButtonGroup rdGroup = new ButtonGroup();
-		rdGroup.add(radioButtonYes);
-		rdGroup.add(radioButtonNo);
-
 		lblNewLabel_2 = new JLabel("(Enter 10 digits)");
 		lblNewLabel_2.setFont(new Font("Times New Roman", Font.ITALIC, 12));
-		lblNewLabel_2.setBounds(275, 233, 104, 29);
+		lblNewLabel_2.setBounds(274, 226, 104, 29);
 		formPanel.add(lblNewLabel_2);
 
 		lblstreetNumber = new JLabel("(street number)");
@@ -375,10 +369,21 @@ public class EditPatientForm extends JPanel{
 		label_2.setFont(new Font("Times New Roman", Font.BOLD, 18));
 		label_2.setBounds(75, 20, 14, 21);
 		formPanel.add(label_2);
+
+		primaryDoctorField = new JTextField("");
+		primaryDoctorField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		primaryDoctorField.setColumns(10);
+		primaryDoctorField.setBounds(120, 279, 152, 29);
+		formPanel.add(primaryDoctorField);
+
+		pLabelDoctor = new JLabel("Primary Doctor");
+		pLabelDoctor.setFont(new Font("Times New Roman", Font.BOLD, 16));
+		pLabelDoctor.setBounds(11, 282, 105, 29);
+		formPanel.add(pLabelDoctor);
 		formPanel.setFocusTraversalPolicy(new FocusTraversalOnArray(
 				new Component[] { firstNameField, midNameField, lastNameField, DOBField, genderField, ssnAreaField,
 						ssnGroupField, ssnSerialField, streetNumField, streetNameField, aptNumField, cityField,
-						stateField, zipcodeField, phoneNumberField, radioButtonYes, radioButtonNo, saveUpdateButton }));
+						stateField, zipcodeField, phoneNumberField, saveUpdateButton }));
 
 	}
 
@@ -417,15 +422,22 @@ public class EditPatientForm extends JPanel{
 			if (stateField.getSelectedItem().toString() != "")
 				state = stateField.getSelectedItem().toString();
 			if(zipcodeField.getText() != null) zipcode = zipcodeField.getText();
+			if (primaryDoctorField.getText() != null)
+				primaryDoctor = primaryDoctorField.getText();
 
-			loadPatientInfo();
+//			loadPatientInfo();
 
-			dbc.updatePatientProfile(firstName, midName, lastName, DOB, gender, " ", ssnArea, ssnGroup, ssnSerial,
-					phoneNumber);
-
-			dbc.updateAddress(patientID, streetNum, aptNum,streetName,city, state, zipcode);
+			if (dbc.updatePatientProfile(firstName, midName, lastName, DOB, gender, primaryDoctor, ssnArea, ssnGroup,
+					ssnSerial, phoneNumber)) {
+				System.out.println("updated profile.");
+			dbc.updateAddress(PatientProfile.getPatientID(), streetNum, aptNum, streetName, city, state, zipcode);
+				System.out.println("updated address.");
+				loadPatientInfo();
 
 			return true;
+			} else {
+				return false;
+			}
 		}
 	}
 
@@ -447,6 +459,7 @@ public class EditPatientForm extends JPanel{
 		PatientProfile.setCityName(city);
 		PatientProfile.setStateName(state);
 		PatientProfile.setZipcode(zipcode);
+		PatientProfile.setPrimaryDoctor(primaryDoctor);
 
 		clearForm();
 	}
@@ -467,7 +480,7 @@ public class EditPatientForm extends JPanel{
 		ssnSerialField.setText("");
 		phoneNumberField.setText("");
 		stateField.setSelectedIndex(0);
-		radioButtonNo.isSelected();
+		primaryDoctorField.setText("");
 
 		firstNameField.setBackground(Color.white);
 		lastNameField.setBackground(Color.white);
@@ -476,13 +489,31 @@ public class EditPatientForm extends JPanel{
 		ssnSerialField.setBackground(Color.white);
 	}
 
+	public void loadPatinetInfoToForm() {
+
+		firstNameField.setText(PatientProfile.getFirstName());
+		midNameField.setText(PatientProfile.getMidName());
+		lastNameField.setText(PatientProfile.getLastName());
+		DOBField.setText(PatientProfile.getDOB());
+		genderField.setSelectedItem(PatientProfile.getGender());
+		ssnAreaField.setText(PatientProfile.getSsnArea());
+		ssnGroupField.setText(PatientProfile.getSsnGroup());
+		ssnSerialField.setText(PatientProfile.getSsnSerial());
+		phoneNumberField.setText(PatientProfile.getPhoneNumber());
+		streetNumField.setText(PatientProfile.getStreetNum());
+		streetNameField.setText(PatientProfile.getStreetName());
+		aptNumField.setText(PatientProfile.getAptNum());
+		cityField.setText(PatientProfile.getCityName());
+		stateField.setSelectedItem(PatientProfile.getStateName());
+		zipcodeField.setText(PatientProfile.getZipcode());
+		primaryDoctorField.setText(PatientProfile.getPrimaryDoctor());
+
+	}
+
 	boolean isFormClear() {
 		if(
-				firstNameField.getText().isEmpty() && 
-				midNameField.getText().isEmpty() && 
-				lastNameField.getText().isEmpty() && 
-				DOBField.getText().isEmpty() && 
-				phoneNumberField.getText().isEmpty() ) {
+		firstNameField.getText() == "" && midNameField.getText() == "" && lastNameField.getText() == ""
+				&& ssnAreaField.getText() == "" && ssnGroupField.getText() == "" && ssnSerialField.getText() == "") {
 
 			return true;
 		}

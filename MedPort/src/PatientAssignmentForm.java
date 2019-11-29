@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -20,6 +21,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.text.MaskFormatter;
 import javax.swing.text.NumberFormatter;
 
 public class PatientAssignmentForm extends JPanel{
@@ -33,14 +35,11 @@ public class PatientAssignmentForm extends JPanel{
 	private JFormattedTextField topBP, bottomPB, heartRate;
 	JTextField reasonVisitField;
 	
-	private JLabel lblNewLabel, lblMidName, lblLastName, lblDob;
-	private JLabel lblSsn, lblStreetAddr, lblZipcode;
+	private JLabel lblNewLabel, lblMidName, lblLastName, lblDob, lblSsn, lblStreetAddr, lblZipcode, label;
 	
 	private JScrollPane scrollPane;
 	DefaultListModel<String> dm;
 	private ArrayList<String> al, rl, tl;
-	
-	private JLabel label;
 	
 	private JFormattedTextField dateAdmitField, dateDismissField;
 	private JButton addRecordButton;
@@ -56,6 +55,9 @@ public class PatientAssignmentForm extends JPanel{
 	
 	private long date = System.currentTimeMillis();
 	
+	private String doctor = "", room = "", visitReason = "", treatmentType = "", note = "";
+	private String checkInDate, checkOutDate;
+	private int upperBP = 0, lowerBP = 0, HeartRate = 0;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public PatientAssignmentForm() {
@@ -106,7 +108,11 @@ public class PatientAssignmentForm extends JPanel{
 		scrollPane.setViewportView(noteField);
 		noteField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		
-		dateDismissField = new JFormattedTextField(dateFormat);
+		try {
+			dateDismissField = new JFormattedTextField(new MaskFormatter("##/##/####"));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 		dateDismissField.setText(" ");
 		dateDismissField.setEditable(true);
 		dateDismissField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
@@ -125,6 +131,7 @@ public class PatientAssignmentForm extends JPanel{
 		addRecordButton = new JButton("Add Record");
 		addRecordButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				addToRecord();
 			}
 		});
 		addRecordButton.setFont(new Font("Tahoma", Font.PLAIN, 20));
@@ -202,8 +209,8 @@ public class PatientAssignmentForm extends JPanel{
 		return addRecordButton;
 	}
 	
-	void addRecord() {
-		
+	void addToRecord() {
+		dbc.addPatientHistory();
 	}
 	
 	

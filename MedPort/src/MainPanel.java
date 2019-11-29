@@ -491,8 +491,9 @@ public class MainPanel extends JPanel {
 			profileInputPanel.repaint();
 			profileInputPanel.validate();
 		} else {
+			editPatientInfo.loadPatinetInfoToForm();
 			profileInputPanel.add(editPatientInfo);
-			newPatientForm.setVisible(true);
+			editPatientInfo.setVisible(true);
 			profileInputPanel.repaint();
 			profileInputPanel.validate();
 		}
@@ -600,10 +601,13 @@ public class MainPanel extends JPanel {
 		viewBillButton.setEnabled(true);
 		patientHistoryButton.setEnabled(true);
 		{
-			if (PatientProfile.getActive() == 1)
+			if (PatientProfile.getActive() == 1) {
+				loadPatientAssignmentForm();
 				checkinButton.setEnabled(false);
-			else
+			} else {
 				checkinButton.setEnabled(true);
+				loadLastPatientHistory();
+			}
 		}
 
 		// patient info
@@ -625,13 +629,6 @@ public class MainPanel extends JPanel {
 		streetLabel.setText(address);
 		aptLabel.setText("Apt#" + PatientProfile.getAptNum());
 		cityStateLabel.setText(cityStateZip);
-
-		if (PatientProfile.getActive() == 0) {
-			loadLastPatientHistory();
-
-		} else {
-			loadPatientAssignmentForm();
-		}
 
 	}
 
@@ -713,13 +710,25 @@ public class MainPanel extends JPanel {
 
 	public void updateEmployeeInfoIsPressed() {
 		errormessageLabel.setVisible(true);
-			errormessageLabel.setText("Updated.");
-			editEmployeeInfo.clearForm();
+		errormessageLabel.setText("Updated.");
+		editEmployeeInfo.clearForm();
 
-			editEmployeeInfo.setVisible(false);
-			addNewButton.setVisible(true);
-			profileInputPanel.repaint();
-			profileInputPanel.validate();
+		editEmployeeInfo.setVisible(false);
+		addNewButton.setVisible(true);
+		profileInputPanel.repaint();
+		profileInputPanel.validate();
+
+	}
+
+	public void updatePatientInfoIsPressed() {
+		errormessageLabel.setVisible(true);
+		errormessageLabel.setText("Updated.");
+		editPatientInfo.clearForm();
+
+		editPatientInfo.setVisible(false);
+		addNewButton.setVisible(true);
+		profileInputPanel.repaint();
+		profileInputPanel.validate();
 
 	}
 }

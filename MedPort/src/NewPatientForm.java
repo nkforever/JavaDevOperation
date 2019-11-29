@@ -37,8 +37,8 @@ public class NewPatientForm extends JPanel{
 	private JTextField firstNameField, midNameField, lastNameField,streetNameField, cityField;
 	private JComboBox<String> stateField, genderField;
 
-	private JLabel lblNewLabel, lblMidName, lblLastName, lblDob;
-	private JLabel lblGender, lblSsn, lblStreetAddr, lblState, lblCity, lblZipcode, lblPhone;
+	private JLabel lblNewLabel, lblMidName, lblLastName, lblDob, lblGender, lblSsn, lblStreetAddr, lblState, lblCity,
+			lblZipcode, lblPhone;
 
 
 	private DBcontrol dbc = new DBcontrol();
@@ -58,13 +58,7 @@ public class NewPatientForm extends JPanel{
 	NumberFormat num = new DecimalFormat("#####"); 
 	NumberFormatter zipFormatter  = new NumberFormatter(num); 
 
-	private JLabel lblNewLabel_2;
-	private JLabel lblstreetNumber;
-	private JLabel lblstreetName;
-	private JLabel mandatoryError;
-	private JLabel label;
-	private JLabel label_1;
-	private JLabel label_2;
+	private JLabel lblNewLabel_2, lblstreetNumber, lblstreetName, mandatoryError, label, label_1, label_2;
 
 
 	public NewPatientForm() {
@@ -536,13 +530,7 @@ public class NewPatientForm extends JPanel{
 		firstNameField.getText().isEmpty() && midNameField.getText().isEmpty() && lastNameField.getText().isEmpty()
 				&& DOBField.getText().isEmpty() && ssnAreaField.getText().isEmpty() && ssnGroupField.getText().isEmpty()
 				&& ssnSerialField.getText().isEmpty()
-				//		genderField.getText().isEmpty() && 
-				//		streetNumField.getText().isEmpty() && 
-				//		streetNameField.getText().isEmpty() && 
-				//		cityField.getText().isEmpty() && 
-				//		zipcodeField.getText().isEmpty() && 
 
-//				 && phoneNumberField.getText().isEmpty() 
 		) {
 
 			return true;

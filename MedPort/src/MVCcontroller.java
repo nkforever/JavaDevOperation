@@ -43,13 +43,14 @@ public class MVCcontroller {
 		public void actionPerformed(ActionEvent e) {
 //				mPanel.do something();
 				System.out.println("update patient info button is pressed");
+			editPatient.updatePatientInfo();
 			mPanel.loadPatient();
+			mPanel.updatePatientInfoIsPressed();
 		}
 	}
 	
 	class addUpdateEmployeeButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("update employee info button is pressed");
 			editEmployee.updateEmployeeInfo();
 			mPanel.loadEmployee();
 			mPanel.updateEmployeeInfoIsPressed();

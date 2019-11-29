@@ -31,7 +31,7 @@ public class DBcontrol {
 		}
 	}
 
-	boolean validate(String user, String pass) {
+	public boolean validate(String user, String pass) {
 		checkConnection();
 		String checkuser = "SELECT * FROM employee_table WHERE username = \"" + user + "\" AND password = \"" + pass
 				+ "\" ;";
@@ -45,18 +45,13 @@ public class DBcontrol {
 			resultSet = statement.executeQuery(checkuser);
 
 			if (resultSet.next() & pass.equals(resultSet.getNString("password"))) {
-//				if (!pass.equals(resultSet.getNString("password"))) {
-//					mpCon.close();
-//					return false;
-//				} else {
-					// get employee info
-					String employeeID = resultSet.getNString("employee_id");
-					OwnProfile.setEmployeeID(employeeID);
-					LoadOwnProfile(employeeID);
-	
-					mpCon.close();
-					return true;
-//				}
+
+				String employeeID = resultSet.getNString("employee_id");
+				OwnProfile.setEmployeeID(employeeID);
+				LoadOwnProfile(employeeID);
+
+				mpCon.close();
+				return true;
 			}
 			mpCon.close();
 			return false;
@@ -67,7 +62,7 @@ public class DBcontrol {
 
 	}
 
-	void getProfile(String id, String name, String ssn, String client) {
+	public void getProfile(String id, String name, String ssn, String client) {
 
 		if (client.equals("employee")) {
 			searchByAdmin(id, name, ssn);
@@ -77,7 +72,7 @@ public class DBcontrol {
 	}
 
 	// staff search
-	void searchByStaff(String id, String name, String ssn) {
+	public void searchByStaff(String id, String name, String ssn) {
 
 		String checkFirstName = "SELECT * FROM patient_table where first_name = \"" + name + "\" AND ssnSerial = \""
 				+ ssn + "\";";
@@ -85,11 +80,12 @@ public class DBcontrol {
 				+ "\";";
 		String checkID = "SELECT * FROM patient_table where patient_id = \"" + id + "\";";
 
+		Statement statement2, statement3;
+		ResultSet resultSet, resultSet2, resultSet3;
 		try {
-			Statement statement, statement2, statement3;
-			ResultSet resultSet, resultSet2, resultSet3;
+			checkConnection();
 
-			statement = mpCon.createStatement();
+			Statement statement = mpCon.createStatement();
 			resultSet = statement.executeQuery(checkFirstName);
 
 			if (resultSet.next()) {
@@ -106,21 +102,21 @@ public class DBcontrol {
 					statement3 = mpCon.createStatement();
 					resultSet3 = statement3.executeQuery(checkID);
 					if (resultSet3.next()) {
+		
 						patientFound(resultSet3);
 					}
-						PatientProfile.found = false;
 				}
 				
 			} // end else
 
 		} catch (SQLException e) {
-
+			e.printStackTrace();
 			PatientProfile.found = false;
 		}
 
 	}// end get patient profile
 	
-	void searchByAdmin(String id, String name, String ssn) {
+	public void searchByAdmin(String id, String name, String ssn) {
 			
 		String checkFirstName = "SELECT * FROM employee_info WHERE first_name = \"" + name + "\" AND ssnSerial = \""
 				+ ssn + "\";";
@@ -160,7 +156,7 @@ public class DBcontrol {
 		}
 	}
 
-	void patientFound(ResultSet resultSet) {
+	private void patientFound(ResultSet resultSet) {
 		String id = "";
 		PatientProfile.found = true;
 		
@@ -188,7 +184,7 @@ public class DBcontrol {
 
 	}// end patient found
 
-	void employeeFound(ResultSet resultSet) {
+	private void employeeFound(ResultSet resultSet) {
 		String id = "";
 		EmployeeProfile.found = true;
 		try {
@@ -223,9 +219,10 @@ public class DBcontrol {
 
 	}// end user found
 
-	void LoadOwnProfile(String employeeID) {
+	public void LoadOwnProfile(String employeeID) {
 
-		String loadProfile = "SELECT * FROM employee_info where employee_id = \"" + employeeID + "\";";
+		String loadProfile = "SELECT * FROM employee_info where employee_id = \"" + employeeID + "\" OR user_id = \""
+				+ employeeID + "\";";
 		Statement statement;
 		ResultSet resultSet;
 
@@ -389,33 +386,27 @@ public class DBcontrol {
 
 	}// add patient profile
 
-	void updatePatientProfile(String firstName, String midName, String lastName, String dateOfBirth,
+	boolean updatePatientProfile(String firstName, String midName, String lastName, String dateOfBirth,
 			String gender, String primaryDoctor, String ssnArea, String ssnGroup, String ssnSerial, String phone_num) {
 
+		Statement preparedStatement;
 		try {
 			checkConnection();
+			preparedStatement = mpCon.createStatement();
 
 			String insert = "UPDATE patient_table "
-					+ "SET first_name = ?, mid_name = ?, last_name = ?, DOB = ?, gender = ?, "
-					+ "primaryDoctor = ?, ssnArea = ?, ssnGroup = ?, ssnSerial = ?, phone_num = ?, last_update = CURDATER() "
-					+ "WHERE patient_id = \"" + PatientProfile.getPatientID() + "\";";
+					+ "SET first_name = '" + firstName + "', mid_name = '" + midName + "', last_name = '" + lastName
+					+ "', DOB = '" + dateOfBirth + "', gender = '" + gender + "', primaryDoctor = '" + primaryDoctor
+					+ "', ssnArea = '" + ssnArea + "', ssnGroup = '" + ssnGroup + "', ssnSerial = '" + ssnSerial
+					+ "', phone_num = '" + phone_num + "', last_update = CURDATE(), update_by = '"
+					+ OwnProfile.getUser() + "' WHERE patient_id = \"" + PatientProfile.getPatientID() + "\";";
 
-			PreparedStatement preparedStatement = mpCon.prepareStatement(insert);
-			preparedStatement.setString(1, firstName);
-			preparedStatement.setString(2, midName);
-			preparedStatement.setString(3, lastName);
-			preparedStatement.setString(4, dateOfBirth);
-			preparedStatement.setString(5, gender);
-			preparedStatement.setString(6, primaryDoctor);
-			preparedStatement.setString(7, ssnArea);
-			preparedStatement.setString(8, ssnGroup);
-			preparedStatement.setString(9, ssnSerial);
-			preparedStatement.setString(10, phone_num);
-
-			preparedStatement.executeUpdate();
+			preparedStatement.executeUpdate(insert);
 			mpCon.close();
+			return true;
 		} catch (SQLException e) {
-			return;
+			e.printStackTrace();
+			return false;
 		}
 
 	}// add patient profile
@@ -431,9 +422,9 @@ public class DBcontrol {
 			statement = mpCon.createStatement();
 
 			String update = "UPDATE employee_info "
-					+ "SET first_name = '" + firstName + "'" + ", mid_name = '" + midName + "', last_name = '"
-					+ lastName + "', gender = '" + gender + "', DOB = '" + dateOfBirth + "', email = '" + email + "',"
-					+ " phone_number = '" + phonenumber + "', role = '" + role + "', ssnArea = '" + ssnArea
+					+ "SET first_name = '" + firstName + "', mid_name = '" + midName + "', last_name = '"
+					+ lastName + "', gender = '" + gender + "', DOB = '" + dateOfBirth + "', email = '" + email
+					+ "', phone_number = '" + phonenumber + "', role = '" + role + "', ssnArea = '" + ssnArea
 					+ "', ssnGroup = '" + ssnGroup + "', ssnSerial = '" + ssnSerial + "', last_update = CURDATE(), "
 					+ "update_by = '" + OwnProfile.getUser() + "', userAdmin = '" + userAdmin + "' , addEditPatient = '"
 					+ addEditPatient + "', viewPatient = '" + viewPatient + "', ownProfile = '" + ownProfile + "' "
@@ -479,7 +470,8 @@ public class DBcontrol {
 	boolean updateAddress(String id, String streetNum, String aptNum, String streetName, String cityName,
 			String stateName, String zipcode) {
 		try {
-		checkConnection();
+			checkConnection();
+			Statement statement = mpCon.createStatement();
 		
 			String updateAddress = "UPDATE address_table "
 					+ "SET street_num = '" + streetNum + "', apt_num = '" + aptNum + "', street_name = '" + streetName
@@ -487,11 +479,11 @@ public class DBcontrol {
 					+ "', zipcode = '" + zipcode + "', lastupdate = CURDATE() , update_by = '" + OwnProfile.getUser()
 					+ "' WHERE address_id = \"" + id + "\";";
 		
-			Statement statement = mpCon.createStatement();
+
 		
 			statement.executeUpdate(updateAddress);
 		
-		mpCon.close();
+			mpCon.close();
 			return true;
 		}catch (SQLException e) {
 			e.printStackTrace();
@@ -659,5 +651,11 @@ public class DBcontrol {
 			return null;
 		}
 		
-	}	
+	}
+
+	public void addPatientHistory() {
+		// TODO Auto-generated method stub
+
+	}
+
 }
