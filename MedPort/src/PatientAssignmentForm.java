@@ -299,7 +299,7 @@ public class PatientAssignmentForm extends JPanel{
 	}
 
 	private void resetForm() {
-		if (!formEmpty() && PatientProfile.getActive() == 0) {
+		if (PatientProfile.getActive() == 0) {
 
 				assignDoctor.setSelectedIndex(-1);
 				assignRoom.setSelectedIndex(-1);

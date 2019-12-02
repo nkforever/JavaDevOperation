@@ -612,6 +612,28 @@ public class DBcontrol {
 		
 	}//end get doctor array list
 	
+	void addDoctorToList(String id, String firstName, String lastName, int active) {
+
+		try {
+			checkConnection();
+			String insert = "INSERT INTO doctor_list (dr_id, dr_firstname, dr_lastname, active) "
+					+ "VALUES (?, ?, ?, ?);";
+			PreparedStatement preparedStatement = mpCon.prepareStatement(insert);
+			preparedStatement.setString(1, id);
+			preparedStatement.setString(2, firstName);
+			preparedStatement.setString(3, lastName);
+			preparedStatement.setInt(4, 1);
+
+			preparedStatement.executeUpdate();
+
+			mpCon.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return;
+		}
+
+	}
+
 	ArrayList<String> getRoomList() {
 
 		ArrayList<String> al = new ArrayList<String>();
@@ -632,6 +654,23 @@ public class DBcontrol {
 		
 	}
 
+	void addRoomToList(String name, String roomNum) {
+		try {
+			checkConnection();
+			String insert = "INSERT INTO room_list (name, room_num) " + "VALUES (?, ?,);";
+			PreparedStatement preparedStatement = mpCon.prepareStatement(insert);
+			preparedStatement.setString(1, name);
+			preparedStatement.setString(2, roomNum);
+
+			preparedStatement.executeUpdate();
+
+			mpCon.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return;
+		}
+
+	}
 	ArrayList<String> getTreatmentList() {
 
 		ArrayList<String> al = new ArrayList<String>();
@@ -651,6 +690,25 @@ public class DBcontrol {
 			return null;
 		}
 		
+	}
+
+	void addTreatmentToList(String id, String description, double cost) {
+		try {
+			checkConnection();
+			String insert = "INSERT INTO treatment_list (treatment_id, description, cost) " + "VALUES (?, ?, ?);";
+			PreparedStatement preparedStatement = mpCon.prepareStatement(insert);
+			preparedStatement.setString(1, id);
+			preparedStatement.setString(2, description);
+			preparedStatement.setDouble(3, cost);
+
+			preparedStatement.executeUpdate();
+
+			mpCon.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return;
+		}
+
 	}
 
 	public boolean addPatientHistory(String invoice, String doctor, String room, int upperBP, int lowerBP,
@@ -717,7 +775,8 @@ public class DBcontrol {
 			e.printStackTrace();
 			return false;
 		}
-	}
+	}// end check
+
 
 	public ResultSet loadPatientAssignment(String id) {
 		String search = "SELECT * FROM patient_history where account_id = \"" + id + "\";";
