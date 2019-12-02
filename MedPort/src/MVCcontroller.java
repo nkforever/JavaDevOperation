@@ -21,9 +21,9 @@ public class MVCcontroller {
 		mPanel.addRecordButtonListener(new addRecordButtonListener());
 		mPanel.addUpdatePatientButtonListener(new addUpdatePatientButtonListener());
 		mPanel.addUpdateEmployeeButtonListener(new addUpdateEmployeeButtonListener());
-		
+
 	}
-	
+
 	class addSaveButtonListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -31,24 +31,27 @@ public class MVCcontroller {
 				mPanel.loadPatient(); //
 		}		
 	}
-	
+
 	class addRecordButtonListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			if (patientAssignmentForm.addToRecord()) {
 				mPanel.loadLastPatientHistory();
+				mPanel.errorMessage("New record saved!");
+			}
+			else
+				mPanel.errorMessage("Unable to add to record!");
 		}		
 	}
-	
+
 	class addUpdatePatientButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-//				mPanel.do something();
-				System.out.println("update patient info button is pressed");
 			editPatient.updatePatientInfo();
 			mPanel.loadPatient();
 			mPanel.updatePatientInfoIsPressed();
 		}
 	}
-	
+
 	class addUpdateEmployeeButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			editEmployee.updateEmployeeInfo();
@@ -56,5 +59,5 @@ public class MVCcontroller {
 			mPanel.updateEmployeeInfoIsPressed();
 		}
 	}
-	
+
 }

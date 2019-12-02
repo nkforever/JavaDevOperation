@@ -478,7 +478,6 @@ public class NewPatientForm extends JPanel{
 
 	void loadPatientInfo() {
 
-
 		PatientProfile.setPatientID(patientID);
 		PatientProfile.setFirstName(firstName);
 		PatientProfile.setMidName(midName);
@@ -528,15 +527,14 @@ public class NewPatientForm extends JPanel{
 	boolean isFormClear() {
 		if(
 		firstNameField.getText().isEmpty() && midNameField.getText().isEmpty() && lastNameField.getText().isEmpty()
-				&& DOBField.getText().isEmpty() && ssnAreaField.getText().isEmpty() && ssnGroupField.getText().isEmpty()
+				&& ssnAreaField.getText().isEmpty() && ssnGroupField.getText().isEmpty()
 				&& ssnSerialField.getText().isEmpty()
 
-		) {
-
+		)
 			return true;
-		}
 
-		return false;
+		else
+			return false;
 	}
 
 	boolean isMandatoryFieldFill() {

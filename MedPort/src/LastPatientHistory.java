@@ -18,10 +18,11 @@ public class LastPatientHistory extends JPanel{
 	private JLabel lblNewLabel, admitDateLabel, lblRoom, lblDob;
 	JLabel reasonLabel;
 
-	private JLabel staffNoteLabel;
+	private JLabel staffNoteLabel, roomLabel;
 	private JTextPane txtpnThisIsWhere;
-	private JLabel roomLabel;
 	
+	DBcontrol dbc = new DBcontrol();
+
 	public LastPatientHistory() {
 		setLayout(new BorderLayout(0, 0));
 		
@@ -111,6 +112,8 @@ public class LastPatientHistory extends JPanel{
 
 	}
 	
-	
+	void loadLastHistory() {
+
+	}
 
 }

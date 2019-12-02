@@ -624,12 +624,6 @@ public class EditEmployeeForm extends JPanel{
 		firstNameField.getText().isEmpty() && midNameField.getText().isEmpty() && lastNameField.getText().isEmpty()
 				&& DOBField.getText().isEmpty() && ssnAreaField.getText().isEmpty() && ssnGroupField.getText().isEmpty()
 				&& ssnSerialField.getText().isEmpty()
-		// genderField.getText().isEmpty() && //these may not be necessary
-				//		streetNumField.getText().isEmpty() && 
-				//		streetNameField.getText().isEmpty() && 
-				//		cityField.getText().isEmpty() && 
-				//		zipcodeField.getText().isEmpty() && 
-		// phoneNumberField.getText().isEmpty()
 		) {
 
 			return true;

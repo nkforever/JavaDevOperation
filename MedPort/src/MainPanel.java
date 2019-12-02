@@ -31,7 +31,7 @@ public class MainPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private JTextField nameSearch, idSearch, ssnSearch;
-	private JButton searchButton, logoutButton, homeButton, addNewButton, checkinButton, editProfile,
+	private JButton searchButton, logoutButton, homeButton, addNewButton, enterRecordButton, editProfile,
 			patientHistoryButton, viewBillButton;
 
 	private JPanel profilePanel, profileInputPanel, bottomPanel, profileSection, searchPanel, centerPanel,
@@ -399,11 +399,11 @@ public class MainPanel extends JPanel {
 		viewBillButton.setBounds(10, 119, 155, 37);
 		optionProfilePanel.add(viewBillButton);
 		
-		checkinButton = new JButton("Check-in");
-		checkinButton.setEnabled(false);
-		checkinButton.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		checkinButton.setBounds(10, 171, 155, 37);
-		optionProfilePanel.add(checkinButton);
+		enterRecordButton = new JButton("Enter Record");
+		enterRecordButton.setEnabled(false);
+		enterRecordButton.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		enterRecordButton.setBounds(10, 171, 155, 37);
+		optionProfilePanel.add(enterRecordButton);
 
 		profileInputPanel = new JPanel();
 		profileInputPanel.setFont(new Font("Times New Roman", Font.PLAIN, 16));
@@ -422,10 +422,11 @@ public class MainPanel extends JPanel {
 		logoutButton.addActionListener(new actionListener());
 		homeButton.addActionListener(new actionListener());
 		addNewButton.addActionListener(new actionListener());
-		checkinButton.addActionListener(new actionListener());
+		enterRecordButton.addActionListener(new actionListener());
 		editProfile.addActionListener(new actionListener());
 		patientHistoryButton.addActionListener(new actionListener());
 		viewBillButton.addActionListener(new actionListener());
+
 
 	}// end panel
 
@@ -450,13 +451,14 @@ public class MainPanel extends JPanel {
 		editEmployeeInfo.getSaveUpdateButton().addActionListener(upateEmployeeInfo);
 	}
 
+
 	private class actionListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource().equals(addNewButton))
 				pressAddNewProfile();
 
-			else if (e.getSource().equals(checkinButton))
+			else if (e.getSource().equals(enterRecordButton))
 				loadPatientAssignmentForm();
 
 			else if (e.getSource().equals(editProfile))
@@ -475,7 +477,17 @@ public class MainPanel extends JPanel {
 					return;
 				}
 			}
+			else if (e.getSource().equals(patientHistoryButton)) {
+				profileInputPanel.removeAll();
+				// call a method in last patient history form to load the history
+				profileInputPanel.add(lastPatientHistory);
+				lastPatientHistory.setVisible(true);
+				profileInputPanel.repaint();
+				profileInputPanel.validate();
 
+			} else if (e.getSource().equals("View Bill")) {
+				// view Bill
+			}
 			// TODO
 			// If there's more button -----------------------------------------
 		}
@@ -543,7 +555,8 @@ public class MainPanel extends JPanel {
 				loadPatient();
 				return;
 			}
-			setNotFound(); //set not found 
+			else
+				setNotFound(); // set not found
 		} else if (OwnProfile.getRole().equalsIgnoreCase("admin")) {
 			dbc.getProfile(idSearch.getText(), nameSearch.getText(), ssnSearch.getText(), "employee");
 			if (EmployeeProfile.found) {
@@ -556,7 +569,8 @@ public class MainPanel extends JPanel {
 				editEmployeeInfo.loadEmployeeInfoToForm();
 				return;
 			}
-			setNotFound(); // set not found
+			else
+				setNotFound(); // set not found
 		}
 	}// end search
 
@@ -598,15 +612,28 @@ public class MainPanel extends JPanel {
 
 	void loadPatient() {
 		editProfile.setEnabled(true);
-		viewBillButton.setEnabled(true);
-		patientHistoryButton.setEnabled(true);
 		{
-			if (PatientProfile.getActive() == 1) {
-				loadPatientAssignmentForm();
-				checkinButton.setEnabled(false);
+			if (OwnProfile.getRole().equalsIgnoreCase("Secretary") || OwnProfile.getRole().equalsIgnoreCase("Finance"))
+				viewBillButton.setEnabled(true);
+			else
+				viewBillButton.setEnabled(false);
+		}
+		{
+			if (OwnProfile.getRole().equalsIgnoreCase("Finance"))
+				patientHistoryButton.setEnabled(false);
+			else
+				patientHistoryButton.setEnabled(true);
+		}
+		{
+			if (OwnProfile.getRole().equalsIgnoreCase("Finance")) {
+					enterRecordButton.setEnabled(false);
 			} else {
-				checkinButton.setEnabled(true);
-				loadLastPatientHistory();
+
+				enterRecordButton.setEnabled(true);
+				if (PatientProfile.getActive() == 1)
+					patientAssignmentForm.loadAssignmentForm();
+					
+				else loadLastPatientHistory();
 			}
 		}
 
@@ -633,15 +660,20 @@ public class MainPanel extends JPanel {
 	}
 
 	void loadLastPatientHistory() {
-		profileInputPanel.removeAll();
-		profileInputPanel.add(lastPatientHistory);
-		lastPatientHistory.setVisible(true);
-		profileInputPanel.repaint();
-		profileInputPanel.validate();
+			profileInputPanel.removeAll();
+			profileInputPanel.add(lastPatientHistory);
+			lastPatientHistory.setVisible(true);
+			profileInputPanel.repaint();
+			profileInputPanel.validate();
 	}
 
 	void loadPatientAssignmentForm() {
 		profileInputPanel.removeAll();
+		{
+			if (PatientProfile.getActive() == 1) {
+				patientAssignmentForm.loadAssignmentForm();
+			}
+		}
 		profileInputPanel.add(patientAssignmentForm);
 		patientAssignmentForm.setVisible(true);
 		profileInputPanel.repaint();
@@ -669,7 +701,7 @@ public class MainPanel extends JPanel {
 				DOBLabel.setText(" ");
 				genderLabel.setText(" ");
 				//disable buttons 
-				checkinButton.setEnabled(false);
+				enterRecordButton.setEnabled(false);
 				editProfile.setEnabled(false);
 				patientHistoryButton.setEnabled(false);
 				viewBillButton.setEnabled(false);
@@ -730,5 +762,9 @@ public class MainPanel extends JPanel {
 		profileInputPanel.repaint();
 		profileInputPanel.validate();
 
+	}
+
+	public void errorMessage(String message) {
+		errormessageLabel.setText(message);
 	}
 }

@@ -3,6 +3,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -29,10 +31,10 @@ public class PatientAssignmentForm extends JPanel{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JComboBox<Object> doctorAssign, roomAssign;
+	private JComboBox<Object> assignDoctor, assignRoom;
 	private JTextPane noteField;
 	JComboBox<?> typeTreatment;
-	private JFormattedTextField topBP, bottomPB, heartRate;
+	private JFormattedTextField upperBPField, lowerBPField, heartRateField;
 	JTextField reasonVisitField;
 	
 	private JLabel lblNewLabel, lblMidName, lblLastName, lblDob, lblSsn, lblStreetAddr, lblZipcode, label;
@@ -41,8 +43,8 @@ public class PatientAssignmentForm extends JPanel{
 	DefaultListModel<String> dm;
 	private ArrayList<String> al, rl, tl;
 	
-	private JFormattedTextField dateAdmitField, dateDismissField;
-	private JButton addRecordButton;
+	private JFormattedTextField checkinDateField, checkoutDateField;
+	private JButton addRecordButton, resetFormButton;
 	
 
 	private DBcontrol dbc = new DBcontrol();
@@ -54,10 +56,10 @@ public class PatientAssignmentForm extends JPanel{
 	private NumberFormatter HR  = new NumberFormatter(num); 
 	
 	private long date = System.currentTimeMillis();
-	
-	private String doctor = "", room = "", visitReason = "", treatmentType = "", note = "";
+
+	private String invoice = "", doctor = "", room = "", visitReason = "", treatmentType = "", note = "";
 	private String checkInDate, checkOutDate;
-	private int upperBP = 0, lowerBP = 0, HeartRate = 0;
+	private int upperBP = 0, lowerBP = 0, HeartRate = 0, active = 0;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public PatientAssignmentForm() {
@@ -70,27 +72,29 @@ public class PatientAssignmentForm extends JPanel{
 		
 		al = new ArrayList<>();
 		al = dbc.getDoctorList(); //calling server to get arraylist
-		doctorAssign = new JComboBox<Object>(al.toArray());
-		doctorAssign.setModel(new DefaultComboBoxModel(new String[] {"", "Dr. V. Vinny", "Dr. J. Lynn", "Dr. N. Nyi", "Dr. D. Dale"}));
-		doctorAssign.setEditable(true);
-		doctorAssign.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		doctorAssign.setBounds(11, 34, 171, 29);
-		formPanel.add(doctorAssign);
+		assignDoctor = new JComboBox<Object>(al.toArray());
+		assignDoctor.setModel(new DefaultComboBoxModel(
+				new String[] { "", "Dr. V. Vinny", "Dr. J. Lynn", "Dr. N. Nyi", "Dr. D. Dale" }));
+		assignDoctor.setEditable(true);
+		assignDoctor.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		assignDoctor.setBounds(11, 34, 171, 29);
+		formPanel.add(assignDoctor);
 		
 		rl = new ArrayList<>();
 		rl = dbc.getRoomList();
-		roomAssign = new JComboBox<Object>(rl.toArray());
-		roomAssign.setModel(new DefaultComboBoxModel(new String[] {"", "ICU 101", "ICU 102", "ICU 103", "ER 201", "ER 202", "ER 203", "HS 301", "HS 302", "HS 303"}));
-		roomAssign.setEditable(true);
-		roomAssign.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		roomAssign.setBounds(226, 34, 166, 29);
-		formPanel.add(roomAssign);
+		assignRoom = new JComboBox<Object>(rl.toArray());
+		assignRoom.setModel(new DefaultComboBoxModel(new String[] { "", "ICU 101", "ICU 102", "ICU 103", "ER 201",
+				"ER 202", "ER 203", "HS 301", "HS 302", "HS 303" }));
+		assignRoom.setEditable(true);
+		assignRoom.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		assignRoom.setBounds(226, 34, 166, 29);
+		formPanel.add(assignRoom);
 		
-		topBP = new JFormattedTextField(UB);
-		topBP.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		topBP.setBounds(478, 34, 41, 29);
-		formPanel.add(topBP);
-		topBP.setColumns(10);
+		upperBPField = new JFormattedTextField(UB);
+		upperBPField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		upperBPField.setBounds(478, 34, 41, 29);
+		formPanel.add(upperBPField);
+		upperBPField.setColumns(10);
 		
 		reasonVisitField = new JTextField();
 		reasonVisitField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
@@ -101,7 +105,7 @@ public class PatientAssignmentForm extends JPanel{
 		scrollPane = new JScrollPane();
 		scrollPane.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane.setBounds(11, 166, 501, 110);
+		scrollPane.setBounds(11, 166, 501, 98);
 		formPanel.add(scrollPane);
 		
 		noteField = new JTextPane();
@@ -109,15 +113,15 @@ public class PatientAssignmentForm extends JPanel{
 		noteField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		
 		try {
-			dateDismissField = new JFormattedTextField(new MaskFormatter("##/##/####"));
+			checkoutDateField = new JFormattedTextField(new MaskFormatter("##/##/####"));
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		dateDismissField.setText(" ");
-		dateDismissField.setEditable(true);
-		dateDismissField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		dateDismissField.setBounds(643, 206, 100, 29);
-		formPanel.add(dateDismissField);
+		checkoutDateField.setText(" ");
+		checkoutDateField.setEditable(true);
+		checkoutDateField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		checkoutDateField.setBounds(643, 206, 100, 29);
+		formPanel.add(checkoutDateField);
 		
 		tl = new ArrayList<>();
 		tl = dbc.getTreatmentList();
@@ -129,13 +133,8 @@ public class PatientAssignmentForm extends JPanel{
 		formPanel.add(typeTreatment);
 		
 		addRecordButton = new JButton("Add Record");
-		addRecordButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				addToRecord();
-			}
-		});
-		addRecordButton.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		addRecordButton.setBounds(594, 273, 149, 37);
+		addRecordButton.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		addRecordButton.setBounds(594, 290, 149, 29);
 		formPanel.add(addRecordButton);
 		
 		lblNewLabel = new JLabel("Assign Doctor");
@@ -178,11 +177,11 @@ public class PatientAssignmentForm extends JPanel{
 		lblApt.setBounds(534, 166, 111, 29);
 		formPanel.add(lblApt);
 		
-		dateAdmitField = new JFormattedTextField(dateFormat.format(date));
-		dateAdmitField.setEditable(true);
-		dateAdmitField.setFont(new Font("Times New Roman", Font.PLAIN, 18));		
-		dateAdmitField.setBounds(643, 166, 100, 29);
-		formPanel.add(dateAdmitField);
+		checkinDateField = new JFormattedTextField(dateFormat.format(date));
+		checkinDateField.setEditable(true);
+		checkinDateField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		checkinDateField.setBounds(643, 166, 100, 29);
+		formPanel.add(checkinDateField);
 		
 		
 		label = new JLabel("/");
@@ -190,18 +189,28 @@ public class PatientAssignmentForm extends JPanel{
 		label.setBounds(519, 24, 9, 51);
 		formPanel.add(label);
 		
-		bottomPB = new JFormattedTextField(LB);
-		bottomPB.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		bottomPB.setColumns(10);
-		bottomPB.setBounds(528, 34, 41, 29);
-		formPanel.add(bottomPB);
+		lowerBPField = new JFormattedTextField(LB);
+		lowerBPField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		lowerBPField.setColumns(10);
+		lowerBPField.setBounds(528, 34, 41, 29);
+		formPanel.add(lowerBPField);
 		
-		heartRate = new JFormattedTextField(HR);
-		heartRate.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		heartRate.setColumns(10);
-		heartRate.setBounds(632, 34, 81, 29);
-		formPanel.add(heartRate);
+		heartRateField = new JFormattedTextField(HR);
+		heartRateField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		heartRateField.setColumns(10);
+		heartRateField.setBounds(632, 34, 81, 29);
+		formPanel.add(heartRateField);
 		
+		resetFormButton = new JButton("Reset Form");
+		resetFormButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				resetForm();
+			}
+		});
+		resetFormButton.setForeground(Color.RED);
+		resetFormButton.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		resetFormButton.setBounds(11, 291, 155, 29);
+		formPanel.add(resetFormButton);
 
 	}
 	
@@ -209,10 +218,119 @@ public class PatientAssignmentForm extends JPanel{
 		return addRecordButton;
 	}
 	
-	void addToRecord() {
-		dbc.addPatientHistory();
+	public boolean addToRecord() {
+
+		doctor = assignDoctor.getSelectedItem().toString();
+		room = assignRoom.getSelectedItem().toString();
+		if (!upperBPField.getText().equals(""))
+			upperBP = Integer.parseInt(upperBPField.getText());
+		if (!lowerBPField.getText().equals(""))
+			lowerBP = Integer.parseInt(lowerBPField.getText());
+		if (!heartRateField.getText().equals(""))
+			HeartRate = Integer.parseInt(heartRateField.getText());
+		visitReason = reasonVisitField.getText();
+		treatmentType = typeTreatment.getSelectedItem().toString();
+		note = noteField.getText();
+		checkInDate = checkinDateField.getText();
+		checkOutDate = checkoutDateField.getText();
+
+
+		if (active == 0) {
+			invoice = generateInvoiceNumber();
+			active = 1;
+			PatientProfile.setActive(active);
+		}
+		if (!checkOutDate.equals("  /  /    ")) {
+			active = 0;
+		}
+
+		if (dbc.addPatientHistory(invoice, doctor, room, upperBP, lowerBP, HeartRate, visitReason, treatmentType, note,
+				checkInDate, checkOutDate, active)) {
+
+			typeTreatment.setSelectedIndex(0);
+			noteField.setText("");
+			checkoutDateField.setText("");
+			return true;
+		} else {
+			return false;
+		}
 	}
-	
-	
-	
+
+	public void loadAssignmentForm() {
+		if (PatientProfile.getActive() == 0) {
+			return;
+		} else {
+		ResultSet rs = dbc.loadPatientAssignment(PatientProfile.getPatientID());
+
+		try {
+			while (rs.next()) {
+				invoice = rs.getNString("invoice");
+				assignDoctor.setSelectedItem(rs.getNString("doctor"));
+				assignRoom.setSelectedItem(rs.getNString("room"));
+				checkinDateField.setText(rs.getNString("check_in_date"));
+				upperBPField.setText(Integer.toString(rs.getInt("upper_bp")));
+				lowerBPField.setText(Integer.toString(rs.getInt("lower_bp")));
+				heartRateField.setText(Integer.toString(rs.getInt("heart_rate")));
+				reasonVisitField.setText(rs.getNString("visit_reason"));
+				typeTreatment.setSelectedItem(rs.getNString("treatment_type"));
+
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}
+	}
+
+	private String generateInvoiceNumber() {
+		String inv = "";
+		long time = System.currentTimeMillis();
+		inv = Long.toString(time);
+		inv = PatientProfile.getSsnArea() + inv.substring(8, inv.length());
+		
+		while (dbc.checkExistingInvoice(inv)) {
+			time = System.currentTimeMillis();
+			inv = Long.toString((time));
+			inv = PatientProfile.getSsnArea() + inv.substring(8, inv.length());
+			
+		}
+		return inv;
+	}
+
+	private void resetForm() {
+		if (!formEmpty() && PatientProfile.getActive() == 0) {
+
+				assignDoctor.setSelectedIndex(-1);
+				assignRoom.setSelectedIndex(-1);
+				upperBPField.setText("");
+				lowerBPField.setText("");
+				heartRateField.setText("");
+				reasonVisitField.setText("");
+				typeTreatment.setSelectedIndex(-1);
+				noteField.setText("");
+				checkinDateField.setText(dateFormat.format(date));
+				checkoutDateField.setText("");
+		}
+		else {
+				typeTreatment.setSelectedIndex(-1);
+				noteField.setText("");
+				checkoutDateField.setText("");
+			}
+
+	}
+
+	private boolean formEmpty() {
+		if ((assignDoctor.getSelectedIndex() <= 0) && (assignRoom.getSelectedIndex() <= 0)
+				&& upperBPField.getText().equals("") && lowerBPField.getText().equals("")
+				&& heartRateField.getText().equals("") && reasonVisitField.getText().equals("")
+				&& (typeTreatment.getSelectedIndex() <= 0) && noteField.getText().equals("")
+			){
+			
+			return true;
+		}
+		else
+			return false;
+	}
+
 }

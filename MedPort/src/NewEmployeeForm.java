@@ -732,24 +732,16 @@ public class NewEmployeeForm extends JPanel{
 
 	boolean isFormClear() {
 		if(
-				firstNameField.getText().isEmpty() && 
-				midNameField.getText().isEmpty() && 
-				lastNameField.getText().isEmpty() && 
-				DOBField.getText().isEmpty() && 
-				//		genderField.getText().isEmpty() && 
-				//		streetNumField.getText().isEmpty() && 
-				//		streetNameField.getText().isEmpty() && 
-				//		cityField.getText().isEmpty() && 
-				//		zipcodeField.getText().isEmpty() && 
-				//		ssnAreaField.getText().isEmpty() && 
-				//		ssnGroupField.getText().isEmpty() && 
-				//		ssnSerialField.getText().isEmpty() && 
-				phoneNumberField.getText().isEmpty() ) {
+		firstNameField.getText().isEmpty() && midNameField.getText().isEmpty() && 
+				lastNameField.getText().isEmpty() && DOBField.getText().isEmpty() && ssnAreaField.getText().isEmpty()
+				&& ssnGroupField.getText().isEmpty() && ssnSerialField.getText().isEmpty()
+				&& phoneNumberField.getText().isEmpty()) {
 
 			return true;
 		}
 
-		return false;
+		else
+			return false;
 	}
 
 	boolean isMandatoryFieldFill() {

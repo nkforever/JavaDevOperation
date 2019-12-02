@@ -89,6 +89,7 @@ public class DBcontrol {
 			resultSet = statement.executeQuery(checkFirstName);
 
 			if (resultSet.next()) {
+				PatientProfile.found = true;
 				patientFound(resultSet);
 				
 			} // end if
@@ -96,13 +97,14 @@ public class DBcontrol {
 				statement2 = mpCon.createStatement();
 				resultSet2 = statement2.executeQuery(checkLastName);
 				if (resultSet2.next()) {
+					PatientProfile.found = true;
 					patientFound(resultSet2);
 					
 				} else {
 					statement3 = mpCon.createStatement();
 					resultSet3 = statement3.executeQuery(checkID);
 					if (resultSet3.next()) {
-		
+						PatientProfile.found = true;
 						patientFound(resultSet3);
 					}
 				}
@@ -158,8 +160,6 @@ public class DBcontrol {
 
 	private void patientFound(ResultSet resultSet) {
 		String id = "";
-		PatientProfile.found = true;
-		
 		try {
 			id = resultSet.getNString("patient_id");
 			PatientProfile.setPatientID(id);
@@ -448,7 +448,7 @@ public class DBcontrol {
 		checkConnection();
 		
 		String insert = "INSERT INTO address_table (address_id, street_num, apt_num, street_name, city, state, zipcode, lastupdate) "
-				+ "VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_DATE())";
+				+ "VALUES (?, ?, ?, ?, ?, ?, ?, CURDATE())";
 		
 		PreparedStatement preparedStatement = mpCon.prepareStatement(insert);
 		preparedStatement.setString(1, id);
@@ -653,9 +653,93 @@ public class DBcontrol {
 		
 	}
 
-	public void addPatientHistory() {
-		// TODO Auto-generated method stub
+	public boolean addPatientHistory(String invoice, String doctor, String room, int upperBP, int lowerBP,
+			int heartRate, String visitReason, String treatmentType, String note, String checkInDate,
+			String checkOutDate, int active) {
+		
+		try {
+			checkConnection();
+			String record = "INSERT INTO patient_history ("
+					+ "account_id, invoice, check_in_date, check_out_date, doctor, room,"
+					+ "upper_bp, lower_bp, heart_rate, visit_reason, treatment_type, note, last_update, change_by) "
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURDATE(), ?);";
 
+			PreparedStatement statement = mpCon.prepareStatement(record);
+			
+			statement.setString(1, PatientProfile.getPatientID());
+			statement.setString(2, invoice);
+			statement.setString(3, checkInDate);
+			statement.setString(4, checkOutDate);
+			statement.setString(5, doctor);
+			statement.setString(6, room);
+			statement.setInt(7, upperBP);
+			statement.setInt(8, lowerBP);
+			statement.setInt(9, heartRate);
+			statement.setString(10, visitReason);
+			statement.setString(11, treatmentType);
+			statement.setString(12, note);
+			statement.setString(13, OwnProfile.getUser());
+
+			statement.executeUpdate();
+
+			Statement update = mpCon.createStatement();
+
+			String updateActive = "UPDATE patient_table SET active = '" + active + "' WHERE patient_id = \""
+					+ PatientProfile.getPatientID() + "\";";
+
+			update.executeUpdate(updateActive);
+
+			mpCon.close();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public boolean checkExistingInvoice(String invoice) {
+		checkConnection();
+		String inv = "SELECT * FROM invoice_table WHERE invoice = \"" +invoice+ "\";";
+		
+		Statement statement;
+		try {
+			statement = mpCon.createStatement();
+
+			ResultSet rs = statement.executeQuery(inv);
+			if (rs.next()) {
+				mpCon.close();
+				return true;
+			} else {
+				mpCon.close();
+				return false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public ResultSet loadPatientAssignment(String id) {
+		String search = "SELECT * FROM patient_history where account_id = \"" + id + "\";";
+
+		try {
+			checkConnection();
+			Statement statement = mpCon.createStatement();
+			ResultSet resultSet = statement.executeQuery(search);
+
+			if (resultSet.next()) {
+				return resultSet;
+			}
+			else {
+			mpCon.close();
+			return null;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+		
 	}
 
 }
