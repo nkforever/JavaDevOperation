@@ -362,7 +362,7 @@ public class DBcontrol {
 
 				String insert = "INSERT INTO patient_table (patient_id, first_name, mid_name, last_name, DOB, gender, "
 						+ "primaryDoctor, ssnArea, ssnGroup, ssnSerial, phone_num, active, last_update) "
-						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_DATE())";
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_DATE())";
 				
 				PreparedStatement preparedStatement = mpCon.prepareStatement(insert);
 				preparedStatement.setString(1, patientID);
@@ -376,9 +376,9 @@ public class DBcontrol {
 				preparedStatement.setString(9, ssnGroup);
 				preparedStatement.setString(10, ssnSerial);
 				preparedStatement.setString(11, phone_num);
-				preparedStatement.setInt(12, 1);
+			preparedStatement.setInt(12, 1);
 				
-				preparedStatement.executeUpdate();
+			preparedStatement.executeUpdate();
 				mpCon.close();
 			} catch (SQLException e) {
 				return;
