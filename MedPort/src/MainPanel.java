@@ -49,6 +49,11 @@ public class MainPanel extends JPanel {
 	private NewEmployeeForm newEmployeForm = new NewEmployeeForm();
 	private EditEmployeeForm editEmployeeInfo = new EditEmployeeForm();
 	private EditPatientForm editPatientInfo = new EditPatientForm();
+	private ViewBillForm viewBillForm = new ViewBillForm();
+	private AddRoomForm addRoomForm = new AddRoomForm();
+	private AddTreatmentForm addTreatmentForm = new AddTreatmentForm();
+	private AddDoctorForm addDoctorForm = new AddDoctorForm();
+
 
 	MVCcontroller mvc = new MVCcontroller(this, newPatientForm, patientAssignmentForm, editPatientInfo,
 			editEmployeeInfo);
@@ -485,8 +490,13 @@ public class MainPanel extends JPanel {
 				profileInputPanel.repaint();
 				profileInputPanel.validate();
 
-			} else if (e.getSource().equals("View Bill")) {
-				// view Bill
+			} else if (e.getSource().equals(viewBillButton)) {
+				profileInputPanel.removeAll();
+				// call a method in last patient history form to load the history
+				profileInputPanel.add(viewBillForm);
+				viewBillForm.setVisible(true);
+				profileInputPanel.repaint();
+				profileInputPanel.validate();
 			}
 			// TODO
 			// If there's more button -----------------------------------------

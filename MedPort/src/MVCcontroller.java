@@ -21,6 +21,7 @@ public class MVCcontroller {
 		mPanel.addRecordButtonListener(new addRecordButtonListener());
 		mPanel.addUpdatePatientButtonListener(new addUpdatePatientButtonListener());
 		mPanel.addUpdateEmployeeButtonListener(new addUpdateEmployeeButtonListener());
+//		mPanel.addViewBillButtonListener(new addViewBillButtonListener());
 
 	}
 
