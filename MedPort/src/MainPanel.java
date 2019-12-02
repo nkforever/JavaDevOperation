@@ -498,7 +498,7 @@ public class MainPanel extends JPanel {
 				profileInputPanel.repaint();
 				profileInputPanel.validate();
 			}
-			// TODO
+			// TODO //need some more work to do
 			// If there's more button -----------------------------------------
 		}
 	};// End ActionListener class
