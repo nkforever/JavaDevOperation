@@ -52,11 +52,11 @@ public class DBcontrol {
 
 				mpCon.close();
 				return true;
+			} else {
+				mpCon.close();
+				return false;
 			}
-			mpCon.close();
-			return false;
 		} catch (SQLException e) {
-			e.printStackTrace();
 			return false;
 		}
 

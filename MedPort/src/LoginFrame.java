@@ -239,11 +239,16 @@ public class LoginFrame {
 					mainFrame.setResizable(true);
 
 					MainPanel mp = new MainPanel();
-					scrPane = new JScrollPane(mp);
+					{
+						if (OwnProfile.getRole().equalsIgnoreCase("admin"))
+							mp.setAdminOptionVisible();
+					}
 					mp.getNameSearchField().requestFocus();
+					scrPane = new JScrollPane(mp);
 					mainFrame.getContentPane().add(scrPane);
 					mainFrame.setMinimumSize(new Dimension(950, 750));
 					mainFrame.validate();
+
 				} else {
 					ErrorMessageLabel.setText("Your account is deactived.\nPlease contact your account administrator.");
 				}

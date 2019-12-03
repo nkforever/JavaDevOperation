@@ -32,13 +32,13 @@ public class MainPanel extends JPanel {
 
 	private JTextField nameSearch, idSearch, ssnSearch;
 	private JButton searchButton, logoutButton, homeButton, addNewButton, enterRecordButton, editProfile,
-			patientHistoryButton, viewBillButton;
+			patientHistoryButton, viewBillButton, addRoomButton, addDoctorButton, addTreatmentButton;
 
 	private JPanel profilePanel, profileInputPanel, bottomPanel, profileSection, searchPanel, centerPanel,
 			optionProfilePanel;
 	private JLabel userLabel, SSNLabel, genderLabel, DOBLabel, IDLabel, firstNameLabel, midNameLabel,
 			lastNameLabel, primaryLabel, lblPhone, updateStatusLabel, streetLabel, cityStateLabel,
-			phoneNumberLabel, aptLabel;
+			phoneNumberLabel, aptLabel, errormessageLabel;
 
 	private DBcontrol dbc = new DBcontrol();
 
@@ -61,11 +61,19 @@ public class MainPanel extends JPanel {
 
 	DefaultListModel<String> model;
 	private Label lblPrimaryDoctor;
-	private JLabel errormessageLabel;
+
 
 	// Begin main panel class
 	public MainPanel() {
-		
+		addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				if (OwnProfile.getRole().equalsIgnoreCase("Admin")) {
+					setAdminOptionVisible();
+				}
+			}
+		});
+
 		setBackground(Color.LIGHT_GRAY);
 		setLayout(new BorderLayout(0, 5));
 		searchPanel = new JPanel();
@@ -410,6 +418,24 @@ public class MainPanel extends JPanel {
 		enterRecordButton.setBounds(10, 171, 155, 37);
 		optionProfilePanel.add(enterRecordButton);
 
+		addRoomButton = new JButton("Add Room");
+		addRoomButton.setVisible(false);
+		addRoomButton.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		addRoomButton.setBounds(211, 41, 155, 37);
+		optionProfilePanel.add(addRoomButton);
+
+		addDoctorButton = new JButton("Add Doctor");
+		addDoctorButton.setVisible(false);
+		addDoctorButton.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		addDoctorButton.setBounds(211, 93, 155, 37);
+		optionProfilePanel.add(addDoctorButton);
+
+		addTreatmentButton = new JButton("Add Treatment");
+		addTreatmentButton.setVisible(false);
+		addTreatmentButton.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		addTreatmentButton.setBounds(211, 148, 155, 37);
+		optionProfilePanel.add(addTreatmentButton);
+
 		profileInputPanel = new JPanel();
 		profileInputPanel.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 		profileInputPanel.setLayout(new BorderLayout(0, 0));
@@ -431,7 +457,6 @@ public class MainPanel extends JPanel {
 		editProfile.addActionListener(new actionListener());
 		patientHistoryButton.addActionListener(new actionListener());
 		viewBillButton.addActionListener(new actionListener());
-
 
 	}// end panel
 
@@ -776,5 +801,11 @@ public class MainPanel extends JPanel {
 
 	public void errorMessage(String message) {
 		errormessageLabel.setText(message);
+	}
+
+	public void setAdminOptionVisible() {
+		addRoomButton.setVisible(true);
+		addDoctorButton.setVisible(true);
+		addTreatmentButton.setVisible(true);
 	}
 }
