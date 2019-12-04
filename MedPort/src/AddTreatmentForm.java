@@ -1,9 +1,15 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -20,7 +26,8 @@ public class AddTreatmentForm extends JPanel{
 	DBcontrol dbc = new DBcontrol();
 	private JTextField idField;
 	private JTextField descriptionField;
-	private JTextField costField;
+	private JFormattedTextField costField;
+	private NumberFormat num = new DecimalFormat("#.00");
 
 	public AddTreatmentForm() {
 		setLayout(new BorderLayout(0, 0));
@@ -77,7 +84,12 @@ public class AddTreatmentForm extends JPanel{
 		lblLastName.setBounds(159, 46, 181, 29);
 		formPanel.add(lblLastName);
 
-		costField = new JTextField();
+		costField = new JFormattedTextField(num);
+		costField.addKeyListener(new KeyAdapter() {
+			public void keyTyped(KeyEvent e) {
+				if(!isDigit(e.getKeyChar())) e.consume();
+			}  
+		});
 		costField.setColumns(10);
 		costField.setBounds(362, 76, 115, 35);
 		formPanel.add(costField);
@@ -90,12 +102,26 @@ public class AddTreatmentForm extends JPanel{
 
 	}
 	
-	void loadDoctorList() {
-
+	public void loadDoctorList() {
+		ArrayList<String> al = new ArrayList<>();
+		al = dbc.getTreatmentList();
 
 	}
 
-	void addNewDoctor(String id, String firstName, String lastName) {
+	public void addNewDoctor(String id, String firstName, String lastName) {
 		dbc.addDoctorToList(id, firstName, lastName, 1);
+	}
+
+	public void clearForm() {
+		idField.setText("");
+		descriptionField.setText("");
+		costField.setText("");
+	}
+
+	boolean isDigit(char input) {
+		if ((input >= 48 && input <= 57) || (input == '.'))
+			return true;
+
+		return false;
 	}
 }

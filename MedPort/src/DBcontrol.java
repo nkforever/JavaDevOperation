@@ -601,7 +601,7 @@ public class DBcontrol {
 			Statement statement = mpCon.createStatement();
 			ResultSet rs = statement.executeQuery(list);
 			while(rs.next()) {
-				al.add("Dr. " + rs.getString(2).substring(0,1) + ". "+rs.getString(3));
+				al.add("Dr. " + rs.getString(2) + " " + rs.getString(3));
 				
 			}
 			mpCon.close();

@@ -12,6 +12,8 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -65,14 +67,6 @@ public class MainPanel extends JPanel {
 
 	// Begin main panel class
 	public MainPanel() {
-		addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent arg0) {
-				if (OwnProfile.getRole().equalsIgnoreCase("Admin")) {
-					setAdminOptionVisible();
-				}
-			}
-		});
 
 		setBackground(Color.LIGHT_GRAY);
 		setLayout(new BorderLayout(0, 5));
@@ -419,19 +413,58 @@ public class MainPanel extends JPanel {
 		optionProfilePanel.add(enterRecordButton);
 
 		addRoomButton = new JButton("Add Room");
-		addRoomButton.setVisible(false);
+		addRoomButton.setEnabled(false);
+		addRoomButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				if (OwnProfile.getRole().equalsIgnoreCase("Admin")) {
+					setAdminOptionVisible();
+				}
+			}
+		});
+		addRoomButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				loadAddRoomForm();
+			}
+		});
 		addRoomButton.setFont(new Font("Times New Roman", Font.PLAIN, 20));
 		addRoomButton.setBounds(211, 41, 155, 37);
 		optionProfilePanel.add(addRoomButton);
 
 		addDoctorButton = new JButton("Add Doctor");
-		addDoctorButton.setVisible(false);
+		addDoctorButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				if (OwnProfile.getRole().equalsIgnoreCase("Admin")) {
+					setAdminOptionVisible();
+				}
+			}
+		});
+		addDoctorButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				loadAddDoctorForm();
+			}
+		});
+		addDoctorButton.setEnabled(false);
 		addDoctorButton.setFont(new Font("Times New Roman", Font.PLAIN, 20));
 		addDoctorButton.setBounds(211, 93, 155, 37);
 		optionProfilePanel.add(addDoctorButton);
 
 		addTreatmentButton = new JButton("Add Treatment");
-		addTreatmentButton.setVisible(false);
+		addTreatmentButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				if (OwnProfile.getRole().equalsIgnoreCase("Admin")) {
+					setAdminOptionVisible();
+				}
+			}
+		});
+		addTreatmentButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				loadAddTreatmentForm();
+			}
+		});
+		addTreatmentButton.setEnabled(false);
 		addTreatmentButton.setFont(new Font("Times New Roman", Font.PLAIN, 20));
 		addTreatmentButton.setBounds(211, 148, 155, 37);
 		optionProfilePanel.add(addTreatmentButton);
@@ -508,20 +541,16 @@ public class MainPanel extends JPanel {
 				}
 			}
 			else if (e.getSource().equals(patientHistoryButton)) {
-				profileInputPanel.removeAll();
-				// call a method in last patient history form to load the history
-				profileInputPanel.add(lastPatientHistory);
-				lastPatientHistory.setVisible(true);
-				profileInputPanel.repaint();
-				profileInputPanel.validate();
+				loadPatientHistoryForm();
 
 			} else if (e.getSource().equals(viewBillButton)) {
-				profileInputPanel.removeAll();
-				// call a method in last patient history form to load the history
-				profileInputPanel.add(viewBillForm);
-				viewBillForm.setVisible(true);
-				profileInputPanel.repaint();
-				profileInputPanel.validate();
+				loadViewBill();
+			}else if (e.getSource().equals(addRoomButton)) {
+				loadAddRoomForm();
+			}else if (e.getSource().equals(addDoctorButton)) {
+				loadAddDoctorForm();
+			}else if (e.getSource().equals(addTreatmentButton)) {
+				loadAddTreatmentForm();
 			}
 			// TODO //need some more work to do
 			// If there's more button -----------------------------------------
@@ -667,7 +696,6 @@ public class MainPanel extends JPanel {
 				enterRecordButton.setEnabled(true);
 				if (PatientProfile.getActive() == 1)
 					patientAssignmentForm.loadAssignmentForm();
-					
 				else loadLastPatientHistory();
 			}
 		}
@@ -751,28 +779,29 @@ public class MainPanel extends JPanel {
 			}
 			return;
 		}
-		nameSearch.setText("");
-		idSearch.setText("");
-		ssnSearch.setText("");
+		else {
+			nameSearch.setText("");
+			idSearch.setText("");
+			ssnSearch.setText("");
 
-		IDLabel.setText(" ");
-		firstNameLabel.setText(" ");
-		midNameLabel.setText(" ");
-		lastNameLabel.setText(" ");
-		SSNLabel.setText(" ");
-		phoneNumberLabel.setText(" ");
-		streetLabel.setText(" ");
-		aptLabel.setText(" ");
-		cityStateLabel.setText(" ");
-		primaryLabel.setText(" ");
-		DOBLabel.setText(" ");
-		genderLabel.setText(" ");
+			IDLabel.setText(" ");
+			firstNameLabel.setText(" ");
+			midNameLabel.setText(" ");
+			lastNameLabel.setText(" ");
+			SSNLabel.setText(" ");
+			phoneNumberLabel.setText(" ");
+			streetLabel.setText(" ");
+			aptLabel.setText(" ");
+			cityStateLabel.setText(" ");
+			primaryLabel.setText(" ");
+			DOBLabel.setText(" ");
+			genderLabel.setText(" ");
 
-		profileInputPanel.removeAll();
-		profileInputPanel.add(addNewButton);
-		profileInputPanel.repaint();
-		profileInputPanel.validate();
-
+			profileInputPanel.removeAll();
+			profileInputPanel.add(addNewButton);
+			profileInputPanel.repaint();
+			profileInputPanel.validate();
+		}
 	}
 
 	public void updateEmployeeInfoIsPressed() {
@@ -803,9 +832,58 @@ public class MainPanel extends JPanel {
 		errormessageLabel.setText(message);
 	}
 
-	public void setAdminOptionVisible() {
-		addRoomButton.setVisible(true);
-		addDoctorButton.setVisible(true);
-		addTreatmentButton.setVisible(true);
+	private void setAdminOptionVisible() {
+		addRoomButton.setEnabled(true);
+		addDoctorButton.setEnabled(true);
+		addTreatmentButton.setEnabled(true);
 	}
+
+	void loadPatientHistoryForm() {
+		profileInputPanel.removeAll();
+		// call a method in last patient history form to load the history
+		profileInputPanel.add(lastPatientHistory);
+		lastPatientHistory.setVisible(true);
+		profileInputPanel.repaint();
+		profileInputPanel.validate();
+	}
+
+	void loadViewBill() {
+		profileInputPanel.removeAll();
+		// call a method in last patient history form to load the history
+		profileInputPanel.add(viewBillForm);
+		viewBillForm.setVisible(true);
+		profileInputPanel.repaint();
+		profileInputPanel.validate();
+	}
+
+	void loadAddRoomForm() {
+		profileInputPanel.removeAll();
+		// call a method in last patient history form to load the history
+		// -----------------------------
+		profileInputPanel.add(addRoomForm);
+		addRoomForm.setVisible(true);
+		profileInputPanel.repaint();
+		profileInputPanel.validate();
+	}
+
+	void loadAddDoctorForm() {
+		profileInputPanel.removeAll();
+		// call a method in last patient history form to load the history
+		// ------------------------------
+		profileInputPanel.add(addDoctorForm);
+		addDoctorForm.setVisible(true);
+		profileInputPanel.repaint();
+		profileInputPanel.validate();
+	}
+
+	void loadAddTreatmentForm() {
+		profileInputPanel.removeAll();
+		// call a method in last patient history form to load the history
+		// ------------------------------
+		profileInputPanel.add(addTreatmentForm);
+		addTreatmentForm.setVisible(true);
+		profileInputPanel.repaint();
+		profileInputPanel.validate();
+	}
+
 }

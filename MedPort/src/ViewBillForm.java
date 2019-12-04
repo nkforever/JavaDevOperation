@@ -2,6 +2,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -29,6 +30,7 @@ public class ViewBillForm extends JPanel{
 	private JLabel lblPaymentCharge;
 	private JLabel lblBalance;
 	private JLabel lblResponsibleOf;
+	private JButton processPaymentButton;
 
 	public ViewBillForm() {
 		setLayout(new BorderLayout(0, 0));
@@ -55,12 +57,12 @@ public class ViewBillForm extends JPanel{
 		
 		lbl4 = new JLabel("Total charge: $ ");
 		lbl4.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		lbl4.setBounds(421, 292, 105, 29);
+		lbl4.setBounds(321, 292, 105, 29);
 		formPanel.add(lbl4);
 		
 		totalAmountLabel = new JLabel("1,000,000.00");
 		totalAmountLabel.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		totalAmountLabel.setBounds(525, 292, 197, 29);
+		totalAmountLabel.setBounds(425, 292, 197, 29);
 		formPanel.add(totalAmountLabel);
 		
 		lbl5 = new JLabel("Detail of charge:");
@@ -122,6 +124,11 @@ public class ViewBillForm extends JPanel{
 		lblResponsibleOf.setFont(new Font("Times New Roman", Font.PLAIN, 12));
 		lblResponsibleOf.setBounds(645, 77, 77, 29);
 		formPanel.add(lblResponsibleOf);
+
+		processPaymentButton = new JButton("Process Payment");
+		processPaymentButton.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		processPaymentButton.setBounds(567, 292, 171, 37);
+		formPanel.add(processPaymentButton);
 
 	}
 	

@@ -71,10 +71,10 @@ public class PatientAssignmentForm extends JPanel{
 		formPanel.setLayout(null);
 		
 		al = new ArrayList<>();
-		al = dbc.getDoctorList(); //calling server to get arraylist
-		assignDoctor = new JComboBox<Object>(al.toArray());
-		assignDoctor.setModel(new DefaultComboBoxModel(
-				new String[] { "", "Dr. V. Vinny", "Dr. J. Lynn", "Dr. N. Nyi", "Dr. D. Dale" }));
+		al = dbc.getDoctorList(); // calling server to get arraylist
+		assignDoctor = new JComboBox<Object>();
+		assignDoctor.setModel(new DefaultComboBoxModel(al.toArray()));
+		assignDoctor.setSelectedIndex(-1);
 		assignDoctor.setEditable(true);
 		assignDoctor.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		assignDoctor.setBounds(11, 34, 171, 29);
@@ -82,9 +82,9 @@ public class PatientAssignmentForm extends JPanel{
 		
 		rl = new ArrayList<>();
 		rl = dbc.getRoomList();
-		assignRoom = new JComboBox<Object>(rl.toArray());
-		assignRoom.setModel(new DefaultComboBoxModel(new String[] { "", "ICU 101", "ICU 102", "ICU 103", "ER 201",
-				"ER 202", "ER 203", "HS 301", "HS 302", "HS 303" }));
+		assignRoom = new JComboBox<Object>();
+		assignRoom.setModel(new DefaultComboBoxModel(rl.toArray()));
+		assignRoom.setSelectedIndex(-1);
 		assignRoom.setEditable(true);
 		assignRoom.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		assignRoom.setBounds(226, 34, 166, 29);
@@ -125,8 +125,9 @@ public class PatientAssignmentForm extends JPanel{
 		
 		tl = new ArrayList<>();
 		tl = dbc.getTreatmentList();
-		typeTreatment = new JComboBox<Object>(tl.toArray());
-		typeTreatment.setModel(new DefaultComboBoxModel(new String[] {"", "Surgrey: Brain", "Surgery: Spine", "Surgery: Knee", "Lab: Blood Basic Test", "Lab: Urine Test", "Lab: Stool Test", "Lab: Xray", "Lab: Ultra Sound", "Lab: CT Scan", "General: IV", "General: Pain Relieve med", "General: First Aid", "General: Anti-bliotic med", "General: Asprin", "General: Wound Dressing", "General: Wax Removal", "General: Consultation", "General: Diagnosis", "Lab: Allergry Test", "Lab: Blood Micro Test", "Dummy Testing"}));
+		typeTreatment = new JComboBox<Object>();
+		typeTreatment.setModel(new DefaultComboBoxModel(tl.toArray()));
+		typeTreatment.setSelectedIndex(-1);
 		typeTreatment.setEditable(true);
 		typeTreatment.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		typeTreatment.setBounds(414, 99, 329, 29);
