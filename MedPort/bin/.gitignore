@@ -1,5 +1,8 @@
 /AddDoctorForm.class
+/AddRoomForm$1.class
+/AddRoomForm$2.class
 /AddRoomForm.class
+/AddTreatmentForm$1.class
 /AddTreatmentForm.class
 /DBcontrol.class
 /DoctorList.class
@@ -11,6 +14,7 @@
 /EditEmployeeForm$6.class
 /EditEmployeeForm$7.class
 /EditEmployeeForm$8.class
+/EditEmployeeForm$9.class
 /EditEmployeeForm.class
 /EditPatientForm$1.class
 /EditPatientForm$2.class
@@ -38,6 +42,11 @@
 /MVCcontroller.class
 /MainPanel$1.class
 /MainPanel$10.class
+/MainPanel$11.class
+/MainPanel$12.class
+/MainPanel$13.class
+/MainPanel$14.class
+/MainPanel$15.class
 /MainPanel$2.class
 /MainPanel$3.class
 /MainPanel$4.class
@@ -84,10 +93,4 @@
 /RoomList.class
 /ViewBillForm.class
 /org/
-/MainPanel$11.class
-/MainPanel$12.class
-/MainPanel$13.class
-/MainPanel$14.class
-/MainPanel$15.class
-/PatientAssignmentForm$2.class
-/AddTreatmentForm$1.class
+/AddRoomForm$3.class

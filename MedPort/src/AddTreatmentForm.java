@@ -7,6 +7,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
@@ -24,10 +25,15 @@ public class AddTreatmentForm extends JPanel{
 	private JLabel lblNewLabel, lblDob;
 	
 	DBcontrol dbc = new DBcontrol();
-	private JTextField idField;
-	private JTextField descriptionField;
+	private JTextField idField, descriptionField;
 	private JFormattedTextField costField;
 	private NumberFormat num = new DecimalFormat("#.00");
+	private JButton addNewTreatmentButton, removeTreatmentButton;
+	private JComboBox<String> treatmentComboBox;
+
+	ArrayList<String> al = new ArrayList<>();
+	private JLabel addMessageLabel;
+	private JLabel removeMessageLabel;
 
 	public AddTreatmentForm() {
 		setLayout(new BorderLayout(0, 0));
@@ -48,7 +54,8 @@ public class AddTreatmentForm extends JPanel{
 		lblDob.setBounds(37, 172, 250, 29);
 		formPanel.add(lblDob);
 		
-		JComboBox treatmentComboBox = new JComboBox();
+		al = dbc.getTreatmentList();
+		treatmentComboBox = new JComboBox(al.toArray());
 		treatmentComboBox.setBounds(37, 201, 398, 35);
 		formPanel.add(treatmentComboBox);
 		
@@ -57,12 +64,12 @@ public class AddTreatmentForm extends JPanel{
 		formPanel.add(idField);
 		idField.setColumns(10);
 		
-		JButton addNewTreatmentButton = new JButton("Add New Treatment");
+		addNewTreatmentButton = new JButton("Add New Treatment");
 		addNewTreatmentButton.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		addNewTreatmentButton.setBounds(487, 82, 194, 29);
 		formPanel.add(addNewTreatmentButton);
 		
-		JButton removeTreatmentButton = new JButton("Remove Treatment");
+		removeTreatmentButton = new JButton("Remove Treatment");
 		removeTreatmentButton.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		removeTreatmentButton.setBounds(486, 206, 194, 32);
 		formPanel.add(removeTreatmentButton);
@@ -100,16 +107,31 @@ public class AddTreatmentForm extends JPanel{
 		lblCost.setBounds(362, 46, 113, 29);
 		formPanel.add(lblCost);
 
+		addMessageLabel = new JLabel("");
+		addMessageLabel.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		addMessageLabel.setBounds(37, 114, 440, 29);
+		formPanel.add(addMessageLabel);
+
+		removeMessageLabel = new JLabel("");
+		removeMessageLabel.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		removeMessageLabel.setBounds(37, 236, 440, 29);
+		formPanel.add(removeMessageLabel);
+
 	}
 	
-	public void loadDoctorList() {
-		ArrayList<String> al = new ArrayList<>();
+	public void loadTreatmentList() {
 		al = dbc.getTreatmentList();
+		treatmentComboBox.setModel(new DefaultComboBoxModel(al.toArray()));
 
 	}
 
-	public void addNewDoctor(String id, String firstName, String lastName) {
-		dbc.addDoctorToList(id, firstName, lastName, 1);
+	public void addTreatmentToList(String id, String description, double cost) {
+		if (dbc.addTreatmentToList(id, description, cost)) {
+			addMessageLabel.setText("Adding successfully.");
+		} else {
+			addMessageLabel.setText("Adding failed.");
+		}
+
 	}
 
 	public void clearForm() {

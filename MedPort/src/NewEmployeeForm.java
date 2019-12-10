@@ -382,71 +382,87 @@ public class NewEmployeeForm extends JPanel{
 		roleComboBox = new JComboBox<String>();
 		roleComboBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
-				if(e.getItem().equals("Admin")) {
+				if (e.getItem().equals("Admin")) {
+					userAdminCheckBox.setEnabled(true);
 					userAdminCheckBox.setSelected(true);
 					addEditPatientCheckBox.setSelected(false);
+					ownProfileCheckBox.setEnabled(true);
 					ownProfileCheckBox.setSelected(true);
 					viewBillCheckBox.setSelected(false);
 					viewPatientCheckBox.setSelected(false);
 					processPaymentCheckBox.setSelected(false);
-					System.out.println("access status: " +
-							addEditPatient + " " + viewPatient + " " + userAdmin + " " + " " + ownProfile + " "
-							+ viewBill
-							+ " " + processPayment);
-				}
-				else if (e.getItem().equals("Doctor")) {
+					processPaymentCheckBox.setEnabled(false);
+
+				} else if (e.getItem().equals("Doctor")) {
 					userAdminCheckBox.setSelected(false);
+					userAdminCheckBox.setEnabled(false);
+					addEditPatientCheckBox.setEnabled(true);
 					addEditPatientCheckBox.setSelected(true);
+					ownProfileCheckBox.setEnabled(true);
 					ownProfileCheckBox.setSelected(true);
 					viewBillCheckBox.setSelected(false);
+					viewBillCheckBox.setEnabled(false);
+					viewPatientCheckBox.setEnabled(true);
 					viewPatientCheckBox.setSelected(true);
 					processPaymentCheckBox.setSelected(false);
-					System.out.println("access status: " +
-							addEditPatient + " " + viewPatient + " " + userAdmin + " " + " " + ownProfile + " "
-							+ viewBill + " " + processPayment);
+					processPaymentCheckBox.setEnabled(false);
+
 				} else if (e.getItem().equals("Nurse")) {
 					userAdminCheckBox.setSelected(false);
+					userAdminCheckBox.setEnabled(false);
+					addEditPatientCheckBox.setEnabled(true);
 					addEditPatientCheckBox.setSelected(true);
+					ownProfileCheckBox.setEnabled(true);
 					ownProfileCheckBox.setSelected(true);
 					viewBillCheckBox.setSelected(false);
+					viewBillCheckBox.setEnabled(false);
+					viewPatientCheckBox.setEnabled(true);
 					viewPatientCheckBox.setSelected(true);
 					processPaymentCheckBox.setSelected(false);
-					System.out.println("access status: " +
-							addEditPatient + " " + viewPatient + " " + userAdmin + " " + " " + ownProfile + " "
-							+ viewBill + " " + processPayment);
-				}
-				else if (e.getItem().equals("Secretary")) {
+					processPaymentCheckBox.setEnabled(false);
+
+				} else if (e.getItem().equals("Secretary")) {
 					userAdminCheckBox.setSelected(false);
+					userAdminCheckBox.setEnabled(false);
+					addEditPatientCheckBox.setEnabled(true);
 					addEditPatientCheckBox.setSelected(true);
+					ownProfileCheckBox.setEnabled(true);
 					ownProfileCheckBox.setSelected(true);
+					viewBillCheckBox.setEnabled(true);
 					viewBillCheckBox.setSelected(true);
+					viewPatientCheckBox.setEnabled(true);
 					viewPatientCheckBox.setSelected(true);
+					processPaymentCheckBox.setEnabled(true);
 					processPaymentCheckBox.setSelected(true);
-					System.out.println("access status: " +
-							addEditPatient + " " + viewPatient + " " + userAdmin + " " + " " + ownProfile + " "
-							+ viewBill + " " + processPayment);
-				}
-				else if (e.getItem().equals("Finance")) {
+
+				} else if (e.getItem().equals("Finance")) {
 					userAdminCheckBox.setSelected(false);
+					userAdminCheckBox.setEnabled(false);
 					addEditPatientCheckBox.setSelected(false);
+					addEditPatientCheckBox.setEnabled(false);
+					ownProfileCheckBox.setEnabled(true);
 					ownProfileCheckBox.setSelected(true);
+					viewBillCheckBox.setEnabled(true);
 					viewBillCheckBox.setSelected(true);
+					viewPatientCheckBox.setEnabled(false);
 					viewPatientCheckBox.setSelected(false);
+					processPaymentCheckBox.setEnabled(true);
 					processPaymentCheckBox.setSelected(true);
-					System.out.println("access status: " +
-							addEditPatient + " " + viewPatient + " " + userAdmin + " " + " " + ownProfile + " "
-							+ viewBill + " " + processPayment);
-				}
-				else {
+
+				} else {
 					userAdminCheckBox.setSelected(false);
+					userAdminCheckBox.setEnabled(false);
 					addEditPatientCheckBox.setSelected(false);
+					addEditPatientCheckBox.setEnabled(false);
 					ownProfileCheckBox.setSelected(false);
+					ownProfileCheckBox.setEnabled(false);
 					viewBillCheckBox.setSelected(false);
+					viewBillCheckBox.setEnabled(false);
 					viewPatientCheckBox.setSelected(false);
+					viewPatientCheckBox.setEnabled(false);
 					processPaymentCheckBox.setSelected(false);
-					System.out.println("access status: " +
-							addEditPatient + " " + viewPatient + " " + userAdmin + " " + ownProfile + " "
-							+ viewBill + " " + processPayment);
+					processPaymentCheckBox.setEnabled(false);
+
 				}
 			}
 		});
@@ -458,6 +474,7 @@ public class NewEmployeeForm extends JPanel{
 		// end role combo box
 		
 		addEditPatientCheckBox = new JCheckBox("Add/Edit Patient");
+		addEditPatientCheckBox.setEnabled(false);
 		addEditPatientCheckBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 
@@ -487,6 +504,7 @@ public class NewEmployeeForm extends JPanel{
 		formPanel.add(ownProfileCheckBox);
 		
 		viewPatientCheckBox = new JCheckBox("View Patient");
+		viewPatientCheckBox.setEnabled(false);
 		viewPatientCheckBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (viewPatientCheckBox.isSelected()) {
@@ -500,6 +518,7 @@ public class NewEmployeeForm extends JPanel{
 		formPanel.add(viewPatientCheckBox);
 		
 		viewBillCheckBox = new JCheckBox("View Bill");
+		viewBillCheckBox.setEnabled(false);
 		viewBillCheckBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (viewBillCheckBox.isSelected()) {
@@ -518,6 +537,7 @@ public class NewEmployeeForm extends JPanel{
 		formPanel.add(lbllimited);
 
 		processPaymentCheckBox = new JCheckBox("Process Payment");
+		processPaymentCheckBox.setEnabled(false);
 		processPaymentCheckBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (processPaymentCheckBox.isSelected()) {
@@ -531,6 +551,7 @@ public class NewEmployeeForm extends JPanel{
 		formPanel.add(processPaymentCheckBox);
 
 		userAdminCheckBox = new JCheckBox("User Admin");
+		userAdminCheckBox.setEnabled(false);
 		userAdminCheckBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (userAdminCheckBox.isSelected()) {

@@ -1,7 +1,9 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.util.ArrayList;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -18,8 +20,11 @@ public class AddDoctorForm extends JPanel{
 	private JLabel lblNewLabel, lblDob;
 	
 	DBcontrol dbc = new DBcontrol();
-	private JTextField firstNameField;
-	private JTextField lastNameField;
+	private JTextField firstNameField, lastNameField;
+	private JButton RemoveDoctorButton, addNewDoctorButton;
+	private JComboBox<String> comboBox;
+
+	ArrayList<String> al = new ArrayList<>();
 
 	public AddDoctorForm() {
 		setLayout(new BorderLayout(0, 0));
@@ -40,7 +45,8 @@ public class AddDoctorForm extends JPanel{
 		lblDob.setBounds(37, 172, 250, 29);
 		formPanel.add(lblDob);
 		
-		JComboBox comboBox = new JComboBox();
+		al = dbc.getDoctorList();
+		comboBox = new JComboBox(al.toArray());
 		comboBox.setBounds(37, 201, 398, 35);
 		formPanel.add(comboBox);
 		
@@ -49,12 +55,12 @@ public class AddDoctorForm extends JPanel{
 		formPanel.add(firstNameField);
 		firstNameField.setColumns(10);
 		
-		JButton addNewDoctorButton = new JButton("Add New Doctor");
+		addNewDoctorButton = new JButton("Add New Doctor");
 		addNewDoctorButton.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		addNewDoctorButton.setBounds(458, 82, 223, 29);
 		formPanel.add(addNewDoctorButton);
 		
-		JButton RemoveDoctorButton = new JButton("Remove Doctor");
+		RemoveDoctorButton = new JButton("Remove Doctor");
 		RemoveDoctorButton.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		RemoveDoctorButton.setBounds(457, 206, 223, 32);
 		formPanel.add(RemoveDoctorButton);
@@ -79,7 +85,8 @@ public class AddDoctorForm extends JPanel{
 	}
 	
 	void loadDoctorList() {
-
+		al = dbc.getDoctorList();
+		comboBox.setModel(new DefaultComboBoxModel(al.toArray()));
 
 	}
 

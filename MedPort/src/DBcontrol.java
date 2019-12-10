@@ -654,20 +654,49 @@ public class DBcontrol {
 		
 	}
 
-	void addRoomToList(String name, String roomNum) {
+	boolean addRoomToList(String name, int roomNum) {
 		try {
 			checkConnection();
-			String insert = "INSERT INTO room_list (name, room_num) " + "VALUES (?, ?,);";
+			String check = "Select * FROM room_list WHERE name = \"" + name + "\" AND room_num = \"" + roomNum + "\"; ";
+			Statement checkStatement = mpCon.createStatement();
+
+			ResultSet rs = checkStatement.executeQuery(check);
+			if (rs.next()) {
+				mpCon.close();
+				return false;
+			} else {
+			String insert = "INSERT INTO room_list (name, room_num) " + "VALUES (?, ?);";
 			PreparedStatement preparedStatement = mpCon.prepareStatement(insert);
 			preparedStatement.setString(1, name);
-			preparedStatement.setString(2, roomNum);
+				preparedStatement.setInt(2, roomNum);
 
 			preparedStatement.executeUpdate();
 
 			mpCon.close();
+			return true;
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return;
+			return false;
+		}
+
+	}
+
+	boolean removeRoomFromList(String name, int num) {
+		try {
+			checkConnection();
+
+			String insert = "DELETE FROM room_list WHERE (name = '" + name + "' AND room_num = '" + num + "');";
+			PreparedStatement preparedStatement = mpCon.prepareStatement(insert);
+
+			preparedStatement.executeUpdate();
+
+			mpCon.close();
+				return true;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
 		}
 
 	}
@@ -692,7 +721,25 @@ public class DBcontrol {
 		
 	}
 
-	void addTreatmentToList(String id, String description, double cost) {
+	boolean addTreatmentToList(String id, String description, double cost) {
+		try {
+			checkConnection();
+			String insert = "DELETE FROM treatment_list WHERE (description = '" + description + "' AND cost = '" + cost
+					+ "');";
+			PreparedStatement preparedStatement = mpCon.prepareStatement(insert);
+
+			preparedStatement.executeUpdate();
+
+			mpCon.close();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+	}
+
+	boolean removeTreatmentFromList(String id, String description, double cost) {
 		try {
 			checkConnection();
 			String insert = "INSERT INTO treatment_list (treatment_id, description, cost) " + "VALUES (?, ?, ?);";
@@ -704,9 +751,10 @@ public class DBcontrol {
 			preparedStatement.executeUpdate();
 
 			mpCon.close();
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return;
+			return false;
 		}
 
 	}

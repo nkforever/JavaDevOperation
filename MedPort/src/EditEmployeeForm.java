@@ -2,6 +2,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.text.DateFormat;
@@ -377,29 +379,123 @@ public class EditEmployeeForm extends JPanel{
 		formPanel.add(label_2);
 		
 		roleComboBox = new JComboBox<String>();
+		{
+			if (!OwnProfile.getUser().equalsIgnoreCase(EmployeeProfile.getUser())) {
+
+				roleComboBox.addItemListener(new ItemListener() {
+					public void itemStateChanged(ItemEvent e) {
+						if (e.getItem().equals("Admin")) {
+							userAdminCheckBox.setEnabled(true);
+							userAdminCheckBox.setSelected(true);
+							addEditPatientCheckBox.setSelected(false);
+							editOwnProfilecheckBox.setEnabled(true);
+							editOwnProfilecheckBox.setSelected(true);
+							viewBillCheckBox.setSelected(false);
+							viewPatientCheckBoc.setSelected(false);
+							processPaymentCheckBox.setSelected(false);
+							processPaymentCheckBox.setEnabled(false);
+
+						} else if (e.getItem().equals("Doctor")) {
+							userAdminCheckBox.setSelected(false);
+							userAdminCheckBox.setEnabled(false);
+							addEditPatientCheckBox.setEnabled(true);
+							addEditPatientCheckBox.setSelected(true);
+							editOwnProfilecheckBox.setEnabled(true);
+							editOwnProfilecheckBox.setSelected(true);
+							viewBillCheckBox.setSelected(false);
+							viewBillCheckBox.setEnabled(false);
+							viewPatientCheckBoc.setEnabled(true);
+							viewPatientCheckBoc.setSelected(true);
+							processPaymentCheckBox.setSelected(false);
+							processPaymentCheckBox.setEnabled(false);
+
+						} else if (e.getItem().equals("Nurse")) {
+							userAdminCheckBox.setSelected(false);
+							userAdminCheckBox.setEnabled(false);
+							addEditPatientCheckBox.setEnabled(true);
+							addEditPatientCheckBox.setSelected(true);
+							editOwnProfilecheckBox.setEnabled(true);
+							editOwnProfilecheckBox.setSelected(true);
+							viewBillCheckBox.setSelected(false);
+							viewBillCheckBox.setEnabled(false);
+							viewPatientCheckBoc.setEnabled(true);
+							viewPatientCheckBoc.setSelected(true);
+							processPaymentCheckBox.setSelected(false);
+							processPaymentCheckBox.setEnabled(false);
+
+						} else if (e.getItem().equals("Secretary")) {
+							userAdminCheckBox.setSelected(false);
+							userAdminCheckBox.setEnabled(false);
+							addEditPatientCheckBox.setEnabled(true);
+							addEditPatientCheckBox.setSelected(true);
+							editOwnProfilecheckBox.setEnabled(true);
+							editOwnProfilecheckBox.setSelected(true);
+							viewBillCheckBox.setEnabled(true);
+							viewBillCheckBox.setSelected(true);
+							viewPatientCheckBoc.setEnabled(true);
+							viewPatientCheckBoc.setSelected(true);
+							processPaymentCheckBox.setEnabled(true);
+							processPaymentCheckBox.setSelected(true);
+
+						} else if (e.getItem().equals("Finance")) {
+							userAdminCheckBox.setSelected(false);
+							userAdminCheckBox.setEnabled(false);
+							addEditPatientCheckBox.setSelected(false);
+							addEditPatientCheckBox.setEnabled(false);
+							editOwnProfilecheckBox.setEnabled(true);
+							editOwnProfilecheckBox.setSelected(true);
+							viewBillCheckBox.setEnabled(true);
+							viewBillCheckBox.setSelected(true);
+							viewPatientCheckBoc.setEnabled(false);
+							viewPatientCheckBoc.setSelected(false);
+							processPaymentCheckBox.setEnabled(true);
+							processPaymentCheckBox.setSelected(true);
+
+						} else {
+							userAdminCheckBox.setSelected(false);
+							userAdminCheckBox.setEnabled(false);
+							addEditPatientCheckBox.setSelected(false);
+							addEditPatientCheckBox.setEnabled(false);
+							editOwnProfilecheckBox.setSelected(false);
+							editOwnProfilecheckBox.setEnabled(false);
+							viewBillCheckBox.setSelected(false);
+							viewBillCheckBox.setEnabled(false);
+							viewPatientCheckBoc.setSelected(false);
+							viewPatientCheckBoc.setEnabled(false);
+							processPaymentCheckBox.setSelected(false);
+							processPaymentCheckBox.setEnabled(false);
+						}
+				}
+				});
+			}
+		}
 		roleComboBox.setModel(new DefaultComboBoxModel<String>(
-				new String[] { "N/A", "Admin", "Doctor", "Finance", "Nurse", "Secretary" }));
+				new String[] { "Admin", "Doctor", "Finance", "Nurse", "Secretary" }));
 		roleComboBox.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		roleComboBox.setBounds(98, 233, 98, 29);
 		formPanel.add(roleComboBox);
 		
 		addEditPatientCheckBox = new JCheckBox("Add/Edit Patient");
+		addEditPatientCheckBox.setEnabled(false);
 		addEditPatientCheckBox.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		addEditPatientCheckBox.setBounds(11, 282, 163, 29);
 		formPanel.add(addEditPatientCheckBox);
 		
 		editOwnProfilecheckBox = new JCheckBox("Own Profile");
+		editOwnProfilecheckBox.setEnabled(false);
 		editOwnProfilecheckBox.setSelected(true);
 		editOwnProfilecheckBox.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		editOwnProfilecheckBox.setBounds(188, 282, 163, 29);
 		formPanel.add(editOwnProfilecheckBox);
 		
 		viewPatientCheckBoc = new JCheckBox("View Patient");
+		viewPatientCheckBoc.setEnabled(false);
 		viewPatientCheckBoc.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		viewPatientCheckBoc.setBounds(11, 328, 163, 29);
 		formPanel.add(viewPatientCheckBoc);
 		
 		viewBillCheckBox = new JCheckBox("View Bill");
+		viewBillCheckBox.setEnabled(false);
 		viewBillCheckBox.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		viewBillCheckBox.setBounds(188, 328, 163, 29);
 		formPanel.add(viewBillCheckBox);
@@ -410,11 +506,13 @@ public class EditEmployeeForm extends JPanel{
 		formPanel.add(lbllimited);
 
 		processPaymentCheckBox = new JCheckBox("Process Payment");
+		processPaymentCheckBox.setEnabled(false);
 		processPaymentCheckBox.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		processPaymentCheckBox.setBounds(188, 373, 163, 29);
 		formPanel.add(processPaymentCheckBox);
 
 		userAdminCheckBox = new JCheckBox("User Admin");
+		userAdminCheckBox.setEnabled(false);
 		userAdminCheckBox.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		userAdminCheckBox.setBounds(11, 373, 163, 29);
 		formPanel.add(userAdminCheckBox);
