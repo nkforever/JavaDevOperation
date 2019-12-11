@@ -55,14 +55,16 @@ public class MainPanel extends JPanel {
 	private AddRoomForm addRoomForm = new AddRoomForm();
 	private AddTreatmentForm addTreatmentForm = new AddTreatmentForm();
 	private AddDoctorForm addDoctorForm = new AddDoctorForm();
+	private PaymentProcessingForm paymentForm = new PaymentProcessingForm();
 
 
 	MVCcontroller mvc = new MVCcontroller(this, newPatientForm, patientAssignmentForm, editPatientInfo,
-			editEmployeeInfo);
+			editEmployeeInfo, paymentForm);
 	// End MVC controller group
 
 	DefaultListModel<String> model;
 	private Label lblPrimaryDoctor;
+	private JButton processPaymentButton;
 
 
 	// Begin main panel class
@@ -242,6 +244,11 @@ public class MainPanel extends JPanel {
 				}
 			}
 		});
+
+		processPaymentButton = new JButton("Process Payment");
+		processPaymentButton.setEnabled(false);
+		processPaymentButton.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		bottomPanel.add(processPaymentButton);
 
 		errormessageLabel = new JLabel("...");
 		bottomPanel.add(errormessageLabel);
@@ -514,6 +521,10 @@ public class MainPanel extends JPanel {
 		editEmployeeInfo.getSaveUpdateButton().addActionListener(upateEmployeeInfo);
 	}
 
+	public void addProcessPaymentButtonListener(ActionListener processPayment) {
+		paymentForm.getProcessPaymentButton().addActionListener(processPayment);
+
+	}
 
 	private class actionListener implements ActionListener {
 
@@ -609,7 +620,7 @@ public class MainPanel extends JPanel {
 		}
 		// else do following
 		
-		if (!OwnProfile.getRole().equalsIgnoreCase("admin")) {
+		if (!OwnProfile.getRole().equalsIgnoreCase("admin") || !OwnProfile.getRole().equalsIgnoreCase("N/A")) {
 			dbc.getProfile(idSearch.getText(), nameSearch.getText(), ssnSearch.getText(), "patient");
 			if (PatientProfile.found) {
 				nameSearch.setText("");
@@ -634,7 +645,11 @@ public class MainPanel extends JPanel {
 				return;
 			}
 			else
-				setNotFound(); // set not found
+			{
+				nameSearch.setText("YOU ARE");
+				idSearch.setText("NOT AUTHORIZE!");
+				ssnSearch.setText("");
+			}
 		}
 	}// end search
 
@@ -849,9 +864,9 @@ public class MainPanel extends JPanel {
 
 	void loadViewBill() {
 		profileInputPanel.removeAll();
-		// call a method in last patient history form to load the history
 		profileInputPanel.add(viewBillForm);
 		viewBillForm.setVisible(true);
+		viewBillForm.loadPaymentProfile();
 		profileInputPanel.repaint();
 		profileInputPanel.validate();
 	}
@@ -884,6 +899,16 @@ public class MainPanel extends JPanel {
 		addTreatmentForm.setVisible(true);
 		profileInputPanel.repaint();
 		profileInputPanel.validate();
+	}
+
+	void loadPaymentForm() {
+		profileInputPanel.removeAll();
+		profileInputPanel.add(paymentForm);
+		paymentForm.setVisible(true);
+		profileInputPanel.repaint();
+		profileInputPanel.validate();
+		if (PaymentProfile.getTotalBalance() > 0)
+			processPaymentButton.setEnabled(true);
 	}
 
 }

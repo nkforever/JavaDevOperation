@@ -387,11 +387,14 @@ public class EditEmployeeForm extends JPanel{
 						if (e.getItem().equals("Admin")) {
 							userAdminCheckBox.setEnabled(true);
 							userAdminCheckBox.setSelected(true);
+							addEditPatientCheckBox.setEnabled(false);
 							addEditPatientCheckBox.setSelected(false);
 							editOwnProfilecheckBox.setEnabled(true);
 							editOwnProfilecheckBox.setSelected(true);
 							viewBillCheckBox.setSelected(false);
+							viewBillCheckBox.setEnabled(false);
 							viewPatientCheckBoc.setSelected(false);
+							viewPatientCheckBoc.setEnabled(false);
 							processPaymentCheckBox.setSelected(false);
 							processPaymentCheckBox.setEnabled(false);
 

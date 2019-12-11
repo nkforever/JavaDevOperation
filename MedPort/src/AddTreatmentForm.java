@@ -114,7 +114,7 @@ public class AddTreatmentForm extends JPanel{
 
 		removeMessageLabel = new JLabel("");
 		removeMessageLabel.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		removeMessageLabel.setBounds(37, 236, 440, 29);
+		removeMessageLabel.setBounds(37, 236, 587, 29);
 		formPanel.add(removeMessageLabel);
 
 	}
@@ -126,10 +126,15 @@ public class AddTreatmentForm extends JPanel{
 	}
 
 	public void addTreatmentToList(String id, String description, double cost) {
-		if (dbc.addTreatmentToList(id, description, cost)) {
+		if (fillAllField() && dbc.addTreatmentToList(id, description, cost)) {
 			addMessageLabel.setText("Adding successfully.");
+			loadTreatmentList();
+			idField.setText("");
+			descriptionField.setText("");
+			costField.setText("");
+
 		} else {
-			addMessageLabel.setText("Adding failed.");
+			addMessageLabel.setText("Add failed. Please be sure to fill all field.");
 		}
 
 	}
@@ -145,5 +150,12 @@ public class AddTreatmentForm extends JPanel{
 			return true;
 
 		return false;
+	}
+
+	boolean fillAllField() {
+		if (idField.getText() != null && descriptionField.getText() != null && costField.getText() != null) {
+			return true;
+		} else
+			return false;
 	}
 }

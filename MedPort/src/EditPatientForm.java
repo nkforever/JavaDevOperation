@@ -530,6 +530,6 @@ public class EditPatientForm extends JPanel{
 	boolean isDigit(char input) {
 		if(input >= 48 && input <= 57) 		return true;
 
-		return false;
+		return false; //
 	}
 }

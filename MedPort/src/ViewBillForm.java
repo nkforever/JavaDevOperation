@@ -1,6 +1,8 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -23,14 +25,13 @@ public class ViewBillForm extends JPanel{
 	private JTextPane detailChargeField;
 	
 	DBcontrol dbc = new DBcontrol();
-	private JLabel lbl3;
-	private JLabel previousBalanceLabel;
-	private JLabel lblTreatmeantDescription;
-	private JLabel lblTotalCharge;
-	private JLabel lblPaymentCharge;
-	private JLabel lblBalance;
-	private JLabel lblResponsibleOf;
+	private JLabel lbl3, previousBalanceLabel, lblTreatmeantDescription, lblTotalCharge;
+	private JLabel lblPaymentCharge, lblBalance, lblResponsibleOf;
 	private JButton processPaymentButton;
+
+	private String invoiceNum = "", checkinDate = "", checkoutDate = "", doctor = "", treatment = "";
+
+	private MainPanel mp;
 
 	public ViewBillForm() {
 		setLayout(new BorderLayout(0, 0));
@@ -125,14 +126,36 @@ public class ViewBillForm extends JPanel{
 		lblResponsibleOf.setBounds(645, 77, 77, 29);
 		formPanel.add(lblResponsibleOf);
 
-		processPaymentButton = new JButton("Process Payment");
-		processPaymentButton.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		processPaymentButton.setBounds(567, 292, 171, 37);
-		formPanel.add(processPaymentButton);
 
 	}
 	
-	void loadLastHistory() {
+	public void loadPaymentProfile() {
+		ResultSet rs = dbc.getInvoiceBalance(PatientProfile.getPatientID());
+
+		try {
+			if (rs != null && rs.next()) {
+				invoiceNum = rs.getNString("invoice");
+
+				ResultSet record = dbc.getInvoiceRecord(invoiceNum);
+
+				String text = "";
+				while (record.next()) {
+					text += record.getNString("treatment_type") + "\t	$ " + record.getDouble("cost") + "\t $ " + 0.00
+							+ "\t $ " + 0.00 + "\t $ " + record.getDouble("cost") + "\n";
+					PaymentProfile.setTotalBalance(PaymentProfile.getTotalBalance() + record.getDouble("cost"));
+				}
+				detailChargeField.setText(text);
+			} else {
+				detailChargeField.setText("Balance Zero!");
+				invoiceLabel.setText(invoiceNum);
+				invoiceDateLabel.setText(checkinDate);
+				previousBalanceLabel.setText(Double.toString(PaymentProfile.getPreviousBalance()));
+				totalAmountLabel.setText(Double.toString(PaymentProfile.getTotalBalance()));
+			}
+		} catch (SQLException e) {
+				// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 

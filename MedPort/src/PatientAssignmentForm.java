@@ -3,6 +3,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -41,7 +43,7 @@ public class PatientAssignmentForm extends JPanel{
 	
 	private JScrollPane scrollPane;
 	DefaultListModel<String> dm;
-	private ArrayList<String> al, rl, tl;
+	private ArrayList<String> al, rl, tl, cl;
 	
 	private JFormattedTextField checkinDateField, checkoutDateField;
 	private JButton addRecordButton, resetFormButton;
@@ -59,7 +61,9 @@ public class PatientAssignmentForm extends JPanel{
 
 	private String invoice = "", doctor = "", room = "", visitReason = "", treatmentType = "", note = "";
 	private String checkInDate, checkOutDate;
+	private double treatmentcost = 0.00;
 	private int upperBP = 0, lowerBP = 0, HeartRate = 0, active = 0;
+	private JComboBox costComboBox;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public PatientAssignmentForm() {
@@ -123,14 +127,26 @@ public class PatientAssignmentForm extends JPanel{
 		checkoutDateField.setBounds(643, 206, 100, 29);
 		formPanel.add(checkoutDateField);
 		
+		cl = dbc.getTreatmentCostList();
+//		costComboBox = new JComboBox<Object>();
+		costComboBox = new JComboBox(new DefaultComboBoxModel(cl.toArray()));
+//		costComboBox.setVisible(false);
+		costComboBox.setBounds(724, 99, 131, 29);
+		formPanel.add(costComboBox);
+
 		tl = new ArrayList<>();
 		tl = dbc.getTreatmentList();
 		typeTreatment = new JComboBox<Object>();
 		typeTreatment.setModel(new DefaultComboBoxModel(tl.toArray()));
+		typeTreatment.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				costComboBox.setSelectedIndex(typeTreatment.getSelectedIndex());
+			}
+		});
 		typeTreatment.setSelectedIndex(-1);
 		typeTreatment.setEditable(true);
 		typeTreatment.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		typeTreatment.setBounds(414, 99, 329, 29);
+		typeTreatment.setBounds(414, 99, 299, 29);
 		formPanel.add(typeTreatment);
 		
 		addRecordButton = new JButton("Add Record");
@@ -234,6 +250,7 @@ public class PatientAssignmentForm extends JPanel{
 		note = noteField.getText();
 		checkInDate = checkinDateField.getText();
 		checkOutDate = checkoutDateField.getText();
+		treatmentcost = Double.parseDouble(costComboBox.getSelectedItem().toString());
 
 
 		if (active == 0) {
@@ -246,7 +263,7 @@ public class PatientAssignmentForm extends JPanel{
 		}
 
 		if (dbc.addPatientHistory(invoice, doctor, room, upperBP, lowerBP, HeartRate, visitReason, treatmentType, note,
-				checkInDate, checkOutDate, active)) {
+				checkInDate, checkOutDate, active, treatmentcost)) {
 
 			typeTreatment.setSelectedIndex(0);
 			noteField.setText("");
@@ -264,7 +281,7 @@ public class PatientAssignmentForm extends JPanel{
 		ResultSet rs = dbc.loadPatientAssignment(PatientProfile.getPatientID());
 
 		try {
-			while (rs.next()) {
+				while (rs.next()) {//
 				invoice = rs.getNString("invoice");
 				assignDoctor.setSelectedItem(rs.getNString("doctor"));
 				assignRoom.setSelectedItem(rs.getNString("room"));
@@ -278,7 +295,6 @@ public class PatientAssignmentForm extends JPanel{
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		}

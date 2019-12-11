@@ -100,7 +100,8 @@ public class NewPatientForm extends JPanel{
 				if(lastNameField.getText().isEmpty()) lastNameField.setBackground(Color.white);
 				if(ssnAreaField.getText().isEmpty()) ssnAreaField.setBackground(Color.white);
 				if(ssnGroupField.getText().isEmpty()) ssnGroupField.setBackground(Color.white);
-				if(ssnSerialField.getText().isEmpty()) ssnSerialField.setBackground(Color.white);
+				if (ssnSerialField.getText().isEmpty())
+					ssnSerialField.setBackground(Color.white);
 
 				mandatoryError.setVisible(false);
 			}
@@ -276,7 +277,8 @@ public class NewPatientForm extends JPanel{
 				if(lastNameField.getText().isEmpty()) lastNameField.setBackground(Color.white);
 				if(ssnAreaField.getText().isEmpty()) ssnAreaField.setBackground(Color.white);
 				if(ssnGroupField.getText().isEmpty()) ssnGroupField.setBackground(Color.white);
-				if(ssnSerialField.getText().isEmpty()) ssnSerialField.setBackground(Color.white);
+				if (ssnSerialField.getText().isEmpty())
+					ssnSerialField.setBackground(Color.white);
 
 				mandatoryError.setVisible(false);
 

@@ -8,20 +8,22 @@ public class MVCcontroller {
 	private PatientAssignmentForm patientAssignmentForm;
 	private EditPatientForm editPatient;
 	private EditEmployeeForm editEmployee;
+	private PaymentProcessingForm paymentProcessingForm;
 
 	MVCcontroller(MainPanel mp, NewPatientForm npf, PatientAssignmentForm paf, EditPatientForm epf,
-			EditEmployeeForm eef) {
+			EditEmployeeForm eef, PaymentProcessingForm ppf) {
 
 		editEmployee = eef;
 		editPatient = epf;
 		patientAssignmentForm = paf;
+		paymentProcessingForm = ppf;
 		mPanel  = mp;
 		npForm = npf;
 		mPanel.addSaveButtonListener(new addSaveButtonListener());
 		mPanel.addRecordButtonListener(new addRecordButtonListener());
 		mPanel.addUpdatePatientButtonListener(new addUpdatePatientButtonListener());
 		mPanel.addUpdateEmployeeButtonListener(new addUpdateEmployeeButtonListener());
-//		mPanel.addViewBillButtonListener(new addViewBillButtonListener());
+		mPanel.addProcessPaymentButtonListener(new addProcessPaymentButtonListener());
 
 	}
 
@@ -61,4 +63,11 @@ public class MVCcontroller {
 		}
 	}
 
+	class addProcessPaymentButtonListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			editEmployee.updateEmployeeInfo();
+//			mPanel.loadEmployee();
+//			mPanel.updateEmployeeInfoIsPressed();
+		}
+	}
 }

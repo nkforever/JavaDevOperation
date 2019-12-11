@@ -59,6 +59,10 @@ public class NewEmployeeForm extends JPanel{
 
 	private NumberFormat num = new DecimalFormat("#####");
 	private NumberFormatter zipFormatter = new NumberFormatter(num);
+	private JTextField userNameField;
+	private JTextField passwordField;
+	private JLabel lblAssignUsername;
+	private JLabel lblAssignPassword;
 
 
 
@@ -119,7 +123,8 @@ public class NewEmployeeForm extends JPanel{
 				if(lastNameField.getText().isEmpty()) lastNameField.setBackground(Color.white);
 				if(ssnAreaField.getText().isEmpty()) ssnAreaField.setBackground(Color.white);
 				if(ssnGroupField.getText().isEmpty()) ssnGroupField.setBackground(Color.white);
-				if(ssnSerialField.getText().isEmpty()) ssnSerialField.setBackground(Color.white);
+				if (ssnSerialField.getText().isEmpty())
+					ssnSerialField.setBackground(Color.white);
 
 				mandatoryError.setVisible(false);
 			}
@@ -588,6 +593,26 @@ public class NewEmployeeForm extends JPanel{
 		emailTextField.setColumns(10);
 		emailTextField.setBounds(500, 259, 152, 29);
 		formPanel.add(emailTextField);
+
+		userNameField = new JTextField();
+		userNameField.setBounds(756, 67, 145, 35);
+		formPanel.add(userNameField);
+		userNameField.setColumns(10);
+
+		passwordField = new JTextField();
+		passwordField.setColumns(10);
+		passwordField.setBounds(756, 134, 145, 35);
+		formPanel.add(passwordField);
+
+		lblAssignUsername = new JLabel("Assign Username");
+		lblAssignUsername.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		lblAssignUsername.setBounds(756, 39, 145, 29);
+		formPanel.add(lblAssignUsername);
+
+		lblAssignPassword = new JLabel("Assign Password");
+		lblAssignPassword.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		lblAssignPassword.setBounds(756, 110, 145, 29);
+		formPanel.add(lblAssignPassword);
 		formPanel.setFocusTraversalPolicy(
 				new FocusTraversalOnArray(new Component[] { firstNameField, midNameField, lastNameField, DOBField,
 						genderField, ssnAreaField, ssnGroupField, ssnSerialField, streetNumField, streetNameField,
@@ -613,18 +638,7 @@ public class NewEmployeeForm extends JPanel{
 			return false;
 		}
 
-		// TODO
-//need fix for adding new employee
-
-		else if(dbc.checkIfPatientAlreadyExist(firstNameField.getText(), lastNameField.getText(), ssnSerialField.getText())) {
-			if (JOptionPane.showConfirmDialog(null,
-					"This person is also a patient in record, do you want to load his/her profile?", "WARNING",
-					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-
-				dbc.getProfile(firstNameField.getText(), lastNameField.getText(), ssnSerialField.getText(), "patient");
-				return true;
-			}
-		} else if (dbc.checkIfEmployeeAlreadyExist(firstNameField.getText(), lastNameField.getText(),
+		else if (dbc.checkIfEmployeeAlreadyExist(firstNameField.getText(), lastNameField.getText(),
 				ssnSerialField.getText())) {
 			if (JOptionPane.showConfirmDialog(null,
 					"This person already exist in record, do you want to load his/her profile?", "WARNING",
@@ -683,12 +697,15 @@ public class NewEmployeeForm extends JPanel{
 			if (activeCheckBox.isSelected())
 				active = 1;
 
-			loadPatientInfo();
+			loadEmployeeInfo();
 
 			if (dbc.addEmployeeProfile(employeeID, userID, firstName, midName, lastName, gender, DOB, email,
 					phone_number, role, ssnArea, ssnGroup, ssnSerial, userAdmin, addEditPatient, viewPatient,
 					ownProfile, viewBill,
 					processPayment, active)) {
+
+				dbc.addID(employeeID);
+				dbc.addNewUser(employeeID, userNameField.getText(), passwordField.getText());
 
 			dbc.addAddress(employeeID, streetNum, aptNum, streetName, city, state, zipcode);
 
@@ -702,7 +719,7 @@ public class NewEmployeeForm extends JPanel{
 		return false;
 	}
 
-	void loadPatientInfo() {
+	void loadEmployeeInfo() {
 
 		EmployeeProfile.setEmployeeID(employeeID);
 		EmployeeProfile.setFirstName(firstName);
@@ -766,11 +783,14 @@ public class NewEmployeeForm extends JPanel{
 	}
 
 	boolean isMandatoryFieldFill() {
-		if(firstNameField.getText().isEmpty() || lastNameField.getText().isEmpty() || ssnAreaField.getText().length() < 3 || 
-				ssnGroupField.getText().length() <2|| ssnSerialField.getText().length() < 4 ) return false;
+		if (userNameField.getText().isEmpty() || passwordField.getText().isEmpty() || firstNameField.getText().isEmpty()
+				|| lastNameField.getText().isEmpty() || ssnAreaField.getText().length() < 3
+				|| ssnGroupField.getText().length() < 2 || ssnSerialField.getText().length() < 4)
+			return false;
 
 
-		return true;
+		else
+			return true;
 	}
 	boolean isDigit(char input) {
 		if(input >= 48 && input <= 57) 		return true;

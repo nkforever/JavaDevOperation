@@ -604,6 +604,7 @@ public class DBcontrol {
 				al.add("Dr. " + rs.getString(2) + " " + rs.getString(3));
 				
 			}
+
 			mpCon.close();
 			return al;
 		} catch (SQLException e) {
@@ -612,11 +613,11 @@ public class DBcontrol {
 		
 	}//end get doctor array list
 	
-	void addDoctorToList(String id, String firstName, String lastName, int active) {
+	boolean addDoctorToList(String id, String firstName, String lastName, int active) {
 
 		try {
 			checkConnection();
-			String insert = "INSERT INTO doctor_list (dr_id, dr_firstname, dr_lastname, active) "
+			String insert = "INSERT INTO doctor_list (dr_id, dr_firstname, doctor_lastname, active) "
 					+ "VALUES (?, ?, ?, ?);";
 			PreparedStatement preparedStatement = mpCon.prepareStatement(insert);
 			preparedStatement.setString(1, id);
@@ -627,9 +628,30 @@ public class DBcontrol {
 			preparedStatement.executeUpdate();
 
 			mpCon.close();
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return;
+			return false;
+		}
+
+	}
+
+	boolean removeDoctorFromList(String firstName, String lastName) {
+		try {
+			checkConnection();
+
+			String insert = "DELETE FROM doctor_list WHERE (dr_firstname = '" + firstName + "' AND doctor_lastname = '"
+					+ lastName + "');";
+			PreparedStatement preparedStatement = mpCon.prepareStatement(insert);
+
+			preparedStatement.executeUpdate();
+
+			mpCon.close();
+			return true;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
 		}
 
 	}
@@ -657,7 +679,8 @@ public class DBcontrol {
 	boolean addRoomToList(String name, int roomNum) {
 		try {
 			checkConnection();
-			String check = "Select * FROM room_list WHERE name = \"" + name + "\" AND room_num = \"" + roomNum + "\"; ";
+			String check = "Select * FROM room_list WHERE name = \"" + name.toUpperCase() + "\" AND room_num = \""
+					+ roomNum + "\"; ";
 			Statement checkStatement = mpCon.createStatement();
 
 			ResultSet rs = checkStatement.executeQuery(check);
@@ -710,7 +733,7 @@ public class DBcontrol {
 			Statement statement = mpCon.createStatement();
 			ResultSet rs = statement.executeQuery(list);
 			while(rs.next()) {
-				al.add(rs.getString(2));	
+				al.add(rs.getString(1) + " " + rs.getString(2));
 			}
 			mpCon.close();
 			return al;
@@ -721,7 +744,28 @@ public class DBcontrol {
 		
 	}
 
-	boolean addTreatmentToList(String id, String description, double cost) {
+	ArrayList<String> getTreatmentCostList() {
+
+		ArrayList<String> al = new ArrayList<String>();
+		checkConnection();
+		String list = "SELECT * FROM treatment_list ;";
+		try {
+
+			Statement statement = mpCon.createStatement();
+			ResultSet rs = statement.executeQuery(list);
+			while (rs.next()) {
+				al.add(rs.getString(4));
+			}
+			mpCon.close();
+			return al;
+		} catch (SQLException e) {
+			System.out.print("unable to get treatment list");
+			return null;
+		}
+
+	}
+
+	boolean removeTreatmentFromList(String id, String description, double cost) {
 		try {
 			checkConnection();
 			String insert = "DELETE FROM treatment_list WHERE (description = '" + description + "' AND cost = '" + cost
@@ -739,7 +783,7 @@ public class DBcontrol {
 
 	}
 
-	boolean removeTreatmentFromList(String id, String description, double cost) {
+	boolean addTreatmentToList(String id, String description, double cost) {
 		try {
 			checkConnection();
 			String insert = "INSERT INTO treatment_list (treatment_id, description, cost) " + "VALUES (?, ?, ?);";
@@ -761,14 +805,14 @@ public class DBcontrol {
 
 	public boolean addPatientHistory(String invoice, String doctor, String room, int upperBP, int lowerBP,
 			int heartRate, String visitReason, String treatmentType, String note, String checkInDate,
-			String checkOutDate, int active) {
+			String checkOutDate, int active, double cost) {
 		
 		try {
 			checkConnection();
 			String record = "INSERT INTO patient_history ("
 					+ "account_id, invoice, check_in_date, check_out_date, doctor, room,"
-					+ "upper_bp, lower_bp, heart_rate, visit_reason, treatment_type, note, last_update, change_by) "
-					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURDATE(), ?);";
+					+ "upper_bp, lower_bp, heart_rate, visit_reason, treatment_type, note, last_update, change_by, cost) "
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURDATE(), ?, ?);";
 
 			PreparedStatement statement = mpCon.prepareStatement(record);
 			
@@ -785,6 +829,7 @@ public class DBcontrol {
 			statement.setString(11, treatmentType);
 			statement.setString(12, note);
 			statement.setString(13, OwnProfile.getUser());
+			statement.setDouble(14, cost);
 
 			statement.executeUpdate();
 
@@ -795,6 +840,19 @@ public class DBcontrol {
 
 			update.executeUpdate(updateActive);
 
+			String addInvoice = "INSERT INTO invoice_table ("
+					+ "id, invoice, previous_bal, balance, credit, debit, last_update, update_by) "
+					+ "VALUES (?, ?, ?, ?, ?, ?, CURDATE(), ?);";
+			PreparedStatement updateInvoice = mpCon.prepareStatement(addInvoice);
+			updateInvoice.setString(1, PatientProfile.getPatientID());
+			updateInvoice.setString(2, invoice);
+			updateInvoice.setDouble(3, PaymentProfile.getPreviousBalance());
+			updateInvoice.setDouble(4, PaymentProfile.getTotalBalance() + cost);
+			updateInvoice.setDouble(5, 0);
+			updateInvoice.setDouble(6, 0);
+			updateInvoice.setString(7, OwnProfile.getUser());
+			updateInvoice.executeUpdate();
+
 			mpCon.close();
 			return true;
 		} catch (SQLException e) {
@@ -802,6 +860,7 @@ public class DBcontrol {
 			return false;
 		}
 	}
+
 
 	public boolean checkExistingInvoice(String invoice) {
 		checkConnection();
@@ -849,4 +908,107 @@ public class DBcontrol {
 		
 	}
 
+
+	public void addNewUser(String employeeID, String text, String text2) {
+		try {
+			checkConnection();
+			String insert = "INSERT INTO employee_table (employee_id, username, password, lastupdate, changeby) "
+					+ "VALUES (?, ?, ?, CURDATE(), ?);";
+			PreparedStatement preparedStatement = mpCon.prepareStatement(insert);
+			preparedStatement.setString(1, employeeID);
+			preparedStatement.setString(2, text);
+			preparedStatement.setString(3, text2);
+			preparedStatement.setString(4, OwnProfile.getUser());
+
+			preparedStatement.executeUpdate();
+
+			mpCon.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public ResultSet getInvoiceBalance(String id) {
+		
+		checkConnection();
+		String inv = "SELECT * FROM invoice_table WHERE id = \"" + id + "\" AND invoice > '0' ;";
+
+		Statement statement;
+		try {
+			statement = mpCon.createStatement();
+
+			ResultSet rs = statement.executeQuery(inv);
+			if (rs.next()) {
+				mpCon.close();
+				return rs;
+			} else {
+				mpCon.close();
+				return null;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public boolean paymentPosting(String id, String invoice, double amount) {
+
+		double prevBal = 0.00;
+		prevBal = PaymentProfile.getPreviousBalance();
+		prevBal -= amount;
+		PaymentProfile.setPreviousBalance(prevBal);
+
+		double balance = prevBal;
+		PaymentProfile.setTotalBalance(balance);
+
+		try {
+			checkConnection();
+			String insert = "INSERT INTO invoice_table (id, invoice, previous_bal, balance, credit, last_update, update_by) "
+					+ "VALUES (?, ?, ?, ?, ?, CURDATE(), ?);";
+			PreparedStatement preparedStatement = mpCon.prepareStatement(insert);
+			preparedStatement.setString(1, id);
+			preparedStatement.setString(2, invoice);
+			preparedStatement.setDouble(3, prevBal);
+			preparedStatement.setDouble(4, balance);
+			preparedStatement.setDouble(5, 0.00);
+			preparedStatement.setString(6, OwnProfile.getUser());
+
+			preparedStatement.executeUpdate();
+
+			mpCon.close();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		return false;
+		}
+	}
+
+	public boolean addPaymentHistory(String invoice, String ccNumb, double ccAmount, String checkNumb,
+			double checkAmount, String checkRoutine, String checkAccount, double cashAmount) {
+		
+
+		return false;
+	}
+
+	public ResultSet getInvoiceRecord(String invoice) {
+		checkConnection();
+		String inv = "SELECT * FROM patient_history WHERE invoice = \"" + invoice + "\";";
+
+		Statement statement;
+		try {
+			statement = mpCon.createStatement();
+
+			ResultSet rs = statement.executeQuery(inv);
+			if (rs.next()) {
+				mpCon.close();
+				return rs;
+			} else {
+				mpCon.close();
+				return null;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

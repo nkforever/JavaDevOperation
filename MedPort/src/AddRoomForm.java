@@ -37,13 +37,6 @@ public class AddRoomForm extends JPanel{
 		setLayout(new BorderLayout(0, 0));
 		
 		formPanel = new JPanel();
-		formPanel.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent arg0) {
-				addMessageLabel.setText("");
-				removeMessageLabel.setText("");
-			}
-		});
 		formPanel.setBackground(new Color(253, 245, 230));
 		add(formPanel);
 		formPanel.setLayout(null);
@@ -66,6 +59,13 @@ public class AddRoomForm extends JPanel{
 		formPanel.add(roomListComboBox);
 		
 		roomNameField = new JTextField();
+		roomNameField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				addMessageLabel.setText("");
+				removeMessageLabel.setText("");
+			}
+		});
 		roomNameField.setBounds(37, 76, 179, 35);
 		formPanel.add(roomNameField);
 		roomNameField.setColumns(10);
@@ -73,7 +73,9 @@ public class AddRoomForm extends JPanel{
 		addNewRoomButton = new JButton("Add New Room");
 		addNewRoomButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				addRoomToList(roomNameField.getText(), Integer.parseInt(roomNumberField.getText()));
+				if (fillAllField()) {
+					addRoomToList(roomNameField.getText(), Integer.parseInt(roomNumberField.getText()));
+				}
 			}
 		});
 		addNewRoomButton.setFont(new Font("Times New Roman", Font.PLAIN, 18));
@@ -96,6 +98,13 @@ public class AddRoomForm extends JPanel{
 		formPanel.add(removeRoomButton);
 
 		roomNumberField = new JTextField();
+		roomNumberField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				addMessageLabel.setText("");
+				removeMessageLabel.setText("");
+			}
+		});
 		roomNumberField.setColumns(10);
 		roomNumberField.setBounds(238, 76, 181, 35);
 		formPanel.add(roomNumberField);
@@ -142,6 +151,8 @@ public class AddRoomForm extends JPanel{
 		if (dbc.addRoomToList(name, number)) {
 			loadRoomList();
 			addMessageLabel.setText("Successfully add to list");
+			roomNameField.setText("");
+			roomNumberField.setText("");
 		} else {
 			addMessageLabel.setText("Unable to add to list");
 		}
@@ -154,5 +165,12 @@ public class AddRoomForm extends JPanel{
 		} else {
 			removeMessageLabel.setText("Unable to remove to list");
 		}
+	}
+
+	boolean fillAllField() {
+		if (roomNameField.getText() != null && roomNumberField.getText() != null) {
+			return true;
+		} else
+			return false;
 	}
 }
