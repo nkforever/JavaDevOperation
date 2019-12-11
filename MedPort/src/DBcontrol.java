@@ -840,14 +840,29 @@ public class DBcontrol {
 
 			update.executeUpdate(updateActive);
 
+			ResultSet invoiceBal = getInvoiceBalance(PatientProfile.getPatientID());
+			double prevBal = 0.00;
+			{
+				if (invoiceBal != null) {
+					int tempInv = invoiceBal.getInt("invoice");
+					prevBal = invoiceBal.getDouble("balance");
+					String setZero = "UPDATE invoice_table " + "SET previous_bal = '" + 0.00 + "', balance = '" + 0.00
+							+ "', last_update = CURDATE(), update_by = '" + OwnProfile.getUser() + "' WHERE invoice = '"
+							+ tempInv + "'";
+
+					PreparedStatement preparedStatement = mpCon.prepareStatement(setZero);
+					preparedStatement.executeUpdate(setZero);
+				}
+			}
+
 			String addInvoice = "INSERT INTO invoice_table ("
 					+ "id, invoice, previous_bal, balance, credit, debit, last_update, update_by) "
 					+ "VALUES (?, ?, ?, ?, ?, ?, CURDATE(), ?);";
 			PreparedStatement updateInvoice = mpCon.prepareStatement(addInvoice);
 			updateInvoice.setString(1, PatientProfile.getPatientID());
 			updateInvoice.setString(2, invoice);
-			updateInvoice.setDouble(3, PaymentProfile.getPreviousBalance());
-			updateInvoice.setDouble(4, PaymentProfile.getTotalBalance() + cost);
+			updateInvoice.setDouble(3, prevBal);
+			updateInvoice.setDouble(4, prevBal + cost);
 			updateInvoice.setDouble(5, 0);
 			updateInvoice.setDouble(6, 0);
 			updateInvoice.setString(7, OwnProfile.getUser());
@@ -860,7 +875,6 @@ public class DBcontrol {
 			return false;
 		}
 	}
-
 
 	public boolean checkExistingInvoice(String invoice) {
 		checkConnection();
@@ -884,21 +898,19 @@ public class DBcontrol {
 		}
 	}// end check
 
-
-	public ResultSet loadPatientAssignment(String id) {
+	public ResultSet loadPatientHistory(String id) {
 		String search = "SELECT * FROM patient_history where account_id = \"" + id + "\";";
-
+		ResultSet resultSet;
 		try {
 			checkConnection();
 			Statement statement = mpCon.createStatement();
-			ResultSet resultSet = statement.executeQuery(search);
+			resultSet = statement.executeQuery(search);
 
 			if (resultSet.next()) {
 				return resultSet;
 			}
 			else {
-			mpCon.close();
-			return null;
+				return resultSet;
 			}
 
 		} catch (SQLException e) {
@@ -907,7 +919,6 @@ public class DBcontrol {
 		}
 		
 	}
-
 
 	public void addNewUser(String employeeID, String text, String text2) {
 		try {
@@ -929,49 +940,39 @@ public class DBcontrol {
 	}
 
 	public ResultSet getInvoiceBalance(String id) {
-		
+		ResultSet rs = null;
 		checkConnection();
-		String inv = "SELECT * FROM invoice_table WHERE id = \"" + id + "\" AND invoice > '0' ;";
+		String inv = "SELECT * FROM invoice_table WHERE id = \"" + id + "\" AND balance > '0' ;";
 
 		Statement statement;
 		try {
 			statement = mpCon.createStatement();
 
-			ResultSet rs = statement.executeQuery(inv);
+			rs = statement.executeQuery(inv);
 			if (rs.next()) {
-				mpCon.close();
 				return rs;
 			} else {
-				mpCon.close();
 				return null;
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			return null;
 		}
 	}
 
 	public boolean paymentPosting(String id, String invoice, double amount) {
 
-		double prevBal = 0.00;
-		prevBal = PaymentProfile.getPreviousBalance();
-		prevBal -= amount;
-		PaymentProfile.setPreviousBalance(prevBal);
-
-		double balance = prevBal;
+		double balance = PaymentProfile.getTotalBalance();
+		balance -= amount;
 		PaymentProfile.setTotalBalance(balance);
 
 		try {
 			checkConnection();
-			String insert = "INSERT INTO invoice_table (id, invoice, previous_bal, balance, credit, last_update, update_by) "
-					+ "VALUES (?, ?, ?, ?, ?, CURDATE(), ?);";
-			PreparedStatement preparedStatement = mpCon.prepareStatement(insert);
-			preparedStatement.setString(1, id);
-			preparedStatement.setString(2, invoice);
-			preparedStatement.setDouble(3, prevBal);
-			preparedStatement.setDouble(4, balance);
-			preparedStatement.setDouble(5, 0.00);
-			preparedStatement.setString(6, OwnProfile.getUser());
+			String update = "UPDATE invoice_table " + "SET previous_bal = '" + 0.00 + "', balance = '" + balance
+					+ "', last_update = CURDATE(), update_by = '" + OwnProfile.getUser() + "' WHERE invoice = '"
+					+ invoice + "'";
+
+			PreparedStatement preparedStatement = mpCon.prepareStatement(update);
 
 			preparedStatement.executeUpdate();
 
@@ -983,32 +984,58 @@ public class DBcontrol {
 		}
 	}
 
-	public boolean addPaymentHistory(String invoice, String ccNumb, double ccAmount, String checkNumb,
+	public boolean addPaymentHistory(String invoice, String ccNum, double ccAmount, String checkNum,
 			double checkAmount, String checkRoutine, String checkAccount, double cashAmount) {
-		
+		try {
+			checkConnection();
+			String record = "INSERT INTO payment_record_table ("
+					+ "invoice, cc_number, cc_amount, check_number, check_amount, check_routine, check_account, cash_amount,"
+					+ "date_process, process_by) "
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURDATE(), ?);";
 
+			PreparedStatement statement = mpCon.prepareStatement(record);
+
+			statement.setInt(1, Integer.parseInt(invoice));
+			statement.setString(2, ccNum);
+			statement.setDouble(3, ccAmount);
+			statement.setString(4, checkNum);
+			statement.setDouble(5, checkAmount);
+			statement.setString(6, checkRoutine);
+			statement.setString(7, checkAccount);
+			statement.setDouble(8, cashAmount);
+			statement.setString(9, OwnProfile.getUser());
+
+			statement.executeUpdate();
+
+			mpCon.close();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
 		return false;
+		}
 	}
 
 	public ResultSet getInvoiceRecord(String invoice) {
 		checkConnection();
 		String inv = "SELECT * FROM patient_history WHERE invoice = \"" + invoice + "\";";
-
+		ResultSet rs = null;
 		Statement statement;
 		try {
 			statement = mpCon.createStatement();
 
-			ResultSet rs = statement.executeQuery(inv);
+			rs = statement.executeQuery(inv);
+//			statement.execute("commit");
+
 			if (rs.next()) {
-				mpCon.close();
 				return rs;
 			} else {
-				mpCon.close();
-				return null;
+//				mpCon.close();
+				return rs;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return null;
+			return rs;
 		}
 	}
-}
+
+}// end of DBcontrol class

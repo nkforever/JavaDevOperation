@@ -246,6 +246,11 @@ public class MainPanel extends JPanel {
 		});
 
 		processPaymentButton = new JButton("Process Payment");
+		processPaymentButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				loadPaymentForm();
+			}
+		});
 		processPaymentButton.setEnabled(false);
 		processPaymentButton.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		bottomPanel.add(processPaymentButton);
@@ -623,9 +628,7 @@ public class MainPanel extends JPanel {
 		if (!OwnProfile.getRole().equalsIgnoreCase("admin") || !OwnProfile.getRole().equalsIgnoreCase("N/A")) {
 			dbc.getProfile(idSearch.getText(), nameSearch.getText(), ssnSearch.getText(), "patient");
 			if (PatientProfile.found) {
-				nameSearch.setText("");
-				idSearch.setText("");
-				ssnSearch.setText("");
+				backToHome();
 
 				loadPatient();
 				return;
@@ -635,9 +638,7 @@ public class MainPanel extends JPanel {
 		} else if (OwnProfile.getRole().equalsIgnoreCase("admin")) {
 			dbc.getProfile(idSearch.getText(), nameSearch.getText(), ssnSearch.getText(), "employee");
 			if (EmployeeProfile.found) {
-				nameSearch.setText("");
-				idSearch.setText("");
-				ssnSearch.setText("");
+				backToHome();
 
 				editProfile.setEnabled(true);
 				loadEmployee();
@@ -812,6 +813,13 @@ public class MainPanel extends JPanel {
 			DOBLabel.setText(" ");
 			genderLabel.setText(" ");
 
+			// disable buttons
+			enterRecordButton.setEnabled(false);
+			editProfile.setEnabled(false);
+			patientHistoryButton.setEnabled(false);
+			viewBillButton.setEnabled(false);
+			errormessageLabel.setVisible(false);
+
 			profileInputPanel.removeAll();
 			profileInputPanel.add(addNewButton);
 			profileInputPanel.repaint();
@@ -865,10 +873,15 @@ public class MainPanel extends JPanel {
 	void loadViewBill() {
 		profileInputPanel.removeAll();
 		profileInputPanel.add(viewBillForm);
-		viewBillForm.setVisible(true);
 		viewBillForm.loadPaymentProfile();
+		viewBillForm.setVisible(true);
 		profileInputPanel.repaint();
 		profileInputPanel.validate();
+		if (PaymentProfile.getTotalBalance() > 0)
+			processPaymentButton.setEnabled(true);
+		else
+			processPaymentButton.setEnabled(false);
+
 	}
 
 	void loadAddRoomForm() {
@@ -907,8 +920,7 @@ public class MainPanel extends JPanel {
 		paymentForm.setVisible(true);
 		profileInputPanel.repaint();
 		profileInputPanel.validate();
-		if (PaymentProfile.getTotalBalance() > 0)
-			processPaymentButton.setEnabled(true);
+		processPaymentButton.setEnabled(false);
 	}
 
 }

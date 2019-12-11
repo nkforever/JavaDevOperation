@@ -128,9 +128,9 @@ public class PatientAssignmentForm extends JPanel{
 		formPanel.add(checkoutDateField);
 		
 		cl = dbc.getTreatmentCostList();
-//		costComboBox = new JComboBox<Object>();
+		costComboBox = new JComboBox<Object>();
 		costComboBox = new JComboBox(new DefaultComboBoxModel(cl.toArray()));
-//		costComboBox.setVisible(false);
+		costComboBox.setVisible(false);
 		costComboBox.setBounds(724, 99, 131, 29);
 		formPanel.add(costComboBox);
 
@@ -278,7 +278,7 @@ public class PatientAssignmentForm extends JPanel{
 		if (PatientProfile.getActive() == 0) {
 			return;
 		} else {
-		ResultSet rs = dbc.loadPatientAssignment(PatientProfile.getPatientID());
+			ResultSet rs = dbc.loadPatientHistory(PatientProfile.getPatientID());
 
 		try {
 				while (rs.next()) {//

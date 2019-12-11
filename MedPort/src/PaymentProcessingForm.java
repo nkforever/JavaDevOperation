@@ -3,12 +3,16 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.text.DecimalFormat;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -32,9 +36,12 @@ public class PaymentProcessingForm extends JPanel{
 			cashAmountField, checkRoutineField, checkAccountField;
 	private JCheckBox checkRadioButton, ccRadioButton, cashRadioButton;
 
-	private String invoiceNum = "", checkRoutine, checkAccount, checkNum, ccNum;
+	private String invoiceNum = " ", checkRoutine = " ", checkAccount = " ", checkNum = " ", ccNum = " ";
 	private double ccAmount = 0.00, checkAmount = 0.00, cashAmount = 0.00, totalAmount = 0.00;
 	private JLabel errorMessageLabel;
+
+	DecimalFormat df = new DecimalFormat("0.00");
+	private JLabel label, label_1, label_2, label_3;
 
 	public PaymentProcessingForm() {
 		setLayout(new BorderLayout(0, 0));
@@ -76,8 +83,15 @@ public class PaymentProcessingForm extends JPanel{
 		formPanel.add(invoiceLabel);
 
 		processPaymentButton = new JButton("Process Payment");
+		processPaymentButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				sumTotal();
+			}
+		});
 		processPaymentButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				sumTotal();
 				processPayment();
 			}
 		});
@@ -94,10 +108,10 @@ public class PaymentProcessingForm extends JPanel{
 					ccNumberField.setText("");
 					ccAmountField.setText("0.00");
 				}
-				{
+				else {
 					ccAmountField.setVisible(false);
 					ccNumberField.setVisible(false);
-					totalAmount -= ccAmount;
+					ccAmountField.setText("0.00");
 					sumTotal();
 				}
 			}
@@ -112,14 +126,20 @@ public class PaymentProcessingForm extends JPanel{
 				if (checkRadioButton.isSelected()) {
 					checkNumberField.setVisible(true);
 					checkAmountField.setVisible(true);
+					checkRoutineField.setVisible(true);
+					checkAccountField.setVisible(true);
+
 					checkNumberField.setText("");
 					checkAmountField.setText("0.00");
+					checkRoutineField.setText("");
+					checkAccountField.setText("");
 				}
-				{
+				else {
 					checkAmountField.setVisible(false);
 					checkNumberField.setVisible(false);
-					totalAmount -= checkAmount;
-					sumTotal();
+					checkRoutineField.setVisible(false);
+					checkAccountField.setVisible(false);
+					checkAmountField.setText("0.00");
 				}
 			}
 		});
@@ -128,16 +148,16 @@ public class PaymentProcessingForm extends JPanel{
 		formPanel.add(checkRadioButton);
 
 		cashRadioButton = new JCheckBox("Cash");
+		cashRadioButton.setSelected(true);
 		cashRadioButton.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if (cashRadioButton.isSelected()) {
 					cashAmountField.setVisible(true);
 					cashAmountField.setText("0.00");
 				}
-				{
+				else {
 					cashAmountField.setVisible(false);
-					totalAmount -= cashAmount;
-					sumTotal();
+					cashAmountField.setText("0.00");
 				}
 			}
 		});
@@ -146,11 +166,12 @@ public class PaymentProcessingForm extends JPanel{
 		formPanel.add(cashRadioButton);
 
 		ccNumberField = new JTextField();
+		ccNumberField.setVisible(false);
 		ccNumberField.addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent e) {
 				if (!isDigit(e.getKeyChar()))
 					e.consume();
-				if (ccNumberField.getText().length() >= 16) // limit textfield to 5 characters
+				if (ccNumberField.getText().length() > 16) // limit textfield to 16 characters
 					e.consume();
 			}
 		});
@@ -159,6 +180,7 @@ public class PaymentProcessingForm extends JPanel{
 		formPanel.add(ccNumberField);
 		ccNumberField.setColumns(10);
 		checkNumberField = new JTextField();
+		checkNumberField.setVisible(false);
 		checkNumberField.addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent e) {
 				if (!isDigit(e.getKeyChar()))
@@ -172,7 +194,13 @@ public class PaymentProcessingForm extends JPanel{
 		checkNumberField.setBounds(262, 161, 101, 35);
 		formPanel.add(checkNumberField);
 
-		totalAmountField = new JFormattedTextField("###,###,###,###.00");
+		totalAmountField = new JFormattedTextField(new DecimalFormat("0.##"));
+		totalAmountField.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				sumTotal();
+			}
+		});
 		totalAmountField.addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent e) {
 				if (!isDigit(e.getKeyChar()) || !ccNumberField.getText().equals("."))
@@ -190,46 +218,67 @@ public class PaymentProcessingForm extends JPanel{
 		lbl3.setBounds(567, 261, 171, 29);
 		formPanel.add(lbl3);
 
-		ccAmountField = new JFormattedTextField("###,###,###,###.00");
+		ccAmountField = new JFormattedTextField(new DecimalFormat("0.00"));
+		ccAmountField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				sumTotal();
+			}
+		});
+		ccAmountField.setVisible(false);
 		ccAmountField.addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent e) {
-				if (!isDigit(e.getKeyChar()) || !ccNumberField.getText().equals("."))
+				if (!isDigit(e.getKeyChar()) && e.getKeyChar() != '.')
 					e.consume();
 			}
 		});
 		ccAmountField.setFont(new Font("Times New Roman", Font.PLAIN, 20));
 		ccAmountField.setText("0.00");
 		ccAmountField.setColumns(10);
-		ccAmountField.setBounds(527, 81, 154, 35);
+		ccAmountField.setBounds(544, 81, 154, 35);
 		formPanel.add(ccAmountField);
 
-		checkAmountField = new JFormattedTextField("###,###,###,###.00");
+		checkAmountField = new JFormattedTextField(new DecimalFormat("0.00"));
+		checkAmountField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				sumTotal();
+			}
+		});
+		checkAmountField.setVisible(false);
 		checkAmountField.addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent e) {
-				if (!isDigit(e.getKeyChar()) || !ccNumberField.getText().equals("."))
+				if (!isDigit(e.getKeyChar()) && e.getKeyChar() != '.')
 					e.consume();
 			}
 		});
 		checkAmountField.setFont(new Font("Times New Roman", Font.PLAIN, 20));
 		checkAmountField.setText("0.00");
 		checkAmountField.setColumns(10);
-		checkAmountField.setBounds(527, 159, 154, 35);
+		checkAmountField.setBounds(544, 163, 154, 35);
 		formPanel.add(checkAmountField);
 
-		cashAmountField = new JFormattedTextField("###,###,###,###.00");
+		cashAmountField = new JFormattedTextField(new DecimalFormat("0.00"));
+		cashAmountField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				sumTotal();
+			}
+		});
 		cashAmountField.addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent e) {
-				if (!isDigit(e.getKeyChar()) || !ccNumberField.getText().equals("."))
+				if (!isDigit(e.getKeyChar()) && e.getKeyChar() != '.')
 					e.consume();
 			}
 		});
 		cashAmountField.setFont(new Font("Times New Roman", Font.PLAIN, 20));
 		cashAmountField.setText("0.00");
 		cashAmountField.setColumns(10);
-		cashAmountField.setBounds(254, 292, 154, 35);
+		cashAmountField.setBounds(265, 293, 154, 35);
 		formPanel.add(cashAmountField);
 
 		checkRoutineField = new JTextField();
+		checkRoutineField.setVisible(false);
 		checkRoutineField.addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent e) {
 				if (!isDigit(e.getKeyChar()))
@@ -244,6 +293,7 @@ public class PaymentProcessingForm extends JPanel{
 		formPanel.add(checkRoutineField);
 
 		checkAccountField = new JTextField();
+		checkAccountField.setVisible(false);
 		checkAccountField.addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent e) {
 				if (!isDigit(e.getKeyChar()))
@@ -259,17 +309,17 @@ public class PaymentProcessingForm extends JPanel{
 
 		lblAmount = new JLabel("Cc or Db Amount:");
 		lblAmount.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		lblAmount.setBounds(527, 59, 171, 29);
+		lblAmount.setBounds(544, 59, 171, 29);
 		formPanel.add(lblAmount);
 
 		lblCheckAmount = new JLabel("Check Amount:");
 		lblCheckAmount.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		lblCheckAmount.setBounds(527, 129, 171, 29);
+		lblCheckAmount.setBounds(544, 133, 171, 29);
 		formPanel.add(lblCheckAmount);
 
 		lblCashAmount = new JLabel("Cash Amount:");
 		lblCashAmount.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		lblCashAmount.setBounds(244, 271, 171, 29);
+		lblCashAmount.setBounds(269, 262, 154, 29);
 		formPanel.add(lblCashAmount);
 
 		lblCheckNumber = new JLabel("Check Number:");
@@ -287,11 +337,33 @@ public class PaymentProcessingForm extends JPanel{
 		lblAccountNumber.setBounds(209, 194, 171, 29);
 		formPanel.add(lblAccountNumber);
 
-		errorMessageLabel = new JLabel("Fail to process payment!");
+		errorMessageLabel = new JLabel("Fail to process payment, make sure all field are filled.");
+		errorMessageLabel.setVisible(false);
 		errorMessageLabel.setForeground(Color.RED);
 		errorMessageLabel.setFont(new Font("Times New Roman", Font.PLAIN, 20));
-		errorMessageLabel.setBounds(249, 353, 311, 29);
+		errorMessageLabel.setBounds(21, 348, 524, 29);
 		formPanel.add(errorMessageLabel);
+
+		JLabel lblDigitsCard = new JLabel("16 Digits Card Number");
+		lblDigitsCard.setFont(new Font("Times New Roman", Font.BOLD, 16));
+		lblDigitsCard.setBounds(258, 55, 171, 29);
+		formPanel.add(lblDigitsCard);
+
+		label = new JLabel("$");
+		label.setBounds(544, 292, 19, 29);
+		formPanel.add(label);
+
+		label_1 = new JLabel("$");
+		label_1.setBounds(526, 162, 19, 29);
+		formPanel.add(label_1);
+
+		label_2 = new JLabel("$");
+		label_2.setBounds(526, 80, 19, 29);
+		formPanel.add(label_2);
+
+		label_3 = new JLabel("$");
+		label_3.setBounds(249, 292, 19, 29);
+		formPanel.add(label_3);
 
 	}
 	
@@ -304,22 +376,36 @@ public class PaymentProcessingForm extends JPanel{
 	}
 
 	private void sumTotal() {
-		totalAmountField.setText(Double.toString(totalAmount));
+		getFieldValue();
+		totalAmountField.setText(df.format(totalAmount));
 	}
 
 	public void processPayment() {
 		getFieldValue();
 
-		if (!(totalAmount > 0)) {
-
+		if (!(totalAmount > 0) || requiredFieldFilled()) {
+			errorMessageLabel.setVisible(true);
 		} else {
-			if (dbc.paymentPosting(PatientProfile.getPatientID(), invoiceNum, cashAmount)) {
-				dbc.addPaymentHistory(invoiceNum, ccNum, ccAmount, checkNum, checkAmount, checkRoutine, checkAccount, cashAmount);
+			if (dbc.paymentPosting(PatientProfile.getPatientID(), PaymentProfile.getInvoice(), cashAmount)) {
+				dbc.addPaymentHistory(PaymentProfile.getInvoice(), ccNum, ccAmount, checkNum, checkAmount, checkRoutine,
+						checkAccount, cashAmount);
 				resetForm();
 			}
 			else
 				errorMessageLabel.setVisible(true);
 		}
+	}
+
+	private boolean requiredFieldFilled() {
+		if (ccRadioButton.isSelected() && (ccNumberField.getText() == null || ccNumberField.getText().length() < 16))
+			return false;
+		if (checkRadioButton.isSelected()
+				&& (checkRoutineField.getText() == null || checkRoutineField.getText().length() < 10
+						|| checkAccountField.getText().length() < 10 || checkAccountField.getText() == null))
+			return false;
+
+		else
+			return false;
 	}
 
 	private void getFieldValue() {
@@ -328,14 +414,15 @@ public class PaymentProcessingForm extends JPanel{
 		if(checkRoutineField.getText()!= null) checkRoutine =  checkRoutineField.getText();
 		if(checkAccountField.getText() != null) checkAccount = checkAccountField.getText();
 		
-		if (!totalAmountField.getText().equals("0.00"))
-			totalAmount = Double.parseDouble(totalAmountField.getText());
-		if (ccAmountField.getText().equals("0.00"))
+
+		if (Double.parseDouble(ccAmountField.getText()) > 0)
 			ccAmount = Double.parseDouble(ccAmountField.getText());
-		if (checkAmountField.getText().equals("0.00"))
+		if (Double.parseDouble(checkAmountField.getText()) > 0)
 			checkAmount = Double.parseDouble(checkAmountField.getText());
-		if (cashAmountField.getText().equals("0.00"))
+		if (Double.parseDouble(cashAmountField.getText()) > 0)
 			cashAmount = Double.parseDouble(cashAmountField.getText());
+
+		totalAmount = ccAmount + checkAmount + cashAmount;
 
 	}
 

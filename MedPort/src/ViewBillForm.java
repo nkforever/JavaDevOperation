@@ -30,8 +30,7 @@ public class ViewBillForm extends JPanel{
 	private JButton processPaymentButton;
 
 	private String invoiceNum = "", checkinDate = "", checkoutDate = "", doctor = "", treatment = "";
-
-	private MainPanel mp;
+	private double balance = 0.00, prevBal = 0.00;
 
 	public ViewBillForm() {
 		setLayout(new BorderLayout(0, 0));
@@ -74,7 +73,7 @@ public class ViewBillForm extends JPanel{
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setAutoscrolls(true);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane.setBounds(11, 107, 711, 141);
+		scrollPane.setBounds(11, 107, 755, 141);
 		formPanel.add(scrollPane);
 		
 		detailChargeField = new JTextPane();
@@ -130,21 +129,49 @@ public class ViewBillForm extends JPanel{
 	}
 	
 	public void loadPaymentProfile() {
+		balance = 0.00;
+		PaymentProfile.setTotalBalance(balance);
+		prevBal = 0.00;
+		PaymentProfile.setPreviousBalance(prevBal);
+		
 		ResultSet rs = dbc.getInvoiceBalance(PatientProfile.getPatientID());
 
 		try {
-			if (rs != null && rs.next()) {
-				invoiceNum = rs.getNString("invoice");
+			if (rs != null) {
+				invoiceNum = Integer.toString(rs.getInt("invoice"));
+				PaymentProfile.setInvoice(invoiceNum);
+
+				balance = rs.getDouble("balance");
+				PaymentProfile.setTotalBalance(balance);
+
+				prevBal = rs.getDouble("previous_bal");
+				PaymentProfile.setPreviousBalance(prevBal);
 
 				ResultSet record = dbc.getInvoiceRecord(invoiceNum);
 
+
 				String text = "";
-				while (record.next()) {
-					text += record.getNString("treatment_type") + "\t	$ " + record.getDouble("cost") + "\t $ " + 0.00
-							+ "\t $ " + 0.00 + "\t $ " + record.getDouble("cost") + "\n";
-					PaymentProfile.setTotalBalance(PaymentProfile.getTotalBalance() + record.getDouble("cost"));
+				double cost = 0.00;
+
+				while (record != null) {
+					treatment = record.getNString("treatment_type");
+					checkinDate = record.getNString("check_in_date");
+					cost = record.getDouble("cost");
+
+					text += treatment + "\t	$ " + cost + "\t \t $ " + 0.00 + "\t\t $ " + cost + "\t\t Patient\n";
+					System.out.println(text);
+
+					if (!record.next())
+						break;
+
 				}
 				detailChargeField.setText(text);
+
+				invoiceLabel.setText(invoiceNum);
+				invoiceDateLabel.setText(checkinDate);
+				previousBalanceLabel.setText(Double.toString(prevBal));
+				totalAmountLabel.setText(Double.toString(balance));
+
 			} else {
 				detailChargeField.setText("Balance Zero!");
 				invoiceLabel.setText(invoiceNum);
