@@ -64,7 +64,7 @@ public class DBcontrol {
 
 	public void getProfile(String id, String name, String ssn, String client) {
 
-		if (client.equals("employee")) {
+		if (client.equalsIgnoreCase("employee")) {
 			searchByAdmin(id, name, ssn);
 		} else {
 			searchByStaff(id, name, ssn);
@@ -107,8 +107,10 @@ public class DBcontrol {
 						PatientProfile.found = true;
 						patientFound(resultSet3);
 					}
+					else {
+						PatientProfile.found = false;
+					}
 				}
-				
 			} // end else
 
 		} catch (SQLException e) {
@@ -947,7 +949,6 @@ public class DBcontrol {
 		Statement statement;
 		try {
 			statement = mpCon.createStatement();
-
 			rs = statement.executeQuery(inv);
 			if (rs.next()) {
 				return rs;

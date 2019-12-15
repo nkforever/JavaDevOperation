@@ -625,7 +625,7 @@ public class MainPanel extends JPanel {
 		}
 		// else do following
 		
-		if (!OwnProfile.getRole().equalsIgnoreCase("admin") || !OwnProfile.getRole().equalsIgnoreCase("N/A")) {
+		if (!OwnProfile.getRole().equalsIgnoreCase("admin")) {
 			dbc.getProfile(idSearch.getText(), nameSearch.getText(), ssnSearch.getText(), "patient");
 			if (PatientProfile.found) {
 				backToHome();
@@ -646,11 +646,11 @@ public class MainPanel extends JPanel {
 				return;
 			}
 			else
-			{
-				nameSearch.setText("YOU ARE");
-				idSearch.setText("NOT AUTHORIZE!");
-				ssnSearch.setText("");
-			}
+				setNotFound(); // set not found
+		} else {
+			nameSearch.setText("YOU ARE");
+			idSearch.setText("NOT AUTHORIZE!");
+			ssnSearch.setText("");
 		}
 	}// end search
 

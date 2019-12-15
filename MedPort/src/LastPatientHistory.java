@@ -2,7 +2,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -25,7 +24,6 @@ public class LastPatientHistory extends JPanel{
 	DBcontrol dbc = new DBcontrol();
 	private JLabel lblCheckoutDate;
 	private JLabel checkoutDateLabel;
-	private JButton button;
 
 	public LastPatientHistory() {
 		setLayout(new BorderLayout(0, 0));
@@ -123,10 +121,6 @@ public class LastPatientHistory extends JPanel{
 		checkoutDateLabel.setFont(new Font("Times New Roman", Font.BOLD, 16));
 		checkoutDateLabel.setBounds(617, 260, 94, 29);
 		formPanel.add(checkoutDateLabel);
-
-		button = new JButton("");
-		button.setBounds(289, 289, 155, 37);
-		formPanel.add(button);
 
 	}
 	

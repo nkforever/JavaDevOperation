@@ -1,6 +1,8 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
@@ -60,11 +62,31 @@ public class AddTreatmentForm extends JPanel{
 		formPanel.add(treatmentComboBox);
 		
 		idField = new JTextField();
+		idField.addKeyListener(new KeyAdapter() {
+			public void keyTyped(KeyEvent e) {
+				idField.setBackground(Color.white);
+			}
+		});
 		idField.setBounds(37, 76, 113, 35);
 		formPanel.add(idField);
 		idField.setColumns(10);
 		
 		addNewTreatmentButton = new JButton("Add New Treatment");
+		addNewTreatmentButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (fillAllField()) {
+					addTreatmentToList(idField.getText(), descriptionField.getText(),
+						Double.parseDouble(costField.getText()));
+				} else {
+					if (idField.getText() == null)
+						idField.setBackground(Color.yellow);
+					if (descriptionField.getText() == null)
+						descriptionField.setBackground(Color.yellow);
+					if (costField.getText() == null)
+						costField.setBackground(Color.yellow);
+				}
+			}
+		});
 		addNewTreatmentButton.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		addNewTreatmentButton.setBounds(487, 82, 194, 29);
 		formPanel.add(addNewTreatmentButton);
@@ -75,6 +97,11 @@ public class AddTreatmentForm extends JPanel{
 		formPanel.add(removeTreatmentButton);
 
 		descriptionField = new JTextField();
+		descriptionField.addKeyListener(new KeyAdapter() {
+			public void keyTyped(KeyEvent e) {
+				descriptionField.setBackground(Color.white);
+			}
+		});
 		descriptionField.setColumns(10);
 		descriptionField.setBounds(159, 76, 181, 35);
 		formPanel.add(descriptionField);
@@ -94,6 +121,7 @@ public class AddTreatmentForm extends JPanel{
 		costField = new JFormattedTextField(num);
 		costField.addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent e) {
+				costField.setBackground(Color.white);
 				if(!isDigit(e.getKeyChar())) e.consume();
 			}  
 		});
@@ -133,6 +161,7 @@ public class AddTreatmentForm extends JPanel{
 			descriptionField.setText("");
 			costField.setText("");
 
+			loadTreatmentList();
 		} else {
 			addMessageLabel.setText("Add failed. Please be sure to fill all field.");
 		}

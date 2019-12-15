@@ -158,7 +158,8 @@ public class ViewBillForm extends JPanel{
 					checkinDate = record.getNString("check_in_date");
 					cost = record.getDouble("cost");
 
-					text += treatment + "\t	$ " + cost + "\t \t $ " + 0.00 + "\t\t $ " + cost + "\t\t Patient\n";
+					text += treatment + "\t	$ " + cost + "\t \t $ " + (PaymentProfile.getTotalBalance() - cost)
+							+ "\t\t $ " + PaymentProfile.getTotalBalance() + "\t\t Patient\n";
 					System.out.println(text);
 
 					if (!record.next())
