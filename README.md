@@ -1,6 +1,6 @@
 # Project by team: JavaDevOperation
-<p>A E-Health service application
-MedPort is a software application that serves as a hospital management system, designed to store and organize patient information within a secure database that allows users to easily manage the status and welfare of medical patients within any medical institution. <br>The software will have the facility to give a unique ID for search on every patient and staff and stores the details in a database.</p>
+   > A E-Health service application
+<p>MedPort is a software application that serves as a hospital management system, designed to store and organize patient information within a secure database that allows users to easily manage the status and welfare of medical patients within any medical institution. <br>The software will have the facility to give a unique ID for search on every patient and staff and stores the details in a database.</p>
 
 
 # Outline
