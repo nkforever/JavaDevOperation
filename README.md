@@ -4,6 +4,9 @@ Medical Portal
 
 
 # Outline
-
+    1. Downloading git repository as local instance
+    2. 
+    3. 
+    4. 
 ## Installation Setup
 
