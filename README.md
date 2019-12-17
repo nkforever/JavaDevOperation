@@ -1,8 +1,19 @@
-# Project by team: JavaDevOperation
-   > **A e-Health service software application**
+# <p style="font-family:Lucida Grande"> Project by team: JavaDevOperation </p>
+   > **<p style="font-family:Lucida Grande">A e-Health service software application</p>**
+
+## <p style="font-family:Lucida Grande"> <u>**Table of Content**</u> </p>
+ 1. <p style="font-family:Lucida Grande"> Introduction - the project's goal </p>
+ 
+ 3. <p style="font-family:Lucida Grande"> Launch </p>
+
+
+
+
+
+
 
 ## Introduction   
-<p>MedPort is a software application that serves as a hospital management system, designed to store and organize patient information within a secure database that allows users to easily manage the status and welfare of medical patients within any medical institution. <br>The software will have the facility to give a unique ID for search on every patient and staff and stores the details in a database.</p>
+<p style="font-family:Lucida Grande"> MedPort is a software application that serves as a hospital management system, designed to store and organize patient information within a secure database that allows users to easily manage the status and welfare of medical patients within any medical institution. <br>The software will have the facility to give a unique ID for search on every patient and staff and stores the details in a database.</p>
 
 
 ## Launch
@@ -19,14 +30,13 @@
    ##### Macintosh operating system
 
 
-## Java SDK and Tools
-1. Windows operating system
+### Java SDK and Tools
+   ##### Windows operating system
+> Software to install
+   ##### Macintosh operating system
 
 
-2. Macintosh operating system 
-
-
-## Data Management and Manipulation Tools
-1. Windows operating system
-
-2. Macintosh operating System
+### Data Management and Manipulation Tools
+   ##### Windows operating system
+> Software to install
+   ##### Macintosh operating system
