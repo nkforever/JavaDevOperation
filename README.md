@@ -27,19 +27,27 @@
 
 ### <p style="font-family:Menlo">Installation Git Repo</p>
    ##### <p style="font-family:Menlo">Windows operating system</p>
+   Run the following commands in PowerShell or command prompt
 ```cmd
-git clone https://github.com/nkforever/JavaDevOperation
+1. cd ~
+2. cd Documents
+3. git clone https://github.com/nkforever/JavaDevOperation
+
 ```
    ##### <p style="font-family:Menlo">Macintosh operating system</p>
-> Software to install
-
-
+    Run the following commands in PowerShell or command prompt
+```bash
+1. cd ~
+2. cd Documents
+```
 
 
 
 ### <p style="font-family:Menlo">Java SDK and Tools</p>
    ##### <p style="font-family:Menlo">Windows operating system</p>
 > Software to install
+1. 
+
    ##### <p style="font-family:Menlo">Macintosh operating system</p>
 > Software to install
 
@@ -51,4 +59,6 @@ git clone https://github.com/nkforever/JavaDevOperation
 ### <p style="font-family:Menlo">Data Management and Manipulation Tools</p>
    ##### <p style="font-family:Menlo">Windows operating system</p>
 > Software to install
+1. MySQL Community workbench  [![Build Status](https://img.shields.io/badge/available%20status-success-brightgreen?style=flat)](https://dev.mysql.com/downloads/workbench/) <-- click me
+2. [MySQL Database Server]() 
    ##### <p style="font-family:Menlo">Macintosh operating system</p>
