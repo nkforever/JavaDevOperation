@@ -4,7 +4,7 @@
 
 
 # Outline
-ol>
+<ol>
 <li>[Downloading and installing git repository as local instance](##-Installation-Setup)
     <ol>
         <li>Further creating a local branch for updating</li>
