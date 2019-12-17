@@ -27,7 +27,9 @@
 
 ### <p style="font-family:Menlo">Installation Git Repo</p>
    ##### <p style="font-family:Menlo">Windows operating system</p>
-> Software to install
+```cmd
+git clone https://github.com/nkforever/JavaDevOperation
+```
    ##### <p style="font-family:Menlo">Macintosh operating system</p>
 > Software to install
 
