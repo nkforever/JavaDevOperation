@@ -6,45 +6,16 @@
 # Outline
 1. [Downloading and installing git repository as local instance](##-Installation-Setup)
     1. Further creating a local branch for updating
-
-2. [Downloading and installing packages/dependencies for running a java program]()
-3. [Downloading and installing database management tools]()
-
-
+    2. 
+2. [Downloading and installing packages/dependencies for running a java program](##-Java-SDK-and-Tools)
+3. [Downloading and installing database management tools](##-Data-Management-and-Manipulation-Tools)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## Installation Setup
+## Installation Git Repo
     1. 
+
+
+## Java SDK and Tools
+
+## Data Management and Manipulation Tools
