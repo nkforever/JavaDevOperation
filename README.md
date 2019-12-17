@@ -59,6 +59,9 @@
 ### <p style="font-family:Menlo">Data Management and Manipulation Tools</p>
    ##### <p style="font-family:Menlo">Windows operating system</p>
 > Software to install
-1. MySQL Community workbench  [![Build Status](https://img.shields.io/badge/available%20status-success-brightgreen?style=flat)](https://dev.mysql.com/downloads/workbench/) <-- click me
+1. MySQL Community workbench  [![Build Status](https://img.shields.io/badge/available%20status-success-brightgreen?style=flat)](https://dev.mysql.com/downloads/workbench/)
+    > ***image***
+    ![MySQL Community Workbench](/images/community_windows.png/)
+    
 2. [MySQL Database Server]() 
    ##### <p style="font-family:Menlo">Macintosh operating system</p>
