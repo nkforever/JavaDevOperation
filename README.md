@@ -4,7 +4,7 @@
 
 
 # Outline
-    1. [Downloading and installing git repository as local instance]("##-installation-setup")
+    1. [Downloading and installing git repository as local instance] ("## Installation Setup")
         a. Further creating a local branch for updating.
     2. Downloading and installing packages/dependencies for running a java program
     3. Downloading and installing database management tools 
