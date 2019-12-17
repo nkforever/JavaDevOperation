@@ -4,7 +4,7 @@
 
 
 # Outline
-    1. Downloading and installing git repository as local instance
+    1. <a href="git_repo">Downloading and installing git repository as local instance</a>
         a. Further creating a local branch for updating.
     2. Downloading and installing packages/dependencies for running a java program
     3. Downloading and installing database management tools 
@@ -13,4 +13,4 @@
 
 
 ## Installation Setup
-
+    1. <p id="git_repo">erhergerg</p>
