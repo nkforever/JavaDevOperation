@@ -8,7 +8,7 @@
     1. Further creating a local branch for updating
     2. 
 2. [Downloading and installing packages/dependencies for running a java program](#-java-sdk-and-tools)
-3. [Downloading and installing database management tools](#-data-management-and-manipulation-tools)
+3. [Downloading and installing database management tools](##-data-management-and-manipulation-tools)
 
 
 
