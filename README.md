@@ -192,5 +192,5 @@
 
 ## Screen Shot of the first window:
 
-> ***Login screen***
+> ***Login screen with Server Status with 'OK'***
 ![login](images/first_screen.png)
