@@ -121,8 +121,13 @@
    > ***data import***
    ![data import](images/data_import.png)
 
-11. 
+11. Under 'import from disk' and create a schema using the image below
+   > ***create schema***
+   ![second data import](images/data2.png)
 
+11. Under 'import from disk' and 
+   > ***data import from medportDB.sql***
+   ![second data import](images/data2.png)
 
 
   ##### <p style="font-family:Menlo">Macintosh operating system</p>
