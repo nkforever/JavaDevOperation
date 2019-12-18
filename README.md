@@ -188,3 +188,9 @@
    ![second data import](images/data_import_updated.png)
 
 12. Run the project in eclipse and enjoy testing...!
+
+
+## Screen Shot of the first window:
+
+> ***Login screen***
+![login](images/first_screen.png)
