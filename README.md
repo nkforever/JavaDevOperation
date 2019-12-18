@@ -117,7 +117,11 @@
     ```java
     mpCon = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/medport", "root", "password");
     ```
+10. After opening the instance click on data import
+   > ***data import***
+   ![data import](images/data_import.png)
 
+11. 
 
 
 
