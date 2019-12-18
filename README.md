@@ -18,7 +18,6 @@
 ## <p style="font-family:Menlo">Launch Guide</p>
 
 1. [Downloading and installing git repository as local instance](#installation-Setup)
-    <!-- 1. [Further creating a local branch for updating](https://learngitbranching.js.org/?locale=en_US) -->
     1. [Further creating a local branch for updating](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-and-deleting-branches-within-your-repository#creating-a-branch) 
 2. [Downloading and installing packages/dependencies for running a java program](#java-sdk-and-tools)
 3. [Downloading and installing database management tools](#data-management-and-manipulation-tools)
@@ -28,7 +27,7 @@
 ### <p style="font-family:Menlo">Installation Git Repo</p>
    ##### <p style="font-family:Menlo">Windows operating system</p>
    Run the following commands in PowerShell or command prompt
-```cmd
+```bash
 1. cd ~
 2. cd Documents
 3. git clone https://github.com/nkforever/JavaDevOperation
@@ -39,6 +38,7 @@
 ```bash
 1. cd ~
 2. cd Documents
+3. git clone https://github.com/nkforever/JavaDevOperation
 ```
 
 
@@ -59,9 +59,14 @@
 ### <p style="font-family:Menlo">Data Management and Manipulation Tools</p>
    ##### <p style="font-family:Menlo">Windows operating system</p>
 > Software to install
-1. MySQL Community workbench  [![Build Status](https://img.shields.io/badge/available%20status-success-brightgreen?style=flat)](https://dev.mysql.com/downloads/workbench/)
-    > ***image***
+1. MySQL Community workbench      [![Build Status](https://img.shields.io/badge/available%20status-success-brightgreen?style=flat)](https://dev.mysql.com/downloads/workbench/)
+    > ***MySQL Community Workbench***
     ![MySQL Community Workbench](images/workbench_windows.png)
     
-2. [MySQL Database Server]() 
+2. MySQL Database Server           [![Build Status](https://img.shields.io/badge/available%20status-success-brightgreen?style=flat)](https://dev.mysql.com/downloads/mysql/) 
+    >***MySQL Database Server***
+    ![MySQL Database Server](images/community_server_windows.png)
+
+
+    
    ##### <p style="font-family:Menlo">Macintosh operating system</p>
