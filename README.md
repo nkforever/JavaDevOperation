@@ -97,7 +97,16 @@
     >***MySQL Database Server***
     ![MySQL Database Server](images/community_server_windows.png)
 
-
+3. Open the MySQL workbench application after installation
+4. create a connection by click the add(+) button
+   > ***making a connection***
+    ![database connection](images/database_connection.png)
+5. type in 'medport' in the input field for 'Connection Name:' and then click ok
+   > ***making a connection name***
+    ![host name](images/connection_name.png)
+6. Open the instance of medport by clicking on it
+   > ***opening instance of the database***
+    ![instance name](images/connection_name.png)
 
   ##### <p style="font-family:Menlo">Macintosh operating system</p>
 > Software to install
