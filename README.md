@@ -44,12 +44,16 @@
 
 
 ### <p style="font-family:Menlo">Java SDK and Tools</p>
+
+**Required Software**
+1. Java Development Kit (13) [![Build Status](https://img.shields.io/badge/download-click-brightgreen?style=flat)](https://www.oracle.com/technetwork/java/javase/downloads/index.html)
+2. Latest Eclipse [![Build Status](https://img.shields.io/badge/download-click-brightgreen?style=flat)](https://www.eclipse.org/downloads/packages/release/2019-09/r/eclipse-ide-java-developers)
    ##### <p style="font-family:Menlo">Windows operating system</p>
-> Software to install
+> 
 1. 
 
    ##### <p style="font-family:Menlo">Macintosh operating system</p>
-> Software to install
+> 
 
 
 
