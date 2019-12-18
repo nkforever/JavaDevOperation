@@ -113,7 +113,7 @@
 8. Enter the password created before in...
    > ***enter password***
     ![enter](images/pass.png) 
-9. The same password has to go in the DBcontrol.java class 
+9. The same password has to go in the DBcontrol.java class, line 22, and replace "password" string
     ```java
         mpCon = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/medport", "root", "password");
     ```

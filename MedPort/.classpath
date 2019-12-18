@@ -13,6 +13,5 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="lib/mysql-connector-java-8.0.17.jar"/>
-	<classpathentry kind="lib" path="C:/Users/crazy/Desktop/CS360-01 Software Engineering/ProjectFille/Microsoft JDBC Driver 7.4 for SQL Server/sqljdbc_7.4/enu/mssql-jdbc-7.4.1.jre8.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

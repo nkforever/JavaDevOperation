@@ -18,11 +18,8 @@ public class DBcontrol {
 	boolean checkConnection() {
 
 		try {
-//			mpCon = DriverManager.getConnection("jdbc:sqlserver://medport.database.windows.net:1433", "munov01",
-//					"soumya98Wii-00");
-//			mpCon = DriverManager.getConnection("jdbc:sqlserver://nk.database.windows.net:1433", "nainnn01",
-//					"Nkforever2019");
-			mpCon = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/medport", "root", "nkforever2019");
+
+			mpCon = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/medport", "root", "password");
 			
 			return true;
 		} catch (SQLException  e) {
