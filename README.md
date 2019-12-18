@@ -48,7 +48,7 @@
 **Required Software**
 1. Java Development Kit (13) [![Build Status](https://img.shields.io/badge/download-click-brightgreen?style=flat)](https://www.oracle.com/technetwork/java/javase/downloads/index.html)
 2. Latest Eclipse [![Build Status](https://img.shields.io/badge/download-click-brightgreen?style=flat)](https://www.eclipse.org/downloads/packages/release/2019-09/r/eclipse-ide-java-developers)
-   ##### <p style="font-family:Menlo">Steps for both Windows operating system and Macintosh operating system</p>
+  ##### <p style="font-family:Menlo">Steps for both Windows operating system and Macintosh operating system</p>
 > Steps to setting up environment
 1. Open eclipse
 2. Set your workspace to the Folder of JavaDevOperation.
