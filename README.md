@@ -137,6 +137,8 @@
 
 12. Run the project in eclipse and enjoy testing...!
 
+
+
   ##### <p style="font-family:Menlo">Macintosh operating system</p>
 > Software to install
 1. MySQL Community workbench      [![Build Status](https://img.shields.io/badge/available%20status-success-brightgreen?style=flat)](https://dev.mysql.com/downloads/workbench/)
@@ -147,3 +149,42 @@
     >***MySQL Database Server***
     ![MySQL Database Server](images/community_server_macos.png)
 
+3. Open the MySQL workbench application after installation
+4. create a connection by click the add(+) button
+   > ***making a connection***
+    ![database connection](images/database_connection.png)
+5. type in 'medport' in the input field for 'Connection Name:' and then click ok
+   > ***making a connection name***
+    ![host name](images/connection_name.png)
+6. Open the instance of medport by clicking on it
+   > ***opening instance of the database***
+    ![instance name](images/instance_open.png)
+7. Enter the password created before in...
+   > ***mysql installation root password created earlier***
+    ![mysql server password](images/sql_password.png)
+8. Enter the password created before in...
+   > ***enter password***
+    ![enter](images/pass.png) 
+9. The same password has to go in the DBcontrol.java class, line 22, and replace "password" string
+    ```java
+    mpCon = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/medport", "root", "password");
+    ```
+
+11. create a schema named 'medport' using the image below and apply the results
+    <u>The red marks on the image shows the steps</u>
+   > ***create schema***
+   ![second data import](images/data2.png)
+
+
+10. click on data import in the left panel
+   > ***data import***
+   ![data import](images/data_import.png)
+
+11. Under 'Server' from the tool bar click on data import. 
+    Under 'import from disk' -> 'Import from Self-Contained Files' -> add the medportDB.sql file in the project folder when it was cloned from git.
+    'Default Target Schema:' should be 'medport'
+    And then click on 'start import'
+   > ***data import from medportDB.sql***
+   ![second data import](images/data_import_updated.png)
+
+12. Run the project in eclipse and enjoy testing...!
