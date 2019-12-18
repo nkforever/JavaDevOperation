@@ -117,18 +117,25 @@
     ```java
     mpCon = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/medport", "root", "password");
     ```
-10. After opening the instance click on data import
-   > ***data import***
-   ![data import](images/data_import.png)
 
-11. Under 'import from disk' and create a schema using the image below
+11. create a schema named 'medport' using the image below and apply the results
+    <u>The red marks on the image shows the steps</u>
    > ***create schema***
    ![second data import](images/data2.png)
 
-11. Under 'import from disk' and 
-   > ***data import from medportDB.sql***
-   ![second data import](images/data2.png)
 
+10. click on data import in the left panel
+   > ***data import***
+   ![data import](images/data_import.png)
+
+11. Under 'Server' from the tool bar click on data import. 
+    Under 'import from disk' -> 'Import from Self-Contained Files' -> add the medportDB.sql file in the project folder when it was cloned from git.
+    'Default Target Schema:' should be 'medport'
+    And then click on 'start import'
+   > ***data import from medportDB.sql***
+   ![second data import](images/data_import_updated.png)
+
+12. Run the project in eclipse and enjoy testing...!
 
   ##### <p style="font-family:Menlo">Macintosh operating system</p>
 > Software to install
