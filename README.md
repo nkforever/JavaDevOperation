@@ -106,7 +106,20 @@
     ![host name](images/connection_name.png)
 6. Open the instance of medport by clicking on it
    > ***opening instance of the database***
-    ![instance name](images/connection_name.png)
+    ![instance name](images/instance_open.png)
+7. Enter the password created before in...
+   > ***mysql installation root password created earlier***
+    ![mysql server password](images/sql_password.png)
+8. Enter the password created before in...
+   > ***enter password***
+    ![enter](images/pass.png) 
+9. The same password has to go in the DBcontrol.java class 
+    ```java
+        mpCon = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/medport", "root", "password");
+    ```
+
+
+
 
   ##### <p style="font-family:Menlo">Macintosh operating system</p>
 > Software to install
