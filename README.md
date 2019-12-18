@@ -57,20 +57,29 @@
 3. In eclipse, go to File option and select Import
 4. Double click on General
 5. Exisiting Projects into Workspace. Then click next button
-6. Under root directory select
-2. Select ‘Java Project’ from the list.
-3. Enter a Name for the Java Project. Click ‘Next’.
-4. Under the ‘Libraries’ tab, click ‘Add Library…’ (or Under your project name, under build path,
-click ‘Add Library..’)
-5. Select ‘User Library’. Click ‘Next’.
-6. Click on ‘User Libraries…’ Click ‘New’.
-7. Enter a name for the User Library (Any name will do, for example, ‘Oracle.JDBC’). Click ‘OK’.
-8. Click on ‘Add external JARs…’ Locate the ‘ojdbc6.jar’ file.
-9. Click ‘OK’. Make sure that the user library that you just created is checked.
+6. Under root directory select the browse button
+7. Click on the Medport Folder and then open
+8. After opening the project, right click the project description and then click on 'Build Path'->'Configure Build Path'
+8. Under the ‘Libraries’ tab, click on the red marked library which is showing an error and then click on remove button
+9. Click ‘Apply and Close’. Make sure that the user library that you just created is checked.
 10. Click ‘Finish’.
 
    ##### <p style="font-family:Menlo">Macintosh operating system</p>
-> 
+> Steps to setting up environment
+1. Open eclipse
+2. Set your workspace to the Folder of JavaDevOperation.
+    For example, if you git cloned in Documents then input the line below in the workspace input.
+    ```Documents\JavaDevOperation```
+3. In eclipse, go to File option and select Import
+4. Double click on General
+5. Exisiting Projects into Workspace. Then click next button
+6. Under root directory select the browse button
+7. Click on the Medport Folder and then open
+8. After opening the project, right click the project description and then click on 'Build Path'->'Configure Build Path'
+8. Under the ‘Libraries’ tab, click on the red marked library which is showing an error and then click on remove button
+9. Click ‘Apply and Close’. Make sure that the user library that you just created is checked.
+10. Click ‘Finish’.
+ 
 
 
 
